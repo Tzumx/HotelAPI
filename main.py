@@ -1,9 +1,13 @@
 from fastapi import FastAPI
 import uvicorn
 from db import database
+from routers import rooms
 
 # Initialize the app
 app = FastAPI()
+
+# Link all URLs
+app.include_router(rooms.router)
 
 
 @app.on_event('startup')
