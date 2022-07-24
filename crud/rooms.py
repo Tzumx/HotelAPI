@@ -39,10 +39,14 @@ async def get_rooms_types(skip: int = 0, limit: int = 100):
 
 async def create_room(room: rooms_schema.RoomCreate):
     """Create new room"""
-    query = room_table.insert().values(
-        number=room.number, type_id=room.type_id, is_clean=room.is_clean)
-    room_id = await database.execute(query)
-    return {**room.dict(), "id": room_id}
+    query = room_table.select().where(room_table.c.number == room.number)
+    answer = await database.execute(query)
+    if answer == None:
+        query = room_table.insert().values(
+            number=room.number, type_id=room.type_id, is_clean=room.is_clean)
+        room_id = await database.execute(query)
+        return {**room.dict(), "id": room_id}
+    else: return {"result": "Error"}
 
 
 async def delete_room(id: int):

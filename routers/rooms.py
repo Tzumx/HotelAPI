@@ -12,13 +12,13 @@ async def create_rooms_type(roomtype: rooms_schema.RoomTypeCreate):
     """
     Create room's type
 
-            Parameters:
-                    type (str): type of rooms
-                    number_of_rooms (int): room size
-                    price (float): price for that type
-                    description (str): description
-            Returns:
-                   Dict with result
+        Args:
+                type (str): type of rooms
+                number_of_rooms (int): room size
+                price (float): price for that type
+                description (str): description
+        Returns:
+                Dict with result
     """
     return await rooms_utils.create_room_type(roomtype=roomtype)
 
@@ -28,10 +28,10 @@ async def delete_rooms_type(id: int):
     """
     Delete room's type
 
-            Parameters:
-                    id (int): Id of entry to delete
-            Returns:
-                   Dict with result of creation or error
+        Args:
+                id (int): Id of entry to delete
+        Returns:
+                Dict with result of creation or error
     """
     return await rooms_utils.delete_room_type(id=id)
 
@@ -41,11 +41,11 @@ async def get_rooms_types(skip: int = 0, limit: int = 100):
     """
     Get list of room's types
 
-            Parameters:
-                    skip (int): number for "offset" entries
-                    limit (int): number for "limit" entries
-            Returns:
-                   List of dicts with room's types
+        Args:
+                skip (int): number for "offset" entries
+                limit (int): number for "limit" entries
+        Returns:
+                List of dicts with room's types
     """
     return await rooms_utils.get_rooms_types(skip=skip, limit=limit)
 
@@ -55,14 +55,14 @@ async def create_room(room: rooms_schema.RoomCreate):
     """
     Add new room
 
-            Parameters:
-                    number (int): room number
-                    type_id (int): room's type
-                    is_free (bool): is room free
-                    is_clean (bool): is room clean
-                    is_broken (bool): is something broken in the room
-            Returns:
-                   Dict with result of creation or error
+        Args:
+                number (int): room number
+                type_id (int): room's type
+                is_free (bool): is room free
+                is_clean (bool): is room clean
+                is_broken (bool): is something broken in the room
+        Returns:
+                Dict with result of creation or error
     """
     return await rooms_utils.create_room(room=room)
 
@@ -70,12 +70,12 @@ async def create_room(room: rooms_schema.RoomCreate):
 @router.delete("/room", response_model=rooms_schema.DeleteInfo)
 async def delete_room(id: int):
     """
-    Delete room
+    Delete room.
 
-            Parameters:
-                    id (int): Id of entry to delete
-            Returns:
-                   Dict with result
+        Args:
+                id (int): Id of entry to delete
+        Returns:
+                Dict with result
     """
     return await rooms_utils.delete_room(id=id)
 
@@ -85,10 +85,10 @@ async def get_rooms(skip: int = 0, limit: int = 100):
     """
     Get list of rooms
     
-            Parameters:
-                    skip (int): number for "offset" entries
-                    limit (int): number for "limit" entries
-            Returns:
-                   List of dicts with rooms
+        Args:
+                skip (int): number for "offset" entries
+                limit (int): number for "limit" entries
+        Returns:
+                List of dicts with rooms
     """
     return await rooms_utils.get_rooms(skip=skip, limit=limit)
