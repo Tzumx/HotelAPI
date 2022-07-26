@@ -10,7 +10,7 @@ room_table = Table(
     metadata,
     Column('id', Integer, primary_key=True),
     Column('number', Integer, unique=True, index=True),  # number of the room
-    Column('type_id', ForeignKey("rooms_types.id",
+    Column('type_id', ForeignKey("room_types.id",
                                  onupdate="CASCADE", ondelete="CASCADE")),
     Column('is_clean', Boolean(),
            server_default=expression.true(),
@@ -19,7 +19,7 @@ room_table = Table(
 
 # Model of room's types
 room_type_table = Table(
-    'rooms_types',
+    'room_types',
     metadata,
     Column('id', Integer, primary_key=True),
     Column('type', String(100)),

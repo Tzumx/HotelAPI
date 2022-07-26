@@ -2,13 +2,13 @@ from fastapi import APIRouter
 from typing import List
 
 from schemas import rooms as rooms_schema
-from crud import rooms as rooms_utils
+from crud import rooms as rooms_crud
 
 router = APIRouter()
 
 
-@router.post("/roomtype", response_model=rooms_schema.RoomTypeInfo)
-async def create_rooms_type(roomtype: rooms_schema.RoomTypeCreate):
+@router.post("/roomtypes", response_model=rooms_schema.RoomTypeInfo)
+async def create_room_types(roomtype: rooms_schema.RoomTypeCreate):
     """
     Create room's type
 
@@ -20,11 +20,11 @@ async def create_rooms_type(roomtype: rooms_schema.RoomTypeCreate):
         Returns:
                 Dict with result
     """
-    return await rooms_utils.create_room_type(roomtype=roomtype)
+    return await rooms_crud.create_room_types(roomtype=roomtype)
 
 
-@router.delete("/roomtype", response_model=rooms_schema.DeleteInfo)
-async def delete_rooms_type(id: int):
+@router.delete("/roomtypes", response_model=rooms_schema.DeleteInfo)
+async def delete_room_types(id: int):
     """
     Delete room's type
 
@@ -33,11 +33,11 @@ async def delete_rooms_type(id: int):
         Returns:
                 Dict with result of creation or error
     """
-    return await rooms_utils.delete_room_type(id=id)
+    return await rooms_crud.delete_room_types(id=id)
 
 
-@router.get("/roomtype", response_model=List[rooms_schema.RoomTypeInfo])
-async def get_rooms_types(skip: int = 0, limit: int = 100):
+@router.get("/roomtypes", response_model=List[rooms_schema.RoomTypeInfo])
+async def get_room_types(skip: int = 0, limit: int = 100):
     """
     Get list of room's types
 
@@ -47,11 +47,11 @@ async def get_rooms_types(skip: int = 0, limit: int = 100):
         Returns:
                 List of dicts with room's types
     """
-    return await rooms_utils.get_rooms_types(skip=skip, limit=limit)
+    return await rooms_crud.get_room_types(skip=skip, limit=limit)
 
 
-@router.post("/room", response_model=rooms_schema.RoomInfo)
-async def create_room(room: rooms_schema.RoomCreate):
+@router.post("/rooms", response_model=rooms_schema.RoomInfo)
+async def create_rooms(room: rooms_schema.RoomCreate):
     """
     Add new room
 
@@ -64,11 +64,11 @@ async def create_room(room: rooms_schema.RoomCreate):
         Returns:
                 Dict with result of creation or error
     """
-    return await rooms_utils.create_room(room=room)
+    return await rooms_crud.create_rooms(room=room)
 
 
-@router.delete("/room", response_model=rooms_schema.DeleteInfo)
-async def delete_room(id: int):
+@router.delete("/rooms", response_model=rooms_schema.DeleteInfo)
+async def delete_rooms(id: int):
     """
     Delete room.
 
@@ -77,10 +77,10 @@ async def delete_room(id: int):
         Returns:
                 Dict with result
     """
-    return await rooms_utils.delete_room(id=id)
+    return await rooms_crud.delete_rooms(id=id)
 
 
-@router.get("/room", response_model=List[rooms_schema.RoomInfo])
+@router.get("/rooms", response_model=List[rooms_schema.RoomInfo])
 async def get_rooms(skip: int = 0, limit: int = 100):
     """
     Get list of rooms
@@ -91,4 +91,4 @@ async def get_rooms(skip: int = 0, limit: int = 100):
         Returns:
                 List of dicts with rooms
     """
-    return await rooms_utils.get_rooms(skip=skip, limit=limit)
+    return await rooms_crud.get_rooms(skip=skip, limit=limit)
