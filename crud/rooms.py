@@ -7,7 +7,7 @@ from models.rooms import room_table, room_type_table
 from schemas import rooms as rooms_schema
 
 
-async def create_room_type(roomtype: rooms_schema.RoomTypeCreate):
+async def create_room_types(roomtype: rooms_schema.RoomTypeCreate):
     """Create new type of room"""
     query = room_type_table.insert().values(
         type=roomtype.type, price=roomtype.price,
@@ -18,7 +18,7 @@ async def create_room_type(roomtype: rooms_schema.RoomTypeCreate):
     return {**roomtype.dict(), "id": roomtype_id}
 
 
-async def delete_room_type(id: int):
+async def delete_room_types(id: int):
     """Delete room's type by id"""
     query = room_type_table.select().where(room_type_table.c.id == id)
     answer = await database.execute(query)
@@ -31,13 +31,13 @@ async def delete_room_type(id: int):
     return {"result": answer}
 
 
-async def get_rooms_types(skip: int = 0, limit: int = 100):
+async def get_room_types(skip: int = 0, limit: int = 100):
     """Get list of room's types"""
     results = await database.fetch_all(room_type_table.select().offset(skip).limit(limit))
     return [dict(result._mapping) for result in results]
 
 
-async def create_room(room: rooms_schema.RoomCreate):
+async def create_rooms(room: rooms_schema.RoomCreate):
     """Create new room"""
     query = room_table.select().where(room_table.c.number == room.number)
     answer = await database.execute(query)
@@ -49,7 +49,7 @@ async def create_room(room: rooms_schema.RoomCreate):
     else: return {"result": "Error"}
 
 
-async def delete_room(id: int):
+async def delete_rooms(id: int):
     """Delete room by id"""
     query = room_table.select().where(room_table.c.id == id)
     answer = await database.execute(query)
