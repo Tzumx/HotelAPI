@@ -1,21 +1,23 @@
-from sqlalchemy import Column, Integer, String, Float, Boolean
+from sqlalchemy import Column, Integer, String, Float, Boolean, text
 from sqlalchemy import MetaData, Table, ForeignKey, UniqueConstraint
 from sqlalchemy.sql import expression
 
 metadata = MetaData()
 
-room_table = Table(
-    # Model of rooms
+room = Table(
+    # Model of hotel rooms
     'rooms',
     metadata,
     Column('number', Integer, primary_key=True, autoincrement=False),  # number of the room
     Column('type_id', ForeignKey("room_types.id",
                                  onupdate="CASCADE", ondelete="SET NULL")),
+    Column('floor', Integer, nullable=False, server_default=text("0")),
+    Column('housing', Integer, nullable=False, server_default=text("0")),
     Column('is_clean', Boolean(),
            server_default=expression.true(), nullable=False),
 )
 
-room_type_table = Table(
+room_type = Table(
     # Model of room's types
     'room_types',
     metadata,
@@ -25,9 +27,9 @@ room_type_table = Table(
     Column('description', String()),
 )
 
-room_feature = Table(
+feature = Table(
     # Model for roomtype's features
-    'room_features',
+    'features',
     metadata,
     Column('id', Integer, primary_key=True),
     Column('feature', String(), nullable=False),
@@ -39,7 +41,7 @@ roomtype_feature = Table(
     metadata,
     Column('type_id', ForeignKey("room_types.id",
                                  onupdate="CASCADE", ondelete="CASCADE")),
-    Column('feature_id', ForeignKey("room_features.id",
+    Column('feature_id', ForeignKey("features.id",
                                     onupdate="CASCADE", ondelete="CASCADE")),
     UniqueConstraint('type_id', 'feature_id'),
 )

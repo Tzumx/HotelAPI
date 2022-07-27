@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Optional
+from typing import Optional, Union
 from pydantic import BaseModel, EmailStr, Field, UUID4, validator
 
 
@@ -46,6 +46,7 @@ class RoomCreate(RoomBase):
 
 class RoomInfo(RoomBase):
     """Response schema with room details."""
+    type_id: Union[int, None]
 
     class Config:
         orm_mode = True

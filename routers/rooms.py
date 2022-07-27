@@ -140,7 +140,9 @@ async def create_room(room: rooms_schema.RoomCreate):
         Args:
                 number (int): room number
                 type_id (int): room's type
-                is_clean (bool): is room clean
+                floor (int): the room is located on this floor, default = 0
+                housing (int): number of housing, default = 0
+                is_clean (bool): is room clean, default = true
         Returns:
                 Dict with result of creation or error
     """
@@ -169,6 +171,6 @@ async def get_rooms(offset: int = 0, limit: int = 100):
                 offset (int): number for "offset" entries
                 limit (int): number for "limit" entries
         Returns:
-                List of dicts with rooms
+                JSON with rooms
     """
     return await rooms_crud.get_rooms(offset=offset, limit=limit)

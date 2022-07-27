@@ -3,8 +3,8 @@ from sqlalchemy import MetaData, Table
 
 metadata = MetaData()
 
-# Model of guests
-guest_table = Table(
+# Model of hotel guests
+guest = Table(
     'guests',
     metadata,
     Column('id', Integer, primary_key=True),
