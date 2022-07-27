@@ -17,7 +17,7 @@ request_table = Table(
     Column('description', String(), nullable=False),
     Column('is_closed', Boolean(),
            server_default=expression.false(), nullable=False),
-    Column('close_desc', String()),
+    Column('close_description', String()),
     Column('created_at', DateTime, index=True,
            nullable=False, default=datetime.datetime.now),
     Column('updated_at', DateTime, index=True,

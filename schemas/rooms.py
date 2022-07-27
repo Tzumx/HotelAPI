@@ -5,14 +5,9 @@ from pydantic import BaseModel, EmailStr, Field, UUID4, validator
 
 class RoomTypeBase(BaseModel):
     """Base schema with room type details."""
-    type: str
+    type_name: str
     price: float
     description: str
-    is_doublebad: bool = False
-    is_kitchen: bool = False
-    is_bathroom: bool = False
-    is_conditioner: bool = False
-    is_TV: bool = False
 
 
 class RoomBase(BaseModel):
@@ -20,6 +15,11 @@ class RoomBase(BaseModel):
     number: int
     type_id: int
     is_clean: bool = True
+
+
+class FeatureBase(BaseModel):
+    """Base schema for roomtype's features."""
+    feature: str
 
 
 class RoomTypeCreate(RoomTypeBase):
@@ -51,6 +51,34 @@ class RoomInfo(RoomBase):
     class Config:
         orm_mode = True
 
+
+class FeatureCreate(FeatureBase):
+    """Create feature schema."""
+
+    class Config:
+        orm_mode = True
+
+
+class FeatureInfo(FeatureBase):
+    """Response schema with roomtype's features."""
+    id: int
+
+    class Config:
+        orm_mode = True
+
+
 class DeleteInfo(BaseModel):
-    """Response schema on delete action"""
+    """Response schema on delete action."""
     result: str
+
+
+class FeatureTypeInfo(BaseModel):
+    """Response schema on union data roomtype and feature."""
+    feature: str
+
+
+class FeatureTypeInfoFull(FeatureTypeInfo):
+    """Response full schema on union data roomtype and feature."""
+    type_name: str
+    price: float
+    description: str
