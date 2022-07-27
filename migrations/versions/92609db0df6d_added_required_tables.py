@@ -1,8 +1,8 @@
 """Added required tables
 
-Revision ID: 06d7f64048f6
+Revision ID: 92609db0df6d
 Revises: 
-Create Date: 2022-07-27 04:00:26.991341
+Create Date: 2022-07-27 04:12:36.379255
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '06d7f64048f6'
+revision = '92609db0df6d'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -32,14 +32,12 @@ def upgrade() -> None:
     )
     op.create_index(op.f('ix_room_types_price'), 'room_types', ['price'], unique=False)
     op.create_table('rooms',
-    sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('number', sa.Integer(), nullable=True),
+    sa.Column('number', sa.Integer(), autoincrement=False, nullable=False),
     sa.Column('type_id', sa.Integer(), nullable=True),
     sa.Column('is_clean', sa.Boolean(), server_default=sa.text('true'), nullable=False),
     sa.ForeignKeyConstraint(['type_id'], ['room_types.id'], onupdate='CASCADE', ondelete='SET NULL'),
-    sa.PrimaryKeyConstraint('id')
+    sa.PrimaryKeyConstraint('number')
     )
-    op.create_index(op.f('ix_rooms_number'), 'rooms', ['number'], unique=True)
     op.create_table('roomtypes_features',
     sa.Column('type_id', sa.Integer(), nullable=True),
     sa.Column('feature_id', sa.Integer(), nullable=True),
@@ -56,7 +54,7 @@ def upgrade() -> None:
     )
     op.create_table('bookings',
     sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('room_id', sa.Integer(), nullable=True),
+    sa.Column('room_number', sa.Integer(), nullable=True),
     sa.Column('guest_id', sa.Integer(), nullable=True),
     sa.Column('check_in', sa.DateTime(), nullable=False),
     sa.Column('check_out', sa.DateTime(), nullable=False),
@@ -72,7 +70,7 @@ def upgrade() -> None:
     sa.Column('created_at', sa.DateTime(), nullable=False),
     sa.Column('updated_at', sa.DateTime(), nullable=False),
     sa.ForeignKeyConstraint(['guest_id'], ['guests.id'], onupdate='CASCADE', ondelete='SET NULL'),
-    sa.ForeignKeyConstraint(['room_id'], ['rooms.id'], onupdate='CASCADE', ondelete='SET NULL'),
+    sa.ForeignKeyConstraint(['room_number'], ['rooms.number'], onupdate='CASCADE', ondelete='SET NULL'),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_index(op.f('ix_bookings_check_in'), 'bookings', ['check_in'], unique=False)
@@ -109,7 +107,6 @@ def downgrade() -> None:
     op.drop_table('bookings')
     op.drop_table('guests')
     op.drop_table('roomtypes_features')
-    op.drop_index(op.f('ix_rooms_number'), table_name='rooms')
     op.drop_table('rooms')
     op.drop_index(op.f('ix_room_types_price'), table_name='room_types')
     op.drop_table('room_types')

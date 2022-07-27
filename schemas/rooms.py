@@ -46,7 +46,6 @@ class RoomCreate(RoomBase):
 
 class RoomInfo(RoomBase):
     """Response schema with room details."""
-    id: int
 
     class Config:
         orm_mode = True

@@ -144,18 +144,18 @@ async def create_room(room: rooms_schema.RoomCreate):
         query = room_table.insert().values(
             number=room.number, type_id=room.type_id, is_clean=room.is_clean)
         room_id = await database.execute(query)
-        return {**room.dict(), "id": room_id}
+        return {**room.dict()}
     else:
         raise HTTPException(status_code=409, detail="Already exist")
 
 
-async def delete_room(id: int):
+async def delete_room(number: int):
     """Delete room by id"""
 
-    query = room_table.select().where(room_table.c.id == id)
+    query = room_table.select().where(room_table.c.number == number)
     answer = await database.execute(query)
-    if answer == id:
-        query = room_table.delete().where(room_table.c.id == id)
+    if answer == number:
+        query = room_table.delete().where(room_table.c.number == number)
         await database.execute(query)
         answer = "Success"
     else:

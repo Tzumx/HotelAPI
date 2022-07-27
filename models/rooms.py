@@ -8,8 +8,7 @@ room_table = Table(
     # Model of rooms
     'rooms',
     metadata,
-    Column('id', Integer, primary_key=True),
-    Column('number', Integer, unique=True, index=True),  # number of the room
+    Column('number', Integer, primary_key=True, autoincrement=False),  # number of the room
     Column('type_id', ForeignKey("room_types.id",
                                  onupdate="CASCADE", ondelete="SET NULL")),
     Column('is_clean', Boolean(),

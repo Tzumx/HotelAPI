@@ -12,7 +12,7 @@ booking_table = Table(
     'bookings',
     metadata,
     Column('id', Integer, primary_key=True),
-    Column('room_id', ForeignKey(room_table.c.id,
+    Column('room_number', ForeignKey(room_table.c.number,
                                  onupdate="CASCADE", ondelete="SET NULL")),
     Column('guest_id', ForeignKey(guest_table.c.id,
                                   onupdate="CASCADE", ondelete="SET NULL")),

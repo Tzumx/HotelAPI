@@ -148,16 +148,16 @@ async def create_room(room: rooms_schema.RoomCreate):
 
 
 @router.delete("/rooms", response_model=rooms_schema.DeleteInfo)
-async def delete_room(id: int):
+async def delete_room(number: int):
     """
     Delete room.
 
         Args:
-                id (int): Id of entry to delete
+                number (int): number of room to delete
         Returns:
                 Dict with result
     """
-    return await rooms_crud.delete_room(id=id)
+    return await rooms_crud.delete_room(number=number)
 
 
 @router.get("/rooms", response_model=List[rooms_schema.RoomInfo])
