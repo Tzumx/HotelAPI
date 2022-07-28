@@ -15,8 +15,6 @@ room = Table(
     Column('floor', Integer, CheckConstraint('floor>=0'),
            nullable=False, server_default=text("0")),
     Column('housing', Integer, CheckConstraint('housing>=0'), nullable=False, server_default=text("0")),
-    Column('is_clean', Boolean(),
-           server_default=expression.true(), nullable=False),
 )
 
 room_type = Table(

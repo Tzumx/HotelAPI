@@ -1,8 +1,8 @@
 """Added required tables
 
-Revision ID: 407f12557a18
+Revision ID: 458a21b03838
 Revises: 
-Create Date: 2022-07-27 21:25:03.380219
+Create Date: 2022-07-28 15:16:51.339939
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '407f12557a18'
+revision = '458a21b03838'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -36,7 +36,6 @@ def upgrade() -> None:
     sa.Column('type_id', sa.Integer(), nullable=True),
     sa.Column('floor', sa.Integer(), server_default=sa.text('0'), nullable=False),
     sa.Column('housing', sa.Integer(), server_default=sa.text('0'), nullable=False),
-    sa.Column('is_clean', sa.Boolean(), server_default=sa.text('true'), nullable=False),
     sa.ForeignKeyConstraint(['type_id'], ['room_types.id'], onupdate='CASCADE', ondelete='SET NULL'),
     sa.PrimaryKeyConstraint('number')
     )
