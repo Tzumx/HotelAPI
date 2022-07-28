@@ -13,8 +13,9 @@ class RoomTypeBase(BaseModel):
 class RoomBase(BaseModel):
     """Base schema with room details."""
     number: int
-    type_id: int
-    is_clean: bool = True
+    fk_room_types_id: int
+    floor: int = 0
+    housing: int = 0
 
 
 class FeatureBase(BaseModel):
@@ -46,7 +47,7 @@ class RoomCreate(RoomBase):
 
 class RoomInfo(RoomBase):
     """Response schema with room details."""
-    type_id: Union[int, None]
+    fk_room_types_id: Union[int, None]
 
     class Config:
         orm_mode = True

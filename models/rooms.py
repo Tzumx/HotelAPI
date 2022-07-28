@@ -1,6 +1,5 @@
-from sqlalchemy import Table, Column, Integer, String, Float, Boolean, text
+from sqlalchemy import Table, Column, Integer, String, Numeric, text
 from sqlalchemy import MetaData, ForeignKey, UniqueConstraint, CheckConstraint
-from sqlalchemy.sql import expression
 
 metadata = MetaData()
 
@@ -10,11 +9,12 @@ room = Table(
     metadata,
     Column('number', Integer, primary_key=True,
            autoincrement=False),  # number of the room
-    Column('type_id', ForeignKey("room_types.id",
+    Column('fk_room_types_id', ForeignKey("room_types.id",
                                  onupdate="CASCADE", ondelete="SET NULL")),
     Column('floor', Integer, CheckConstraint('floor>=0'),
            nullable=False, server_default=text("0")),
-    Column('housing', Integer, CheckConstraint('housing>=0'), nullable=False, server_default=text("0")),
+    Column('housing', Integer, CheckConstraint('housing>=0'), nullable=False,
+           server_default=text("0")),
 )
 
 room_type = Table(
@@ -23,7 +23,8 @@ room_type = Table(
     metadata,
     Column('id', Integer, primary_key=True),
     Column('type_name', String(), nullable=False),
-    Column('price', Float, CheckConstraint('price>=0'), index=True, nullable=False),
+    Column('price', Numeric, CheckConstraint(
+        'price>=0'), index=True, nullable=False),
     Column('description', String()),
 )
 
@@ -39,9 +40,9 @@ roomtype_feature = Table(
     # Many-to-many between roomtype and feature
     'roomtypes_features',
     metadata,
-    Column('type_id', ForeignKey("room_types.id",
+    Column('fk_room_type_id', ForeignKey("room_types.id",
                                  onupdate="CASCADE", ondelete="CASCADE")),
-    Column('feature_id', ForeignKey("features.id",
+    Column('fk_feature_id', ForeignKey("features.id",
                                     onupdate="CASCADE", ondelete="CASCADE")),
-    UniqueConstraint('type_id', 'feature_id'),
+    UniqueConstraint('fk_room_type_id', 'fk_feature_id'),
 )

@@ -104,32 +104,32 @@ async def add_feature_to_roomtype(type_id: int, feature_id: int):
 
 
 @router.delete("/roomtypes/{type_id}/feature", response_model=rooms_schema.DeleteInfo)
-async def delete_feature_from_roomtype(type_id: int, feature_id: int):
+async def delete_feature_from_roomtype(fk_room_type_id: int, feature_id: int):
     """
     Delete feature from roomtype
 
         Args:
-                type_id (int): id of roomtype
-                feature_id (int): id of feature
+                fk_room_type_id (int): id of roomtype
+                fk_feature_id (int): id of feature
         Returns:
                 Dict with result
 
     """
-    return await rooms_crud.delete_feature_from_roomtype(type_id, feature_id)
+    return await rooms_crud.delete_feature_from_roomtype(fk_room_type_id, feature_id)
 
 
 @router.get("/roomtypes/{type_id}/feature", response_model=List[rooms_schema.FeatureTypeInfo])
-async def get_feature_to_roomtype(type_id: int):
+async def get_features_to_roomtype(fk_room_type_id: int):
     """
-    Add feature to roomtype
+    Get roomtype's feature
 
         Args:
-                type_id (int): id of roomtype
-                feature_id (int): id of feature
+                fk_room_type_id (int): id of roomtype
+                fk_feature_id (int): id of feature
         Returns:
                 JSON with join roomtypes and features
     """
-    return await rooms_crud.get_feature_to_roomtype(type_id)
+    return await rooms_crud.get_features_to_roomtype(fk_room_type_id)
 
 
 @router.post("/rooms", response_model=rooms_schema.RoomInfo)
@@ -139,10 +139,9 @@ async def create_room(room: rooms_schema.RoomCreate):
 
         Args:
                 number (int): room number
-                type_id (int): room's type
+                fk_room_types_id (int): room's type
                 floor (int): the room is located on this floor, default = 0
                 housing (int): number of housing, default = 0
-                is_clean (bool): is room clean, default = true
         Returns:
                 Dict with result of creation or error
     """
