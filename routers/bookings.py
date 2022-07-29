@@ -3,30 +3,32 @@ from fastapi import APIRouter
 router = APIRouter()
 
 
-@router.get("/booking")
-async def bookings_get():
+@router.get("/bookings")
+async def get_bookings():
     """
     List bookings
 
         Args:
-            check_in (date)
-            check_out (date)
-            is_paid (bool)
-            is_active (bool)
+            fk_room_number (int): number of the room
+            fk_guest_id (int): guest's id
+            check_in (date): date of guest's move on
+            check_out (date): date of guest's move out
+            is_paid (bool): check if booking is paid
+            is_active (bool): check if booking is active
         Returns:
             JSON with result
     """
     pass
 
 
-@router.post("/booking")
-async def booking_create():
+@router.post("/bookings")
+async def create_booking():
     """
     Add booking
 
         Args:
-            room_number (int): number of the room
-            guest_id (int): guest who is booking
+            fk_room_number (int): number of the room
+            fk_guest_id (int): guest who is booking
             check_in (date): when move in
             check_out (date): when move out
             description (str): desription for the booking
@@ -36,17 +38,18 @@ async def booking_create():
     pass
 
 
-@router.post("/booking/{booking_id}")
-async def bookings_update():
+@router.post("/bookings/{booking_id}")
+async def update_bookings():
     """
     Update booking
 
         Args:
-            bookig_id (int): id of the booking
-            room_number (int): number of the room
-            guest_id (int): guest who is booking
+            booking_id (int): id of the booking
+            fk_room_number (int): number of the room
+            fk_guest_id (int): guest who is booking
             check_in (date): when move in
             check_out (date): when move out
+            is_active (bool): if booking is active
             description (str): desription for the booking
         Returns:
             JSON with result
@@ -54,8 +57,8 @@ async def bookings_update():
     pass
 
 
-@router.post("/booking/{booking_id}/active")
-async def booking_set_active(is_active: bool):
+@router.post("/bookings/{booking_id}/status")
+async def set_booking_status(status: bool):
     """
     Set booking state
 
@@ -68,29 +71,28 @@ async def booking_set_active(is_active: bool):
     pass
 
 
-@router.post("/booking/{booking_id}/review")
-async def booking_post_review():
+@router.post("/bookings/{booking_id}/review")
+async def post_booking_review():
     """
     Update client's review
 
         Args:
             booking_id (int): id of the booking
-            is_active (bool): status of the booking
         Returns:
             JSON with result
     """
     pass
 
 
-@router.get("/booking/{booking_id}/payment")
-async def booking_get_payment():
-    """
-    Update client's review
+# @router.get("/bookings/{booking_id}/payment")
+# async def get_booking_payment():
+#     """
+#     Update client's review
 
-        Args:
-            booking_id (int): id of the booking
-            is_active (bool): status of the booking
-        Returns:
-            JSON with result
-    """
-    pass
+#         Args:
+#             booking_id (int): id of the booking
+#             is_active (bool): status of the booking
+#         Returns:
+#             JSON with result
+#     """
+#     pass

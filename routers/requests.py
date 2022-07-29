@@ -3,8 +3,8 @@ from fastapi import APIRouter
 router = APIRouter()
 
 
-@router.get("/request")
-async def requests_gets():
+@router.get("/requests")
+async def get_requests():
     """
     List requests
 
@@ -18,17 +18,32 @@ async def requests_gets():
     pass
 
 
-@router.post("/request")
-async def request_create():
+@router.post("/requests")
+async def create_request():
     """
     Create request
 
         Args:
             booking_id (int): id of booking that request correspond to
             description (str): requsts's description
-            is_closed (bool): is request closed
             close_description (str): requsts's description after closing
-            price (float): price of request (if need)
+            price (Optional[float]): price of request (if need)
+        Returns:
+            JSON with result
+    """
+    pass
+
+@router.post("/requests/{request_id}")
+async def create_request():
+    """
+    Create request
+
+        Args:
+            request_id (int): id of request
+            booking_id (int): id of booking that request correspond to
+            description (str): requsts's description
+            close_description (str): requsts's description after closing
+            price (Optional[float]): price of request (if need)
         Returns:
             JSON with result
     """

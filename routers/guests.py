@@ -3,8 +3,8 @@ from fastapi import APIRouter
 router = APIRouter()
 
 
-@router.get("/guest")
-async def guests_get():
+@router.get("/guests")
+async def get_guests():
     """
     List guests
 
@@ -18,8 +18,8 @@ async def guests_get():
     pass
 
 
-@router.post("/guest")
-async def guest_create():
+@router.post("/guests")
+async def create_guest():
     """
     Create guest
 
@@ -33,12 +33,13 @@ async def guest_create():
     pass
 
 
-@router.post("/guest/{guest_id}")
-async def guest_update():
+@router.post("/guests/{guest_id}")
+async def update_guest():
     """
     Create guest
 
         Args:
+            guest_id (int): guest's id
             name (str): Name of the guest
             email (str): guest's email
             phone (str): guest's phone
@@ -48,8 +49,8 @@ async def guest_update():
     pass
 
 
-@router.get("/guest/{guest_id}/booking")
-async def guest_get_bookings():
+@router.get("/guests/{guest_id}/bookings")
+async def get_guest_bookings():
     """
     List bookings according with guest
 
@@ -61,8 +62,8 @@ async def guest_get_bookings():
     pass
 
 
-@router.get("/guest/{guest_id}/request")
-async def guest_get_requests():
+@router.get("/guests/{guest_id}/requests")
+async def get_guest_requests():
     """
     List requests according with guest
 

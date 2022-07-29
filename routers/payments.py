@@ -3,29 +3,29 @@ from fastapi import APIRouter
 router = APIRouter()
 
 
-@router.get("/payment")
-async def payments_get():
+@router.get("/payments")
+async def get_payments():
     """
     List payments
 
         Args:
-            booking_id (int): id of booking that payment correspond to
+            fk_booking_id (int): id of booking that payment correspond to
             sum (float): sum of payment
-            from (datetime): from the time of the payment
-            till (datetime): till the time of the payment            
+            from (datetime): filter start time of the payment
+            till (datetime): filter end time of the payment            
         Returns:
             JSON with result
     """
     pass
 
 
-@router.post("/payment")
-async def payment_create():
+@router.post("/payments")
+async def create_payment():
     """
     Create payment
 
         Args:
-            booking_id (int): id of booking that payment correspond to
+            fk_booking_id (int): id of booking that payment correspond to
             sum (float): sum of payment
             date (datetime): time of the payment
             description (str): description of payment
@@ -35,14 +35,14 @@ async def payment_create():
     pass
 
 
-@router.post("/payment/{payment_id}")
-async def payment_update():
+@router.post("/payments/{payment_id}")
+async def update_payment():
     """
-    Create payment
+    Update payment
 
         Args:
             payment_id (int): id of payment
-            booking_id (int): id of booking that payment correspond to
+            fk_booking_id (int): id of booking that payment correspond to
             sum (float): sum of payment
             date (datetime): time of the payment
             description (str): description of payment
