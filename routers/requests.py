@@ -28,7 +28,6 @@ async def create_request():
         Args:
             booking_id (int): id of booking that request correspond to
             description (str): requsts's description
-            close_description (str, optional): requsts's description after closing
             price (Optional[float]): price of request (if need)
         Returns:
             JSON with result

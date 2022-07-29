@@ -8,7 +8,7 @@ router = APIRouter()
 
 
 @router.post("/roomtypes", response_model=rooms_schema.RoomTypeInfo)
-async def create_rooms_type(roomtype: rooms_schema.RoomTypeCreate):
+async def create_room_type(roomtype: rooms_schema.RoomTypeCreate):
     """
     Create room's type
         Args:
@@ -22,7 +22,7 @@ async def create_rooms_type(roomtype: rooms_schema.RoomTypeCreate):
 
 
 @router.post("/roomtypes/{roomtype_id}", response_model=rooms_schema.RoomTypeInfo)
-async def update_rooms_type(roomtype: rooms_schema.RoomTypeInfo):
+async def update_room_type(roomtype: rooms_schema.RoomTypeInfo):
     """
     Update info in the room's type
 
@@ -38,7 +38,7 @@ async def update_rooms_type(roomtype: rooms_schema.RoomTypeInfo):
 
 
 @router.delete("/roomtypes", response_model=rooms_schema.DeleteInfo)
-async def delete_rooms_type(id: int):
+async def delete_room_type(id: int):
     """
     Delete room's type
 
@@ -47,11 +47,11 @@ async def delete_rooms_type(id: int):
         Returns:
                 JSON with result of delete: Success or Error
     """
-    return await rooms_crud.delete_rooms_type(id=id)
+    return await rooms_crud.delete_room_type(id=id)
 
 
 @router.get("/roomtypes", response_model=List[rooms_schema.RoomTypeInfo])
-async def get_rooms_types(skip: int = 0, limit: int = 100):
+async def get_room_types(skip: int = 0, limit: int = 100):
     """
     Get list of room's types
 
@@ -61,11 +61,11 @@ async def get_rooms_types(skip: int = 0, limit: int = 100):
         Returns:
                 JSON with room's types or error
     """
-    return await rooms_crud.get_rooms_types(skip=skip, limit=limit)
+    return await rooms_crud.get_room_types(skip=skip, limit=limit)
 
 
 @router.post("/rooms", response_model=rooms_schema.RoomInfo)
-async def room_create(room: rooms_schema.RoomCreate):
+async def create_room(room: rooms_schema.RoomCreate):
     """
     Create new room
         Args:
@@ -96,7 +96,7 @@ async def update_room(room: rooms_schema.RoomInfo):
 
 
 @router.delete("/rooms", response_model=rooms_schema.DeleteInfo)
-async def delete_room(id: int):
+async def delete_room(number: int):
     """
     Delete room.
 
@@ -105,7 +105,7 @@ async def delete_room(id: int):
         Returns:
                 JSON with result of delete: Success or Error
     """
-    return await rooms_crud.delete_room(id=id)
+    return await rooms_crud.delete_room(number=number)
 
 
 @router.get("/rooms", response_model=List[rooms_schema.RoomInfo])
