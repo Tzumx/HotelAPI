@@ -8,7 +8,7 @@ async def get_guests():
     """
     List guests
 
-        Args:
+        Args (optional):
             name (str): Name of the guest
             email (str): guest's email
             phone (str): guest's phone
@@ -25,8 +25,8 @@ async def create_guest():
 
         Args:
             name (str): Name of the guest
-            email (str): guest's email
-            phone (str): guest's phone
+            email (str, optional): guest's email
+            phone (str, optional): guest's phone
         Returns:
             JSON with result
     """
@@ -47,6 +47,7 @@ async def update_guest():
             JSON with result
     """
     pass
+
 
 @router.delete("/guests/{guest_id}")
 async def delete_guest():

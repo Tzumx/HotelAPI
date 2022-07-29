@@ -8,7 +8,7 @@ async def get_payments():
     """
     List payments
 
-        Args:
+        Args (optional):
             fk_booking_id (int): id of booking that payment correspond to
             sum (float): sum of payment
             from (datetime): filter start time of the payment
@@ -28,7 +28,7 @@ async def create_payment():
             fk_booking_id (int): id of booking that payment correspond to
             sum (float): sum of payment
             date (datetime): time of the payment
-            description (str): description of payment
+            description (str, optional): description of payment
         Returns:
             JSON with result
     """

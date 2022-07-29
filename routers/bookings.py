@@ -8,11 +8,13 @@ async def get_bookings():
     """
     List bookings
 
-        Args:
+        Args (optional):
             fk_room_number (int): number of the room
             fk_guest_id (int): guest's id
-            check_in (date): date of guest's move on
-            check_out (date): date of guest's move out
+            check_in_from (date): filter date of guest's move on from
+            check_in_till (date): filter date of guest's move on till
+            check_out_from (date): filter date of guest's move out from
+            check_out_till (date): filter date of guest's move out till
             is_paid (bool): check if booking is paid
             is_active (bool): check if booking is active
         Returns:
@@ -31,7 +33,7 @@ async def create_booking():
             fk_guest_id (int): guest who is booking
             check_in (date): when move in
             check_out (date): when move out
-            description (str): desription for the booking
+            description (str, optional): desription for the booking
         Returns:
             JSON with result
     """
@@ -55,6 +57,7 @@ async def update_bookings():
             JSON with result
     """
     pass
+
 
 @router.delete("/bookings/{booking_id}")
 async def delete_bookings():

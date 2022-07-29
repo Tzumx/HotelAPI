@@ -14,7 +14,7 @@ async def create_rooms_type(roomtype: rooms_schema.RoomTypeCreate):
         Args:
                 type_name (str): type of rooms
                 price (float): price for that type
-                description (str): description
+                description (str, optional): description
         Returns:
                 JSON with result or error
     """
@@ -55,7 +55,7 @@ async def get_rooms_types(skip: int = 0, limit: int = 100):
     """
     Get list of room's types
 
-        Args:
+        Args (optional):
                 skip (int): number for "offset" entries
                 limit (int): number for "limit" entries
         Returns:
@@ -71,8 +71,8 @@ async def room_create(room: rooms_schema.RoomCreate):
         Args:
                 number (int): room number
                 fk_room_types_id (int): room's type
-                floor (int): the room is located on this floor, default = 0, >=0
-                housing (int): number of housing, default = 0, >=0
+                floor (int,  optional): the room is located on this floor, default = 0, >=0
+                housing (int,  optional): number of housing, default = 0, >=0
         Returns:
                 JSON with result of creation or error
     """
@@ -113,7 +113,7 @@ async def get_rooms(skip: int = 0, limit: int = 100):
     """
     Get list of rooms
 
-        Args:
+        Args (optional):
                 skip (int): number for "offset" entries
                 limit (int): number for "limit" entries
         Returns:
@@ -129,8 +129,8 @@ async def room_status():  # add schema or query params
 
         Args:
                 room_number (int): number of the room to check
-                from (date): filter from date
-                till (date): filter till date
+                from (date,  optional): filter from date
+                till (date,  optional): filter till date
         Returns:
                 JSON with answer (true or false)
     """
@@ -144,8 +144,8 @@ async def get_room_bookings():  # add schema or query params, add filters
 
         Args:
                 room_number (int): number of the room to check
-                from (date): filter from date
-                till (date): filter till date
+                from (date,  optional): filter from date
+                till (date,  optional): filter till date
         Returns:
                 JSON with bookings or error
     """
@@ -160,8 +160,8 @@ async def get_room_requests():  # add schema or query params, add filters
         Args:
                 room_number (int): number of the room to check
                 is closed (bool): is request has closed
-                from (date): filter from date
-                till (date): filter till date
+                from (date,  optional): filter from date
+                till (date,  optional): filter till date
         Returns:
                 JSON with requests or error
     """
@@ -185,7 +185,7 @@ async def get_room_guest():  # add schema or query params
 async def get_room_features():  # add schema or query params
     """
     List features corresponding with that room
-    
+
         Args:
                 room_number (int): number of the room to check
         Returns:
