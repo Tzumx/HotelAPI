@@ -36,7 +36,7 @@ async def create_request():
 @router.post("/requests/{request_id}")
 async def create_request():
     """
-    Create request
+    Update request
 
         Args:
             request_id (int): id of request
@@ -44,6 +44,18 @@ async def create_request():
             description (str): requsts's description
             close_description (str): requsts's description after closing
             price (Optional[float]): price of request (if need)
+        Returns:
+            JSON with result
+    """
+    pass
+
+@router.delete("/requests/{request_id}")
+async def delete_request():
+    """
+    Delete request
+
+        Args:
+            request_id (int): id of request
         Returns:
             JSON with result
     """

@@ -50,3 +50,17 @@ async def update_payment():
             JSON with result
     """
     pass
+
+
+@router.delete("/payments/{payment_id}")
+async def delete_payment():
+    """
+    Delete payment
+
+        Args:
+            payment_id (int): id of payment
+
+        Returns:
+            JSON with result
+    """
+    pass

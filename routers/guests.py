@@ -36,13 +36,25 @@ async def create_guest():
 @router.post("/guests/{guest_id}")
 async def update_guest():
     """
-    Create guest
+    Update guest
 
         Args:
             guest_id (int): guest's id
             name (str): Name of the guest
             email (str): guest's email
             phone (str): guest's phone
+        Returns:
+            JSON with result
+    """
+    pass
+
+@router.delete("/guests/{guest_id}")
+async def delete_guest():
+    """
+    Delete guest
+
+        Args:
+            guest_id (int): guest's id
         Returns:
             JSON with result
     """

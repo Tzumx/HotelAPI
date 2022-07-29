@@ -56,6 +56,18 @@ async def update_bookings():
     """
     pass
 
+@router.delete("/bookings/{booking_id}")
+async def delete_bookings():
+    """
+    Delete booking
+
+        Args:
+            booking_id (int): id of the booking
+        Returns:
+            JSON with result
+    """
+    pass
+
 
 @router.post("/bookings/{booking_id}/status")
 async def set_booking_status(status: bool):
@@ -84,14 +96,13 @@ async def post_booking_review():
     pass
 
 
-# @router.get("/bookings/{booking_id}/payment")
-# async def get_booking_payment():
+# @router.get("/bookings/{booking_id}/payments")
+# async def get_booking_payments():
 #     """
-#     Update client's review
+#     Get client's payments
 
 #         Args:
 #             booking_id (int): id of the booking
-#             is_active (bool): status of the booking
 #         Returns:
 #             JSON with result
 #     """
