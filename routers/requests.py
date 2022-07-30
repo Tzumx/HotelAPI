@@ -4,16 +4,32 @@ router = APIRouter()
 
 
 @router.get("/requests")
-async def get_requests():
+async def get_requests(offset: int = 0, limit: int = 100):
     """
     List requests
 
-        Args (optional):
-            booking_id (int): id of booking that request correspond to
-            is_closed (bool): is request closed
-            price (float): price of request
-            date_from (datetime): filter date from
-            date_till (datetime): filter date till
+        Args:
+            offset (int, optional): number for "offset" entries
+            limit (int, optional): number for "limit" entries   
+        Returns:
+            JSON with result
+    """
+    pass
+
+
+@router.post("/requests/filter")
+async def filter_requests(offset: int = 0, limit: int = 100):
+    """
+    List requests with filter
+
+        Args:
+            offset (int, optional): number for "offset" entries
+            limit (int, optional): number for "limit" entries           
+            booking_id (int, optional): id of booking that request correspond to
+            is_closed (bool, optional): is request closed
+            price (float, optional): price of request
+            date_from (datetime, optional): filter date from
+            date_till (datetime, optional): filter date till
         Returns:
             JSON with result
     """
@@ -28,15 +44,15 @@ async def create_request():
         Args:
             booking_id (int): id of booking that request correspond to
             description (str): requsts's description
-            price (Optional[float]): price of request (if need)
+            price (float, optinal): price of request (if need)
         Returns:
             JSON with result
     """
     pass
 
 
-@router.post("/requests/{request_id}")
-async def create_request():
+@router.put("/requests/{request_id}")
+async def update_request():
     """
     Update request
 
@@ -44,8 +60,9 @@ async def create_request():
             request_id (int): id of request
             booking_id (int): id of booking that request correspond to
             description (str): requsts's description
-            close_description (str): requsts's description after closing
-            price (Optional[float]): price of request (if need)
+            is_closed (bool, optinal): is request closed
+            close_description (str, optinal): requsts's description after closing
+            price (float, optinal): price of request (if need)
         Returns:
             JSON with result
     """

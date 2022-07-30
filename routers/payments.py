@@ -1,23 +1,41 @@
-from fastapi import APIRouter
+from datetime import datetime
+from typing import Union
+from fastapi import APIRouter, Body
 
 router = APIRouter()
 
 
 @router.get("/payments")
-async def get_payments():
+async def get_payments(offset: int = 0, limit: int = 100):
     """
     List payments
 
-        Args (optional):
-            fk_booking_id (int): id of booking that payment correspond to
-            sum (float): sum of payment
-            from (datetime): filter start time of the payment
-            till (datetime): filter end time of the payment            
+        Args:
+            offset (int, optional): number for "offset" entries
+            limit (int, optional): number for "limit" entries         
         Returns:
             JSON with result
     """
     pass
 
+
+@router.post("/payments/filter")
+async def filter_payments(offset: int = 0, limit: int = 100):
+    """
+    List payments with filter
+
+        Args:
+            offset (int, optional): number for "offset" entries
+            limit (int, optional): number for "limit" entries  
+            payment_id (int, optional): id of payment
+            booking_id (int, optional): id of booking that payment correspond to
+            sum (float, optional): sum of payment
+            date_from (datetime, optional): filter start time of the payment
+            date_till (datetime, optional): filter end time of the payment            
+        Returns:
+            JSON with result
+    """
+    pass
 
 @router.post("/payments")
 async def create_payment():
@@ -25,7 +43,7 @@ async def create_payment():
     Create payment
 
         Args:
-            fk_booking_id (int): id of booking that payment correspond to
+            booking_id (int): id of booking that payment correspond to
             sum (float): sum of payment
             date (datetime): time of the payment
             description (str, optional): description of payment
@@ -35,17 +53,17 @@ async def create_payment():
     pass
 
 
-@router.post("/payments/{payment_id}")
+@router.put("/payments/{payment_id}")
 async def update_payment():
     """
     Update payment
 
         Args:
             payment_id (int): id of payment
-            fk_booking_id (int): id of booking that payment correspond to
+            booking_id (int): id of booking that payment correspond to
             sum (float): sum of payment
             date (datetime): time of the payment
-            description (str): description of payment
+            description (str, optinal): description of payment
         Returns:
             JSON with result
     """

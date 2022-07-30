@@ -1,12 +1,16 @@
 from fastapi import FastAPI
 import uvicorn
 from db import database
-from routers import rooms
+from routers import bookings, guests, payments, requests, rooms
 
 # Initialize the app
 app = FastAPI()
 
 # Link all URLs
+app.include_router(bookings.router)
+app.include_router(guests.router)
+app.include_router(payments.router)
+app.include_router(requests.router)
 app.include_router(rooms.router)
 
 
