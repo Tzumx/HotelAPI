@@ -1,70 +1,76 @@
+from typing import List
 from fastapi import APIRouter
+from schemas import guests as guests_schema, bookings as booking_schema
+from schemas import requests as requests_schema
 
 router = APIRouter()
 
 
-@router.get("/guests")
+@router.get("/guests", response_model=List[guests_schema.GuestInfo])
 async def get_guests(offset: int = 0, limit: int = 100):
     """
     List guests
 
         Args:
-                offset (int, optional): number for "offset" entries
-                limit (int, optional): number for "limit" entries
+            offset (int, optional): number for "offset" entries
+            limit (int, optional): number for "limit" entries
         Returns:
+            response: List[GuestInfo]
                 JSON with guests or error
     """
     pass
 
 
-@router.get("/guests/filter")
-async def get_guests(name: str="", email: str = "", phone: str = ""):
+@router.get("/guests/filter", response_model=List[guests_schema.GuestInfo])
+async def get_guests(name: str = "", email: str = "", phone: str = ""):
     """
-    List guests
+    List guests with filter
 
         Args:
             name (str, optional): Name of the guest
             email (str, optional): guest's email
             phone (str, optional): guest's phone
         Returns:
-            JSON with result
+            response: List[GuestInfo]
+                JSON with result
     """
     pass
 
 
-@router.post("/guests")
-async def create_guest():
+@router.post("/guests", response_model=guests_schema.GuestInfo)
+async def create_guest(guest: guests_schema.GuestCreate):
     """
     Create guest
 
         Args:
-            name (str): Name of the guest
-            email (str, optional): guest's email
-            phone (str, optional): guest's phone
+            guest: GuestCreate
+                parameters required to create a guest
         Returns:
-            JSON with result
+            response: GuestInfo
+                JSON with result
     """
     pass
 
 
-@router.put("/guests/{guest_id}")
-async def update_guest():
+@router.put("/guests/{guest_id}", response_model=guests_schema.GuestInfo)
+async def update_guest(guest_id: int, guest: guests_schema.GuestCreate):
     """
     Update guest
 
         Args:
             guest_id (int): guest's id
-            name (str): Name of the guest
-            email (str, optinal): guest's email
-            phone (str, optinal): guest's phone
+
+            guest: GuestCreate
+                parameters required to update a roomtype
         Returns:
-            JSON with result
+            response: GuestInfo
+                JSON with result
     """
     pass
 
 
-@router.delete("/guests/{guest_id}")
-async def delete_guest():
+@router.delete("/guests/{guest_id}", response_model=guests_schema.DeleteInfo)
+async def delete_guest(guest_id: int):
     """
     Delete guest
 
@@ -76,8 +82,8 @@ async def delete_guest():
     pass
 
 
-@router.get("/guests/{guest_id}/bookings")
-async def get_guest_bookings(is_active : bool = True):
+@router.get("/guests/{guest_id}/bookings", response_model=List[booking_schema.BookingInfo])
+async def get_guest_bookings(guest_id: int, is_active: bool = True):
     """
     List bookings according with guest
 
@@ -85,13 +91,14 @@ async def get_guest_bookings(is_active : bool = True):
             guest_id (id): Guest id
             is_active (bool, optional) : is booking active
         Returns:
-            JSON with result
+            response: BookingInfo
+                JSON with result
     """
     pass
 
 
-@router.get("/guests/{guest_id}/requests")
-async def get_guest_requests(is_closed: bool = False):
+@router.get("/guests/{guest_id}/requests", response_model=List[requests_schema.RequestInfo])
+async def get_guest_requests(guest_id: int, is_closed: bool = False):
     """
     List requests according with guest
 
@@ -99,6 +106,7 @@ async def get_guest_requests(is_closed: bool = False):
             guest_id (id): Guest id
             is_closed (bool, optional): is request closed
         Returns:
-            JSON with result
+            response: List[RequestInfo]
+                JSON with result
     """
     pass

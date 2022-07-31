@@ -1,11 +1,13 @@
 from fastapi import APIRouter
+from schemas import bookings as booking_schema
+from typing import List
 
 router = APIRouter()
 
 
 # TODO: add schemas
 
-@router.get("/bookings")
+@router.get("/bookings", response_model=List[booking_schema.BookingInfo])
 async def get_bookings(offset: int = 0, limit: int = 100):
     """
     List bookings
@@ -14,13 +16,15 @@ async def get_bookings(offset: int = 0, limit: int = 100):
             offset (int, optional): number for "offset" entries
             limit (int, optional): number for "limit" entries
         Returns:
-            JSON with result
+            response: List[BookingInfo]
+                JSON with results
     """
     pass
 
 
-@router.post("/bookings/filter")
-async def filter_bookings(offset: int = 0, limit: int = 100):
+@router.post("/bookings/filter", response_model=List[booking_schema.BookingInfo])
+async def filter_bookings(filter: booking_schema.BookingFilter,
+                          offset: int = 0, limit: int = 100):
     """
     Add booking
 
@@ -30,57 +34,58 @@ async def filter_bookings(offset: int = 0, limit: int = 100):
             booking: BookingFilter
         Returns:
             response: List[BookingInfo]
-                JSON with result
+                JSON with results
     """
     pass
 
 
-@router.post("/bookings")
-async def create_booking():
+@router.post("/bookings", response_model=booking_schema.BookingInfo)
+async def create_booking(booking: booking_schema.BookingCreate):
     """
     Add booking
 
         Args:
-            room_number (int): number of the room
-            guest_id (int): guest who is booking
-            check_in (date): when move in
-            check_out (date): when move out
-            description (str, optional): desription for the booking
+            booking: BookingCreate
+                parameters required to create a booking
         Returns:
-            JSON with result
+            response: BookingInfo
+                JSON with booking instance
     """
     pass
 
 
-@router.put("/bookings/{booking_id}")
-async def update_bookings():
+@router.put("/bookings/{booking_id}", response_model=booking_schema.BookingInfo)
+async def update_bookings(booking_id: int,
+                          booking: booking_schema.BookingInfo):
     """
     Update specific booking.
         Args:
-            request: UpdateBookingRequest
+            booking: BookingInfo
                 parameters required to update a booking
         Raises:
         Returns:
-            response: UpdateBookingResponse
+            response: BookingInfo
+                JSON with updated booking instance
     """
     pass
 
 
-@router.delete("/bookings/{booking_id}")
-async def delete_bookings():
+@router.delete("/bookings/{booking_id}", response_model=booking_schema.DeleteInfo)
+async def delete_bookings(booking_id: int):
     """
     Delete booking
 
         Args:
             booking_id (int): id of the booking
         Returns:
-            JSON with result
+            response: DeleteInfo
+                JSON with result
     """
     pass
 
 
-@router.patch("/bookings/{booking_id}/status")
-async def set_booking_status(status: bool):
+@router.patch("/bookings/{booking_id}/is_active", response_model=booking_schema.BookingInfo)
+async def set_booking_status(booking_id: int, is_active: bool):
     """
     Set booking state
 
@@ -88,32 +93,22 @@ async def set_booking_status(status: bool):
             booking_id (int): id of the booking
             is_active (bool): status of the booking
         Returns:
-            JSON with result
+            response: BookingInfo
+                JSON with updated booking instance
     """
     pass
 
 
-@router.patch("/bookings/{booking_id}/review")
-async def post_booking_review():
+@router.patch("/bookings/{booking_id}/review", response_model=booking_schema.BookingInfo)
+async def post_booking_review(booking_id: int, review: str):
     """
     Update client's review
 
         Args:
             booking_id (int): id of the booking
+            review (str): client's review
         Returns:
-            JSON with result
+            response: BookingInfo
+                JSON with updated booking instance
     """
     pass
-
-
-# @router.get("/bookings/{booking_id}/payments")
-# async def get_booking_payments():
-#     """
-#     Get client's payments
-
-#         Args:
-#             booking_id (int): id of the booking
-#         Returns:
-#             JSON with result
-#     """
-#     pass

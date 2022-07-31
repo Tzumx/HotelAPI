@@ -1,11 +1,12 @@
 from datetime import datetime
-from typing import Union
+from typing import List, Union
 from fastapi import APIRouter, Body
+from schemas import payments as payments_schema
 
 router = APIRouter()
 
 
-@router.get("/payments")
+@router.get("/payments", response_model=List[payments_schema.PaymentInfo])
 async def get_payments(offset: int = 0, limit: int = 100):
     """
     List payments
@@ -14,63 +15,62 @@ async def get_payments(offset: int = 0, limit: int = 100):
             offset (int, optional): number for "offset" entries
             limit (int, optional): number for "limit" entries         
         Returns:
-            JSON with result
+            response: PaymentInfo
+                JSON with result
     """
     pass
 
 
-@router.post("/payments/filter")
-async def filter_payments(offset: int = 0, limit: int = 100):
+@router.post("/payments/filter", response_model=payments_schema.PaymentInfo)
+async def filter_payments(filter: payments_schema.PaymentFilter, offset: int = 0, limit: int = 100):
     """
     List payments with filter
 
         Args:
             offset (int, optional): number for "offset" entries
-            limit (int, optional): number for "limit" entries  
-            payment_id (int, optional): id of payment
-            booking_id (int, optional): id of booking that payment correspond to
-            sum (float, optional): sum of payment
-            date_from (datetime, optional): filter start time of the payment
-            date_till (datetime, optional): filter end time of the payment            
+            limit (int, optional): number for "limit" entries
+
+            filter: PaymentFilter
+                parameters required to filter     
         Returns:
             JSON with result
     """
     pass
 
-@router.post("/payments")
-async def create_payment():
+
+@router.post("/payments", response_model=payments_schema.PaymentInfo)
+async def create_payment(payment: payments_schema.PaymentCreate):
     """
     Create payment
 
         Args:
-            booking_id (int): id of booking that payment correspond to
-            sum (float): sum of payment
-            date (datetime): time of the payment
-            description (str, optional): description of payment
+            payment: PaymentCreate
+                parameters required to create a payment
         Returns:
-            JSON with result
+            response: PaymentInfo
+                JSON with result
     """
     pass
 
 
 @router.put("/payments/{payment_id}")
-async def update_payment():
+async def update_payment(payment_id: int, payment: payments_schema.PaymentCreate):
     """
     Update payment
 
         Args:
             payment_id (int): id of payment
-            booking_id (int): id of booking that payment correspond to
-            sum (float): sum of payment
-            date (datetime): time of the payment
-            description (str, optinal): description of payment
+
+            payment: PaymentCreate
+                parameters required to update a payment
         Returns:
-            JSON with result
+            response: PaymentInfo
+                JSON with result
     """
     pass
 
 
-@router.delete("/payments/{payment_id}")
+@router.delete("/payments/{payment_id}", response_model=payments_schema.DeleteInfo)
 async def delete_payment():
     """
     Delete payment
@@ -79,6 +79,7 @@ async def delete_payment():
             payment_id (int): id of payment
 
         Returns:
-            JSON with result
+            response: DeleteInfo
+                JSON with result
     """
     pass

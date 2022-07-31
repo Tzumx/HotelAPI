@@ -1,9 +1,11 @@
+from typing import List
 from fastapi import APIRouter
+from schemas import requests as requests_schema
 
 router = APIRouter()
 
 
-@router.get("/requests")
+@router.get("/requests", response_model=List[requests_schema.RequestInfo])
 async def get_requests(offset: int = 0, limit: int = 100):
     """
     List requests
@@ -12,65 +14,64 @@ async def get_requests(offset: int = 0, limit: int = 100):
             offset (int, optional): number for "offset" entries
             limit (int, optional): number for "limit" entries   
         Returns:
-            JSON with result
+            response: RequestInfo
+                JSON with result
     """
     pass
 
 
-@router.post("/requests/filter")
-async def filter_requests(offset: int = 0, limit: int = 100):
+@router.post("/requests/filter", response_model=List[requests_schema.RequestInfo])
+async def filter_requests(filter: requests_schema.RequestFilter, offset: int = 0, limit: int = 100):
     """
     List requests with filter
 
         Args:
             offset (int, optional): number for "offset" entries
             limit (int, optional): number for "limit" entries           
-            booking_id (int, optional): id of booking that request correspond to
-            is_closed (bool, optional): is request closed
-            price (float, optional): price of request
-            date_from (datetime, optional): filter date from
-            date_till (datetime, optional): filter date till
+
+            filter: RequestFilter
+                parameters required to filter requests
         Returns:
-            JSON with result
+            response: RequestInfo
+                JSON with result
     """
     pass
 
 
-@router.post("/requests")
-async def create_request():
+@router.post("/requests", response_model=requests_schema.RequestInfo)
+async def create_request(request: requests_schema.RequestCreate):
     """
     Create request
 
         Args:
-            booking_id (int): id of booking that request correspond to
-            description (str): requsts's description
-            price (float, optinal): price of request (if need)
+            request: RequestCreate
+                parameters required to create a request
         Returns:
-            JSON with result
+            response: RequestInfo
+                JSON with result
     """
     pass
 
 
-@router.put("/requests/{request_id}")
-async def update_request():
+@router.put("/requests/{request_id}", response_model=requests_schema.RequestInfo)
+async def update_request(request_id: int, request: requests_schema.RequestCreate):
     """
     Update request
 
         Args:
             request_id (int): id of request
-            booking_id (int): id of booking that request correspond to
-            description (str): requsts's description
-            is_closed (bool, optinal): is request closed
-            close_description (str, optinal): requsts's description after closing
-            price (float, optinal): price of request (if need)
+
+            request: RequestCreate
+                parameters required to update a request
         Returns:
-            JSON with result
+            response: RequestInfo
+                JSON with result
     """
     pass
 
 
-@router.delete("/requests/{request_id}")
-async def delete_request():
+@router.delete("/requests/{request_id}", response_model=requests_schema.DeleteInfo)
+async def delete_request(request_id: int):
     """
     Delete request
 
