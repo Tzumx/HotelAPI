@@ -15,7 +15,7 @@ async def get_payments(offset: int = 0, limit: int = 100):
             offset (int, optional): number for "offset" entries
             limit (int, optional): number for "limit" entries         
         Returns:
-            response: PaymentInfo
+            response: List[PaymentInfo]
                 JSON with result
     """
     pass
@@ -33,7 +33,8 @@ async def filter_payments(filter: payments_schema.PaymentFilter, offset: int = 0
             filter: PaymentFilter
                 parameters required to filter     
         Returns:
-            JSON with result
+            response: List[PaymentInfo]
+                JSON with result
     """
     pass
 
@@ -48,12 +49,12 @@ async def create_payment(payment: payments_schema.PaymentCreate):
                 parameters required to create a payment
         Returns:
             response: PaymentInfo
-                JSON with result
+                JSON with resulted instance
     """
     pass
 
 
-@router.put("/payments/{payment_id}")
+@router.put("/payments/{payment_id}", response_model=payments_schema.PaymentInfo)
 async def update_payment(payment_id: int, payment: payments_schema.PaymentCreate):
     """
     Update payment
@@ -65,7 +66,7 @@ async def update_payment(payment_id: int, payment: payments_schema.PaymentCreate
                 parameters required to update a payment
         Returns:
             response: PaymentInfo
-                JSON with result
+                JSON with resulted instance
     """
     pass
 
@@ -80,6 +81,6 @@ async def delete_payment():
 
         Returns:
             response: DeleteInfo
-                JSON with result
+                JSON with result (Success, Error)
     """
     pass

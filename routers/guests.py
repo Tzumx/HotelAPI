@@ -16,7 +16,7 @@ async def get_guests(offset: int = 0, limit: int = 100):
             limit (int, optional): number for "limit" entries
         Returns:
             response: List[GuestInfo]
-                JSON with guests or error
+                JSON with guests
     """
     pass
 
@@ -47,7 +47,7 @@ async def create_guest(guest: guests_schema.GuestCreate):
                 parameters required to create a guest
         Returns:
             response: GuestInfo
-                JSON with result
+                JSON with resulted instance of guest
     """
     pass
 
@@ -64,7 +64,7 @@ async def update_guest(guest_id: int, guest: guests_schema.GuestCreate):
                 parameters required to update a roomtype
         Returns:
             response: GuestInfo
-                JSON with result
+                JSON with resulted instance
     """
     pass
 
@@ -77,7 +77,8 @@ async def delete_guest(guest_id: int):
         Args:
             guest_id (int): guest's id
         Returns:
-            JSON with result
+            response: DeleteInfo
+                JSON with result (Success, Error)
     """
     pass
 
@@ -85,13 +86,13 @@ async def delete_guest(guest_id: int):
 @router.get("/guests/{guest_id}/bookings", response_model=List[booking_schema.BookingInfo])
 async def get_guest_bookings(guest_id: int, is_active: bool = True):
     """
-    List bookings according with guest
+    List bookings connected with this guest
 
         Args:
-            guest_id (id): Guest id
+            guest_id (id): guest id
             is_active (bool, optional) : is booking active
         Returns:
-            response: BookingInfo
+            response: List[BookingInfo]
                 JSON with result
     """
     pass
@@ -100,10 +101,10 @@ async def get_guest_bookings(guest_id: int, is_active: bool = True):
 @router.get("/guests/{guest_id}/requests", response_model=List[requests_schema.RequestInfo])
 async def get_guest_requests(guest_id: int, is_closed: bool = False):
     """
-    List requests according with guest
+    List requests connected with this guest
 
         Args:
-            guest_id (id): Guest id
+            guest_id (id): guest id
             is_closed (bool, optional): is request closed
         Returns:
             response: List[RequestInfo]

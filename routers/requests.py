@@ -14,7 +14,7 @@ async def get_requests(offset: int = 0, limit: int = 100):
             offset (int, optional): number for "offset" entries
             limit (int, optional): number for "limit" entries   
         Returns:
-            response: RequestInfo
+            response: List[RequestInfo]
                 JSON with result
     """
     pass
@@ -32,7 +32,7 @@ async def filter_requests(filter: requests_schema.RequestFilter, offset: int = 0
             filter: RequestFilter
                 parameters required to filter requests
         Returns:
-            response: RequestInfo
+            response: List[RequestInfo]
                 JSON with result
     """
     pass
@@ -78,6 +78,7 @@ async def delete_request(request_id: int):
         Args:
             request_id (int): id of request
         Returns:
-            JSON with result
+            response: DeleteInfo
+                JSON with result (Success, Error)
     """
     pass

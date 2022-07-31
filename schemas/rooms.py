@@ -93,6 +93,7 @@ class RoomFilter(BaseModel):
     floor: Optional[int]
     housing: Optional[int]
 
+
 class RoomStatus(BaseModel):
     """Schema for room status"""
 

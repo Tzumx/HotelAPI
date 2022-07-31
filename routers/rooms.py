@@ -40,12 +40,14 @@ async def create_room_type(roomtype: rooms_schema.RoomTypeCreate):
 
 
 @router.put("/roomtypes/{roomtype_id}", response_model=rooms_schema.RoomTypeInfo)
-async def update_room_type(roomtype_id: int, roomtype: rooms_schema.RoomTypeInfo):
+async def update_room_type(roomtype_id: int, roomtype: rooms_schema.RoomTypeCreate):
     """
     Update info in the room's type
 
         Args:
-            roomtype: RoomTypeInfo
+            roomtype_id (int): roomtype id for updating
+
+            roomtype: RoomTypeCreate
                 parameters required to update a roomtype
         Returns:
             response: RoomTypeInfo
@@ -93,11 +95,11 @@ async def filter_rooms(room: rooms_schema.RoomFilter,
             offset (int, optional): number for "offset" entries
             limit (int, optional): number for "limit" entries
 
-            room: RoomInfo
+            room: RoomFilter
                 parameters required to filter rooms
         Returns:
             response: List[RoomInfo]
-                JSON with rooms or error
+                JSON with rooms
     """
     pass
 
@@ -117,13 +119,14 @@ async def create_room(room: rooms_schema.RoomCreate):
 
 
 @router.put("/rooms/{number}", response_model=rooms_schema.RoomInfo)
-async def update_room(number:int, room: rooms_schema.RoomInfo):
+async def update_room(number: int, room: rooms_schema.RoomCreate):
     """
     Update info in the room
 
         Args:
             number (int): room number
-            room: RoomInfo
+
+            room: RoomCreate
                 parameters required to update a room
         Returns:
             response: RoomInfo
@@ -147,7 +150,7 @@ async def delete_room(number: int):
 
 
 @router.get("/rooms/{number}/status", response_model=rooms_schema.RoomStatus)
-async def room_status(number:int):
+async def room_status(number: int):
     """
     Check room's status   
 
@@ -161,9 +164,9 @@ async def room_status(number:int):
 
 
 @router.get("/rooms/{number}/bookings", response_model=List[bookings_schema.BookingInfo])
-async def get_room_bookings(number: int, 
+async def get_room_bookings(number: int,
                             date_from: Optional[datetime], date_till: Optional[datetime],
-                            is_active:bool = True):
+                            is_active: bool = True):
     """
     List bookings coresponding with that room  
 
@@ -180,7 +183,7 @@ async def get_room_bookings(number: int,
 
 
 @router.get("/rooms/{number}/requests", response_model=List[requests_schema.RequestInfo])
-async def get_room_requests(number: int, 
+async def get_room_requests(number: int,
                             date_from: Optional[datetime], date_till: Optional[datetime],
                             is_closed: bool = False):
     """
@@ -247,7 +250,7 @@ async def create_room_type_feature(feature: rooms_schema.FeatureCreate):
 @router.delete("/roomtypes/features", response_model=rooms_schema.DeleteInfo)
 async def delete_room_type_feature(id: int):
     """
-    Delete roomtype's feature
+    Delete roomtype's feature from global list
 
         Args:
             id (int): Id of entry to delete
@@ -285,7 +288,7 @@ async def delete_feature_from_roomtype(type_id: int, feature_id: int):
             feature_id (int): id of feature
         Returns:
             response: DeleteInfo
-                Dict with result
+                Dict with result (Success, Error)
     """
 
     return await rooms_crud.delete_feature_from_roomtype(type_id, feature_id)

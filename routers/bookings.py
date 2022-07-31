@@ -5,8 +5,6 @@ from typing import List
 router = APIRouter()
 
 
-# TODO: add schemas
-
 @router.get("/bookings", response_model=List[booking_schema.BookingInfo])
 async def get_bookings(offset: int = 0, limit: int = 100):
     """
@@ -31,7 +29,9 @@ async def filter_bookings(filter: booking_schema.BookingFilter,
         Args:
             offset (int, optional): number for "offset" entries
             limit (int, optional): number for "limit" entries
+
             booking: BookingFilter
+                parameters for filtering, optional
         Returns:
             response: List[BookingInfo]
                 JSON with results
@@ -79,7 +79,7 @@ async def delete_bookings(booking_id: int):
             booking_id (int): id of the booking
         Returns:
             response: DeleteInfo
-                JSON with result
+                JSON with result (Success, Error)
     """
     pass
 

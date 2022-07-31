@@ -15,7 +15,7 @@ class BookingBase (BaseModel):
 
 class BookingCreate (BookingBase):
     """Schema for booking creation"""
-    
+
     class Config:
         orm_mode = True
 
@@ -33,6 +33,7 @@ class BookingInfo (BookingBase):
     class Config:
         orm_mode = True
 
+
 class BookingFilter (BaseModel):
     """Filter bookings"""
 
@@ -45,6 +46,8 @@ class BookingFilter (BaseModel):
     check_out_from: Optional[datetime]
     check_out_till: Optional[datetime]
 
+
 class DeleteInfo (BaseModel):
     """Response schema on delete action"""
-    result: str    
+
+    result: str

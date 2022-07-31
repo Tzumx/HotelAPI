@@ -38,4 +38,5 @@ class GuestFilter (BaseModel):
 
 class DeleteInfo(BaseModel):
     """Response schema on delete action"""
+
     result: str
