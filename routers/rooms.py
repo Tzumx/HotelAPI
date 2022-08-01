@@ -150,7 +150,7 @@ async def delete_room(number: int):
 
 
 @router.get("/rooms/{number}/status", response_model=rooms_schema.RoomStatus)
-async def room_status(number: int):
+async def get_room_status(number: int):
     """
     Check room's status   
 

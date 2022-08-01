@@ -35,6 +35,8 @@ class PaymentFilter(BaseModel):
 
     id: Optional[int]
     booking_id: Optional[int]
+    sum_from: Optional[float]
+    sum_till: Optional[float]
     date_from: Optional[datetime]
     date_till: Optional[datetime]
 
