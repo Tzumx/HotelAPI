@@ -42,7 +42,7 @@ class RequestFilter(BaseModel):
     date_creation_till:  Optional[datetime]  # filter by creation date till
 
 
-class DeleteInfo(BaseModel):
+class RequestDeleteInfo(BaseModel):
     """Response schema on delete action"""
 
     result: str

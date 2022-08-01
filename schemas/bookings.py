@@ -47,7 +47,7 @@ class BookingFilter (BaseModel):
     check_out_till: Optional[datetime]
 
 
-class DeleteInfo (BaseModel):
+class BookingDeleteInfo (BaseModel):
     """Response schema on delete action"""
 
     result: str

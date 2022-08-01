@@ -71,7 +71,7 @@ async def update_payment(payment_id: int, payment: payments_schema.PaymentCreate
     pass
 
 
-@router.delete("/payments/{payment_id}", response_model=payments_schema.DeleteInfo)
+@router.delete("/payments/{payment_id}", response_model=payments_schema.PaymentDeleteInfo)
 async def delete_payment():
     """
     Delete payment

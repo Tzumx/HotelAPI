@@ -68,7 +68,7 @@ class FeatureInfo(FeatureBase):
         orm_mode = True
 
 
-class DeleteInfo(BaseModel):
+class RoomDeleteInfo(BaseModel):
     """Response schema on delete action."""
     result: str
 

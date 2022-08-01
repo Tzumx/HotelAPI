@@ -69,7 +69,7 @@ async def update_guest(guest_id: int, guest: guests_schema.GuestCreate):
     pass
 
 
-@router.delete("/guests/{guest_id}", response_model=guests_schema.DeleteInfo)
+@router.delete("/guests/{guest_id}", response_model=guests_schema.GuestDeleteInfo)
 async def delete_guest(guest_id: int):
     """
     Delete guest

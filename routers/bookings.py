@@ -70,7 +70,7 @@ async def update_bookings(booking_id: int,
     pass
 
 
-@router.delete("/bookings/{booking_id}", response_model=booking_schema.DeleteInfo)
+@router.delete("/bookings/{booking_id}", response_model=booking_schema.BookingDeleteInfo)
 async def delete_bookings(booking_id: int):
     """
     Delete booking

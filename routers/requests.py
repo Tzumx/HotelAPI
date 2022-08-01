@@ -70,7 +70,7 @@ async def update_request(request_id: int, request: requests_schema.RequestCreate
     pass
 
 
-@router.delete("/requests/{request_id}", response_model=requests_schema.DeleteInfo)
+@router.delete("/requests/{request_id}", response_model=requests_schema.RequestDeleteInfo)
 async def delete_request(request_id: int):
     """
     Delete request

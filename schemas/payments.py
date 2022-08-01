@@ -39,7 +39,7 @@ class PaymentFilter(BaseModel):
     date_till: Optional[datetime]
 
 
-class DeleteInfo(BaseModel):
+class PaymentDeleteInfo(BaseModel):
     """Response schema on delete action"""
 
     result: str

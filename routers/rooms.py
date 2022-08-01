@@ -135,7 +135,7 @@ async def update_room(number: int, room: rooms_schema.RoomCreate):
     return await rooms_crud.update_room(room=room)
 
 
-@router.delete("/rooms/{number}", response_model=rooms_schema.DeleteInfo)
+@router.delete("/rooms/{number}", response_model=rooms_schema.RoomDeleteInfo)
 async def delete_room(number: int):
     """
     Delete room.
@@ -247,7 +247,7 @@ async def create_room_type_feature(feature: rooms_schema.FeatureCreate):
     return await rooms_crud.create_room_type_feature(feature=feature)
 
 
-@router.delete("/roomtypes/features", response_model=rooms_schema.DeleteInfo)
+@router.delete("/roomtypes/features", response_model=rooms_schema.RoomDeleteInfo)
 async def delete_room_type_feature(id: int):
     """
     Delete roomtype's feature from global list
@@ -278,7 +278,7 @@ async def add_feature_to_roomtype(type_id: int, feature_id: int):
     return await rooms_crud.add_feature_to_roomtype(type_id, feature_id)
 
 
-@router.delete("/roomtypes/{type_id}/features", response_model=rooms_schema.DeleteInfo)
+@router.delete("/roomtypes/{type_id}/features", response_model=rooms_schema.RoomDeleteInfo)
 async def delete_feature_from_roomtype(type_id: int, feature_id: int):
     """
     Delete feature from roomtype

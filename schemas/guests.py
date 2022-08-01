@@ -21,6 +21,7 @@ class GuestCreate(GuestBase):
 class GuestInfo (GuestBase):
     """Schema for guest information"""
 
+    id: int
     email: str
     phone: str
 
@@ -36,7 +37,7 @@ class GuestFilter (BaseModel):
     phone: Optional[str]
 
 
-class DeleteInfo(BaseModel):
+class GuestDeleteInfo(BaseModel):
     """Response schema on delete action"""
 
     result: str
