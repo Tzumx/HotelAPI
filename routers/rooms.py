@@ -2,7 +2,7 @@ from datetime import datetime
 from fastapi import APIRouter
 from typing import List, Optional
 
-from schemas import rooms as rooms_schema, bookings as bookings_schema
+from schemas import rooms as rooms_schema
 from schemas import guests as guests_schema, requests as requests_schema
 from crud import rooms as rooms_crud
 
@@ -159,25 +159,6 @@ async def get_room_status(number: int):
         Returns:
             response: RoomStatus
                 JSON with status
-    """
-    pass
-
-
-@router.get("/rooms/{number}/bookings", response_model=List[bookings_schema.BookingInfo])
-async def get_room_bookings(number: int,
-                            date_from: Optional[datetime], date_till: Optional[datetime],
-                            is_active: bool = True):
-    """
-    List bookings coresponding with that room  
-
-        Args:
-            number (int): number of the room to check
-            is_active (bool, optional): is booking active
-            date_from (date,  optional): filter from date
-            date_till (date,  optional): filter till date
-        Returns:
-            response: List[BookingInfo]
-                JSON with bookings
     """
     pass
 

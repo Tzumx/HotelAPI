@@ -1,7 +1,6 @@
 from typing import List
 from fastapi import APIRouter
-from schemas import guests as guests_schema, bookings as booking_schema
-from schemas import requests as requests_schema
+from schemas import guests as guests_schema, requests as requests_schema
 
 router = APIRouter()
 
@@ -79,21 +78,6 @@ async def delete_guest(guest_id: int):
         Returns:
             response: DeleteInfo
                 JSON with result (Success, Error)
-    """
-    pass
-
-
-@router.get("/guests/{guest_id}/bookings", response_model=List[booking_schema.BookingInfo])
-async def get_guest_bookings(guest_id: int, is_active: bool = True):
-    """
-    List bookings connected with this guest
-
-        Args:
-            guest_id (id): guest id
-            is_active (bool, optional) : is booking active
-        Returns:
-            response: List[BookingInfo]
-                JSON with result
     """
     pass
 
