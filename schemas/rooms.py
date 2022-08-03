@@ -5,6 +5,7 @@ from pydantic import BaseModel, EmailStr, Field, UUID4, validator
 
 class RoomTypeBase(BaseModel):
     """Base schema with room type details."""
+    
     type_name: str
     price: float
     description: str
@@ -12,8 +13,9 @@ class RoomTypeBase(BaseModel):
 
 class RoomBase(BaseModel):
     """Base schema with room details."""
+    
     number: int
-    fk_room_types_id: int
+    room_types_id: int
     floor: int = 0
     housing: int = 0
 
@@ -32,6 +34,7 @@ class RoomTypeCreate(RoomTypeBase):
 
 class RoomTypeInfo(RoomTypeBase):
     """Response schema with room type details."""
+    
     id: int
 
     class Config:
@@ -47,7 +50,8 @@ class RoomCreate(RoomBase):
 
 class RoomInfo(RoomBase):
     """Response schema with room details."""
-    fk_room_types_id: Union[int, None]
+    
+    room_types_id: Union[int, None]
 
     class Config:
         orm_mode = True
@@ -62,13 +66,15 @@ class FeatureCreate(FeatureBase):
 
 class FeatureInfo(FeatureBase):
     """Response schema with roomtype's features."""
+    
     id: int
 
     class Config:
         orm_mode = True
 
 
-class DeleteInfo(BaseModel):
+class RoomDeleteInfo(BaseModel):
+
     """Response schema on delete action."""
     result: str
 
@@ -83,3 +89,21 @@ class FeatureTypeInfoFull(FeatureTypeInfo):
     type_name: str
     price: float
     description: str
+
+
+class RoomFilter(BaseModel):
+    """Schema for room filtering"""
+
+    number: Optional[int]
+    room_types_id: Optional[int]
+    floor: Optional[int]
+    housing: Optional[int]
+
+
+class RoomStatus(BaseModel):
+    """Schema for room status"""
+
+    is_free: bool
+    is_open_requests: bool
+    is_paid: bool
+
