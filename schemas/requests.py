@@ -39,7 +39,7 @@ class RequestFilter(BaseModel):
     is_closed: Optional[bool]
     price: Optional[float]
     date_creation_from: Optional[datetime]  # filter by creation date from
-    date_creation_till:  Optional[datetime]  # filter by creation date till
+    date_creation_till: Optional[datetime]  # filter by creation date till
 
 
 class RequestDeleteInfo(BaseModel):

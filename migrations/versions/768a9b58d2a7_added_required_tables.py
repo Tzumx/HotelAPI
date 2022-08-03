@@ -1,7 +1,7 @@
 """Added required tables
 
 Revision ID: 768a9b58d2a7
-Revises: 
+Revises:
 Create Date: 2022-07-28 21:55:14.121909
 
 """

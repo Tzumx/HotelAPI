@@ -92,7 +92,7 @@ async def add_feature_to_roomtype(fk_room_type_id: int, fk_feature_id: int):
 
     sum_table = rooms_model.roomtype_feature.join(rooms_model.room_type,
                 rooms_model.roomtype_feature.c.fk_room_type_id == rooms_model.room_type.c.id
-                ).join(rooms_model.feature, 
+                ).join(rooms_model.feature,
                 rooms_model.roomtype_feature.c.fk_feature_id == rooms_model.feature.c.id)
     result = await database.fetch_one(sum_table.select().
                                       where(rooms_model.room_type.c.id == fk_room_type_id).
@@ -145,8 +145,8 @@ async def create_room(room: rooms_schema.RoomCreate):
                                     rooms_model.room.c.number == room.number)
     answer = await database.execute(query)
     if answer == None:
-        query = rooms_model.room.insert().values(number=room.number, 
-                                    type_id=room.type_id, floor=room.floor, 
+        query = rooms_model.room.insert().values(number=room.number,
+                                    type_id=room.type_id, floor=room.floor,
                                     housing=room.housing)
         room_id = await database.execute(query)
         return {**room.dict()}

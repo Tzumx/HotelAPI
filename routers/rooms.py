@@ -57,7 +57,7 @@ async def update_room_type(roomtype_id: int, roomtype: rooms_schema.RoomTypeCrea
     return await rooms_crud.update_room_type(roomtype=roomtype)
 
 
-@router.delete("/roomtypes/{roomtype_id}", response_model=rooms_schema.DeleteInfo)
+@router.delete("/roomtypes/{roomtype_id}", response_model=rooms_schema.RoomDeleteInfo)
 async def delete_room_type(roomtype_id: int):
     """
     Delete room's type
@@ -153,7 +153,7 @@ async def delete_room(number: int):
 @router.get("/rooms/{number}/status", response_model=rooms_schema.RoomStatus)
 async def get_room_status(number: int):
     """
-    Check room's status   
+    Check room's status
 
         Args:
             number (int): number of the room to check
@@ -169,7 +169,7 @@ async def get_room_requests(number: int,
                             date_from: Optional[datetime], date_till: Optional[datetime],
                             is_closed: bool = False):
     """
-    List requests coresponding with that room  
+    List requests coresponding with that room
 
         Args:
             number (int): number of the room to check
