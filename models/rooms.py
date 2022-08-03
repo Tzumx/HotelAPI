@@ -1,43 +1,48 @@
-from sqlalchemy import Column, DateTime, Integer, String, Float, Boolean
-from sqlalchemy import MetaData, Table, ForeignKey
-from sqlalchemy.sql import expression
+from sqlalchemy import Table, Column, Integer, String, Numeric, text
+from sqlalchemy import MetaData, ForeignKey, UniqueConstraint, CheckConstraint
 
 metadata = MetaData()
 
-# Model of romms
-room_table = Table(
+room = Table(
+    # Model of hotel rooms
     'rooms',
     metadata,
-    Column('id', Integer, primary_key=True),
-    Column('number', Integer, unique=True, index=True),  # number of the room
-    Column('type_id', ForeignKey("rooms_types.id",
-                                 onupdate="CASCADE", ondelete="CASCADE")),
-    Column('is_clean', Boolean(),
-           server_default=expression.true(),
-           nullable=False),
+    Column('number', Integer, primary_key=True,
+           autoincrement=False),  # number of the room
+    Column('fk_room_types_id', ForeignKey("room_types.id",
+                                 onupdate="CASCADE", ondelete="SET NULL")),
+    Column('floor', Integer, CheckConstraint('floor>=0'),
+           nullable=False, server_default=text("0")),
+    Column('housing', Integer, CheckConstraint('housing>=0'), nullable=False,
+           server_default=text("0")),
 )
 
-# Model of room's types
-room_type_table = Table(
-    'rooms_types',
+room_type = Table(
+    # Model of room's types
+    'room_types',
     metadata,
     Column('id', Integer, primary_key=True),
-    Column('type', String(100)),
-    Column('price', Float, index=True),
+    Column('type_name', String(), nullable=False),
+    Column('price', Numeric, CheckConstraint(
+        'price>=0'), index=True, nullable=False),
     Column('description', String()),
-    Column('is_doublebad', Boolean(),
-           server_default=expression.false(),
-           nullable=False),
-    Column('is_kitchen', Boolean(),
-           server_default=expression.false(),
-           nullable=False),
-    Column('is_bathroom', Boolean(),
-           server_default=expression.false(),
-           nullable=False),
-    Column('is_conditioner', Boolean(),
-           server_default=expression.false(),
-           nullable=False),
-    Column('is_TV', Boolean(),
-           server_default=expression.false(),
-           nullable=False),
+)
+
+feature = Table(
+    # Model for roomtype's features
+    'features',
+    metadata,
+    Column('id', Integer, primary_key=True),
+    Column('feature', String(), nullable=False),
+)
+
+roomtype_feature = Table(
+    # Many-to-many between roomtype and feature
+    'roomtypes_features',
+    metadata,
+    Column('fk_room_type_id', ForeignKey("room_types.id",
+                                 onupdate="CASCADE", ondelete="CASCADE")),
+    Column('fk_feature_id', ForeignKey("features.id",
+                                    onupdate="CASCADE", ondelete="CASCADE")),
+    UniqueConstraint('fk_room_type_id', 'fk_feature_id'),
 )
