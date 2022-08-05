@@ -1,11 +1,12 @@
 from fastapi import APIRouter
-from schemas import bookings as booking_schema
+from schemas import bookings as bookings_schema
+from crud import bookings as bookings_crud
 from typing import List
 
 router = APIRouter()
 
 
-@router.get("/bookings", response_model=List[booking_schema.BookingInfo])
+@router.get("/bookings", response_model=List[bookings_schema.BookingInfo])
 async def get_bookings(offset: int = 0, limit: int = 100):
     """
     List bookings
@@ -17,11 +18,11 @@ async def get_bookings(offset: int = 0, limit: int = 100):
             response: List[BookingInfo]
                 JSON with results
     """
-    pass
+    return await bookings_crud.get_bookings(offset, limit)
 
 
-@router.post("/bookings/filter", response_model=List[booking_schema.BookingInfo])
-async def filter_bookings(filter: booking_schema.BookingFilter,
+@router.post("/bookings/filter", response_model=List[bookings_schema.BookingInfo])
+async def filter_bookings(filter: bookings_schema.BookingFilter,
                           offset: int = 0, limit: int = 100):
     """
     Add booking
@@ -36,11 +37,11 @@ async def filter_bookings(filter: booking_schema.BookingFilter,
             response: List[BookingInfo]
                 JSON with results
     """
-    pass
+    return await bookings_crud.filter_bookings(filter=filter, offset=offset, limit=limit)
 
 
-@router.post("/bookings", response_model=booking_schema.BookingInfo)
-async def create_booking(booking: booking_schema.BookingCreate):
+@router.post("/bookings", response_model=bookings_schema.BookingInfo)
+async def create_booking(booking: bookings_schema.BookingCreate):
     """
     Add booking
 
@@ -51,12 +52,12 @@ async def create_booking(booking: booking_schema.BookingCreate):
             response: BookingInfo
                 JSON with booking instance
     """
-    pass
+    return await bookings_crud.create_booking(booking=booking)
 
 
-@router.put("/bookings/{booking_id}", response_model=booking_schema.BookingInfo)
+@router.put("/bookings/{booking_id}", response_model=bookings_schema.BookingUpdate)
 async def update_bookings(booking_id: int,
-                          booking: booking_schema.BookingInfo):
+                          booking: bookings_schema.BookingUpdate):
     """
     Update specific booking.
         Args:
@@ -67,10 +68,10 @@ async def update_bookings(booking_id: int,
             response: BookingInfo
                 JSON with updated booking instance
     """
-    pass
+    return await bookings_crud.update_booking(booking_id=booking_id, booking=booking)
 
 
-@router.delete("/bookings/{booking_id}", response_model=booking_schema.BookingDeleteInfo)
+@router.delete("/bookings/{booking_id}", response_model=bookings_schema.BookingDeleteInfo)
 async def delete_bookings(booking_id: int):
     """
     Delete booking
@@ -81,10 +82,10 @@ async def delete_bookings(booking_id: int):
             response: DeleteInfo
                 JSON with result (Success, Error)
     """
-    pass
+    return await bookings_crud.delete_booking(booking_id=booking_id)
 
 
-@router.patch("/bookings/{booking_id}/is_active", response_model=booking_schema.BookingInfo)
+@router.patch("/bookings/{booking_id}/is_active", response_model=bookings_schema.BookingInfo)
 async def set_booking_status(booking_id: int, is_active: bool):
     """
     Set booking state
@@ -96,10 +97,10 @@ async def set_booking_status(booking_id: int, is_active: bool):
             response: BookingInfo
                 JSON with updated booking instance
     """
-    pass
+    return await bookings_crud.set_booking_status(booking_id=booking_id, is_active=is_active)
 
 
-@router.patch("/bookings/{booking_id}/review", response_model=booking_schema.BookingInfo)
+@router.patch("/bookings/{booking_id}/review", response_model=bookings_schema.BookingInfo)
 async def post_booking_review(booking_id: int, review: str):
     """
     Update client's review
@@ -111,4 +112,4 @@ async def post_booking_review(booking_id: int, review: str):
             response: BookingInfo
                 JSON with updated booking instance
     """
-    pass
+    return await bookings_crud.post_booking_review(booking_id=booking_id, review=review)
