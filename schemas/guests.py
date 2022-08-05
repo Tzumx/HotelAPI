@@ -1,5 +1,5 @@
 from typing import Optional, Union
-from pydantic import BaseModel
+from pydantic import BaseModel, EmailStr
 
 
 class GuestBase(BaseModel):
@@ -11,7 +11,7 @@ class GuestBase(BaseModel):
 class GuestCreate(GuestBase):
     """Schema for guest creation"""
 
-    email: Optional[str]
+    email: Optional[EmailStr]
     phone: Optional[str]
 
     class Config:
@@ -22,8 +22,8 @@ class GuestInfo (GuestBase):
     """Schema for guest information"""
 
     id: int
-    email: str
-    phone: str
+    email: Optional[EmailStr]
+    phone: Optional[str]
 
     class Config:
         orm_mode = True
