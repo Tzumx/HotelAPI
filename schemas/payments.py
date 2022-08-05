@@ -1,12 +1,11 @@
 from datetime import datetime
 from typing import Optional, Union
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 
 class PaymentBase(BaseModel):
     """Base schema for payments"""
 
-    booking_id: int
     sum: float
     date: datetime
 
@@ -14,7 +13,8 @@ class PaymentBase(BaseModel):
 class PaymentCreate(PaymentBase):
     """Schema for payment create"""
 
-    description: Optional[str]
+    booking_id: int
+    description: Optional[str] = ""
 
     class Config:
         orm_mode = True
@@ -24,10 +24,12 @@ class PaymentInfo(PaymentBase):
     """Schema for getting information about payment"""
 
     id: int
+    fk_booking_id: int = Field(..., alias='booking_id')
     description: str
 
     class Config:
         orm_mode = True
+        allow_population_by_field_name = True
 
 
 class PaymentFilter(BaseModel):
