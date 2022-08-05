@@ -26,3 +26,9 @@ repos:
     hooks:
     -   id: pylint
         exclude: ^(tests|migrations)/
+        args:
+        - --max-line-length=100
+        - --ignore-imports=yes
+        - -d duplicate-code
+        - --errors-only
+        - --disable=F0401
