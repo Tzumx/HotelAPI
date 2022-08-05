@@ -9,15 +9,20 @@ repos:
     rev: 4.0.1
     hooks:
     -   id: flake8
+        exclude: ^(tests|migrations)/
+
 -   repo: https://github.com/pre-commit/mirrors-autopep8
     rev: v1.6.0
     hooks:
     -   id: autopep8
+        exclude: ^(tests|migrations)/
 -   repo: https://github.com/pycqa/isort
     rev: 5.10.1
     hooks:
     -   id: isort
+        exclude: ^(tests|migrations)/
 -   repo: https://github.com/pycqa/pylint
-    rev: pylint-2.14.5
+    rev: v2.14.5
     hooks:
-    -   id: pylint        
+    -   id: pylint
+        exclude: ^(tests|migrations)/
