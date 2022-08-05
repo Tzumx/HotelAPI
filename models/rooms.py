@@ -10,7 +10,7 @@ room = Table(
     Column('number', Integer, primary_key=True,
            autoincrement=False),  # number of the room
     Column('fk_room_types_id', ForeignKey("room_types.id",
-                                 onupdate="CASCADE", ondelete="SET NULL")),
+                                          onupdate="CASCADE", ondelete="SET NULL")),
     Column('floor', Integer, CheckConstraint('floor>=0'),
            nullable=False, server_default=text("0")),
     Column('housing', Integer, CheckConstraint('housing>=0'), nullable=False,
@@ -41,8 +41,8 @@ roomtype_feature = Table(
     'roomtypes_features',
     metadata,
     Column('fk_room_type_id', ForeignKey("room_types.id",
-                                 onupdate="CASCADE", ondelete="CASCADE")),
+                                         onupdate="CASCADE", ondelete="CASCADE")),
     Column('fk_feature_id', ForeignKey("features.id",
-                                    onupdate="CASCADE", ondelete="CASCADE")),
+                                       onupdate="CASCADE", ondelete="CASCADE")),
     UniqueConstraint('fk_room_type_id', 'fk_feature_id'),
 )
