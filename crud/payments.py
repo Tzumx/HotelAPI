@@ -6,14 +6,6 @@ from models import payments as payments_model, bookings as bookings_model, rooms
 from schemas import payments as payments_schema
 
 
-async def get_payments(offset: int = 0, limit: int = 100):
-    """Get list of payments"""
-
-    results = await database.fetch_all(payments_model.payment.select(
-    ).offset(offset).limit(limit))
-    return [dict(result._mapping) for result in results]
-
-
 async def filter_payments(filter: payments_schema.PaymentFilter,
                           offset: int = 0, limit: int = 100):
     """Get filter list of payments"""

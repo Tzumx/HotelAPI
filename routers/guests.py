@@ -6,21 +6,6 @@ from crud import guests as guests_crud
 router = APIRouter()
 
 
-@router.get("/guests", response_model=List[guests_schema.GuestInfo])
-async def get_guests(offset: int = 0, limit: int = 100):
-    """
-    List guests
-
-        Args:
-            offset (int, optional): number for "offset" entries
-            limit (int, optional): number for "limit" entries
-        Returns:
-            response: List[GuestInfo]
-                JSON with guests
-    """
-    return await guests_crud.get_guests(offset=offset, limit=limit)
-
-
 @router.post("/guests/filter", response_model=List[guests_schema.GuestInfo])
 async def filter_guests(filter: guests_schema.GuestFilter,
                         offset: int = 0, limit: int = 100):

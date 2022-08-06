@@ -7,21 +7,6 @@ from crud import payments as payments_crud
 router = APIRouter()
 
 
-@router.get("/payments", response_model=List[payments_schema.PaymentInfo])
-async def get_payments(offset: int = 0, limit: int = 100):
-    """
-    List payments
-
-        Args:
-            offset (int, optional): number for "offset" entries
-            limit (int, optional): number for "limit" entries
-        Returns:
-            response: List[PaymentInfo]
-                JSON with result
-    """
-    return await payments_crud.get_payments(offset, limit)
-
-
 @router.post("/payments/filter", response_model=List[payments_schema.PaymentInfo])
 async def filter_payments(filter: payments_schema.PaymentFilter, offset: int = 0, limit: int = 100):
     """

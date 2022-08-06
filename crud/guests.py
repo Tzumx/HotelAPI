@@ -6,14 +6,6 @@ from models import guests as guests_model, bookings as bookings_model, requests 
 from schemas import guests as guests_schema
 
 
-async def get_guests(offset: int = 0, limit: int = 100):
-    """Get list of guests"""
-
-    results = await database.fetch_all(guests_model.guest.select(
-    ).offset(offset).limit(limit))
-    return [dict(result._mapping) for result in results]
-
-
 async def filter_guests(filter: guests_schema.GuestFilter, offset: int = 0, limit: int = 100):
     """Get filter list of guests"""
 

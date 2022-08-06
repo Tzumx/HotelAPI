@@ -7,14 +7,6 @@ from schemas import bookings as bookings_schema
 from crud import rooms as room_crud
 
 
-async def get_bookings(offset: int = 0, limit: int = 100):
-    """Get list of bookings"""
-
-    results = await database.fetch_all(bookings_model.booking.select(
-    ).offset(offset).limit(limit))
-    return [dict(result._mapping) for result in results]
-
-
 async def filter_bookings(filter: bookings_schema.BookingFilter,
                           offset: int = 0, limit: int = 100):
     """Get filter list of bookings"""

@@ -6,21 +6,6 @@ from crud import requests as requests_crud
 router = APIRouter()
 
 
-@router.get("/requests", response_model=List[requests_schema.RequestInfo])
-async def get_requests(offset: int = 0, limit: int = 100):
-    """
-    List requests
-
-        Args:
-            offset (int, optional): number for "offset" entries
-            limit (int, optional): number for "limit" entries
-        Returns:
-            response: List[RequestInfo]
-                JSON with result
-    """
-    return await requests_crud.get_requests(offset, limit)
-
-
 @router.post("/requests/filter", response_model=List[requests_schema.RequestInfo])
 async def filter_requests(filter: requests_schema.RequestFilter, offset: int = 0, limit: int = 100):
     """

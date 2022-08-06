@@ -71,21 +71,6 @@ async def delete_room_type(roomtype_id: int):
     return await rooms_crud.delete_room_type(id=roomtype_id)
 
 
-@router.get("/rooms", response_model=List[rooms_schema.RoomInfo])
-async def get_rooms(offset: int = 0, limit: int = 100):
-    """
-    Get list of rooms
-
-        Args:
-            offset (int, optional): number for "offset" entries
-            limit (int, optional): number for "limit" entries
-        Returns:
-            response: List[RoomInfo]
-                JSON with rooms or error
-    """
-    return await rooms_crud.get_rooms(offset=offset, limit=limit)
-
-
 @router.post("/rooms/filter", response_model=List[rooms_schema.RoomInfo])
 async def filter_rooms(filter: rooms_schema.RoomFilter,
                        offset: int = 0, limit: int = 100):

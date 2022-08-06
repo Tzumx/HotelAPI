@@ -6,21 +6,6 @@ from typing import List
 router = APIRouter()
 
 
-@router.get("/bookings", response_model=List[bookings_schema.BookingInfo])
-async def get_bookings(offset: int = 0, limit: int = 100):
-    """
-    List bookings
-
-        Args:
-            offset (int, optional): number for "offset" entries
-            limit (int, optional): number for "limit" entries
-        Returns:
-            response: List[BookingInfo]
-                JSON with results
-    """
-    return await bookings_crud.get_bookings(offset, limit)
-
-
 @router.post("/bookings/filter", response_model=List[bookings_schema.BookingInfo])
 async def filter_bookings(filter: bookings_schema.BookingFilter,
                           offset: int = 0, limit: int = 100):

@@ -59,14 +59,6 @@ async def delete_room_type(id: int):
     return {"result": answer}
 
 
-async def get_rooms(offset: int = 0, limit: int = 100):
-    """Get list of rooms"""
-
-    results = await database.fetch_all(
-        rooms_model.room.select().offset(offset).limit(limit))
-    return [dict(result._mapping) for result in results]
-
-
 async def filter_rooms(filter: rooms_schema.RoomFilter, offset: int = 0, limit: int = 100):
     """Get filter list of rooms"""
 

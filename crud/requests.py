@@ -6,14 +6,6 @@ from models import requests as requests_model
 from schemas import requests as requests_schema
 
 
-async def get_requests(offset: int = 0, limit: int = 100):
-    """Get list of requests"""
-
-    results = await database.fetch_all(requests_model.request.select(
-    ).offset(offset).limit(limit))
-    return [dict(result._mapping) for result in results]
-
-
 async def filter_requests(filter: requests_schema.RequestFilter,
                           offset: int = 0, limit: int = 100):
     """Get filter list of requests"""
