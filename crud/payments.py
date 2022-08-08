@@ -73,23 +73,22 @@ async def check_is_paid(booking_id: int):
     return sum_payment_bookings >= price
 
 
-async def update_payment(payment_id, payment: payments_schema.PaymentCreate):
+async def update_payment(payment_id, payment: payments_schema.PaymentUpdate):
     """Update the payment"""
 
     query = payments_model.payment.select().where(
         payments_model.payment.c.id == payment_id)
-    answer = await database.execute(query)
-    if answer == payment_id:
-        query = payments_model.payment.update().values(
-            fk_booking_id=payment.booking_id,
-            sum=payment.sum,
-            date=payment.date,
-            description=payment.description).where(
+    stored_data = await database.fetch_one(query)
+    if stored_data != None:
+        stored_data = dict(stored_data)
+        update_data = payment.dict(exclude_unset=True)
+        stored_data.update(update_data)
+        query = payments_model.payment.update().values(**update_data).where(
             payments_model.payment.c.id == payment_id)
         await database.execute(query)
 
-        result = await check_is_paid(payment.booking_id)
-        return {**payment.dict(), "id": payment_id}
+        result = await check_is_paid(stored_data['fk_booking_id'])
+        return {**stored_data, "id": payment_id}
     else:
         raise HTTPException(status_code=404, detail="Not found")
 

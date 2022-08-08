@@ -41,7 +41,7 @@ async def create_guest(guest: guests_schema.GuestCreate):
 
 
 @router.put("/guests/{guest_id}", response_model=guests_schema.GuestInfo)
-async def update_guest(guest_id: int, guest: guests_schema.GuestCreate):
+async def update_guest(guest_id: int, guest: guests_schema.GuestUpdate):
     """
     Update guest
 

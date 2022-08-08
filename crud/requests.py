@@ -39,7 +39,7 @@ async def create_request(request: requests_schema.RequestCreate):
     """Create new request"""
 
     query = requests_model.request.insert().values(fk_booking_id=request.booking_id,
-                                                   price=request.price, 
+                                                   price=request.price,
                                                    description=request.description)
     request_id = await database.execute(query)
     query = requests_model.request.select().where(
@@ -53,17 +53,15 @@ async def update_request(request_id, request: requests_schema.RequestUpdate):
 
     query = requests_model.request.select().where(
         requests_model.request.c.id == request_id)
-    answer = await database.execute(query)
-    if answer == request_id:
-        query = requests_model.request.update().values(
-            fk_booking_id=request.booking_id,
-            price=request.price,
-            description=request.description,
-            is_closed=request.is_closed,
-            close_description=request.close_description).where(
+    stored_data = await database.fetch_one(query)
+    if stored_data != None:
+        stored_data = dict(stored_data)
+        update_data = request.dict(exclude_unset=True)
+        stored_data.update(update_data)
+        query = requests_model.request.update().values(**update_data).where(
             requests_model.request.c.id == request_id)
         await database.execute(query)
-        return {**request.dict(), "id": request_id}
+        return {**stored_data, "id": request_id}
     else:
         raise HTTPException(status_code=404, detail="Not found")
 

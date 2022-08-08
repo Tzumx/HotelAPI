@@ -26,10 +26,12 @@ class BookingCreate (BookingBase):
 class BookingUpdate(BookingCreate):
     """Schema for booking update"""
 
-    room_number: int
-    guest_id: int
-    # is_active: Optional[bool]
-    # client_review: Optional[str]
+    room_number: Optional[int]
+    guest_id: Optional[int]
+    is_active: Optional[bool]
+    client_review: Optional[str]
+    check_in: Optional[datetime]
+    check_out: Optional[datetime]
 
     class Config:
         orm_mode = True

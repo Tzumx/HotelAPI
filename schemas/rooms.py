@@ -31,6 +31,14 @@ class RoomTypeCreate(RoomTypeBase):
         orm_mode = True
 
 
+class RoomTypeUpdate(BaseModel):
+    """Base schema with room type details."""
+
+    type_name: Optional[str]
+    price: Optional[float]
+    description: Optional[str]
+
+
 class RoomTypeInfo(RoomTypeBase):
     """Response schema with room type details."""
 
@@ -50,9 +58,12 @@ class RoomCreate(RoomBase):
 
 
 class RoomUpdate(RoomCreate):
-    """Create rooms schema."""
+    """Update rooms schema."""
 
     number: Union[int, None]
+    room_types_id: Optional[int]
+    floor: Optional[int]
+    housing: Optional[int]
 
     class Config:
         orm_mode = True

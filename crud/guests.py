@@ -34,19 +34,19 @@ async def create_guest(guest: guests_schema.GuestCreate):
     return {**guest.dict(), "id": guest_id}
 
 
-async def update_guest(guest_id, guest: guests_schema.GuestCreate):
+async def update_guest(guest_id, guest: guests_schema.GuestUpdate):
     """Update the guest"""
 
     query = guests_model.guest.select().where(guests_model.guest.c.id == guest_id)
-    answer = await database.execute(query)
-    if answer == guest_id:
-        query = guests_model.guest.update().values(
-            name=guest.name,
-            email=guest.email,
-            phone=guest.phone).where(
+    stored_data = await database.fetch_one(query)
+    if stored_data != None:
+        stored_data = dict(stored_data)
+        update_data = guest.dict(exclude_unset=True)
+        stored_data.update(update_data)
+        query = guests_model.guest.update().values(**update_data).where(
             guests_model.guest.c.id == guest_id)
         await database.execute(query)
-        return {**guest.dict(), "id": guest_id}
+        return {**stored_data, "id": guest_id}
     else:
         raise HTTPException(status_code=404, detail="Not found")
 

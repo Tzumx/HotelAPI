@@ -26,19 +26,20 @@ async def create_room_type(roomtype: rooms_schema.RoomTypeCreate):
     return {**roomtype.dict(), "id": roomtype_id}
 
 
-async def update_room_type(roomtype_id, roomtype: rooms_schema.RoomTypeCreate):
+async def update_room_type(roomtype_id, roomtype: rooms_schema.RoomTypeUpdate):
     """Update the type of room"""
 
     query = rooms_model.room_type.select().where(
         rooms_model.room_type.c.id == roomtype_id)
-    answer = await database.execute(query)
-    if answer == roomtype_id:
-        query = rooms_model.room_type.update().values(
-            type_name=roomtype.type_name, price=roomtype.price,
-            description=roomtype.description).where(
+    stored_data = await database.fetch_one(query)
+    if stored_data != None:
+        stored_data = dict(stored_data)
+        update_data = roomtype.dict(exclude_unset=True)
+        stored_data.update(update_data)
+        query = rooms_model.room_type.update().values(**update_data).where(
             rooms_model.room_type.c.id == roomtype_id)
         await database.execute(query)
-        return {**roomtype.dict(), "id": roomtype_id}
+        return {**stored_data, "id": roomtype_id}
     else:
         raise HTTPException(status_code=404, detail="Not found")
 
@@ -101,15 +102,15 @@ async def update_room(number, room: rooms_schema.RoomUpdate):
     """Update the room"""
 
     query = rooms_model.room.select().where(rooms_model.room.c.number == number)
-    answer = await database.execute(query)
-    if answer == number:
-        query = rooms_model.room.update().values(
-            fk_room_types_id=room.room_types_id,
-            floor=room.floor,
-            housing=room.housing).where(
+    stored_data = await database.fetch_one(query)
+    if stored_data != None:
+        stored_data = dict(stored_data)
+        update_data = room.dict(exclude_unset=True)
+        stored_data.update(update_data)
+        query = rooms_model.room.update().values(**update_data).where(
             rooms_model.room.c.number == number)
         await database.execute(query)
-        return {**room.dict(), "number": number}
+        return {**stored_data, "number": number}
     else:
         raise HTTPException(status_code=404, detail="Not found")
 

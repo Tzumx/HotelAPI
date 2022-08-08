@@ -41,7 +41,7 @@ async def create_room_type(roomtype: rooms_schema.RoomTypeCreate):
 
 
 @router.put("/roomtypes/{roomtype_id}", response_model=rooms_schema.RoomTypeInfo)
-async def update_room_type(roomtype_id: int, roomtype: rooms_schema.RoomTypeCreate):
+async def update_room_type(roomtype_id: int, roomtype: rooms_schema.RoomTypeUpdate):
     """
     Update info in the room's type
 

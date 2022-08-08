@@ -22,7 +22,10 @@ class RequestCreate(RequestBase):
 class RequestUpdate(RequestCreate):
     """Schema for request update"""
 
-    is_closed: bool  # is request closed
+    booking_id: Optional[int]
+    description: Optional[str]
+    price: Optional[float]
+    is_closed: Optional[bool]  # is request closed
     close_description: Optional[str]  # requsts's description after closing
 
     class Config:

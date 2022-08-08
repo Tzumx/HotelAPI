@@ -52,7 +52,7 @@ async def create_booking(booking: bookings_schema.BookingCreate):
 
     query = bookings_model.booking.insert().values(fk_room_number=booking.room_number,
                                                    fk_guest_id=booking.guest_id,
-                                                   check_in=booking.check_in, 
+                                                   check_in=booking.check_in,
                                                    check_out=booking.check_out,
                                                    description=booking.description)
     booking_id = await database.execute(query)
@@ -67,17 +67,15 @@ async def update_booking(booking_id, booking: bookings_schema.BookingUpdate):
 
     query = bookings_model.booking.select().where(
         bookings_model.booking.c.id == booking_id)
-    answer = await database.execute(query)
-    if answer == booking_id:
-        query = bookings_model.booking.update().values(
-            fk_room_number=booking.room_number,
-            fk_guest_id=booking.guest_id,
-            check_in=booking.check_in, 
-            check_out=booking.check_out,
-            description=booking.description).where(
+    stored_data = await database.fetch_one(query)
+    if stored_data != None:
+        stored_data = dict(stored_data)
+        update_data = booking.dict(exclude_unset=True)
+        stored_data.update(update_data)
+        query = bookings_model.booking.update().values(**update_data).where(
             bookings_model.booking.c.id == booking_id)
         await database.execute(query)
-        return {**booking.dict(), "id": booking_id}
+        return {**stored_data, "id": booking_id}
     else:
         raise HTTPException(status_code=404, detail="Not found")
 

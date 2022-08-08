@@ -20,6 +20,17 @@ class PaymentCreate(PaymentBase):
         orm_mode = True
 
 
+class PaymentUpdate(PaymentCreate):
+    """Schema for payment update"""
+
+    booking_id: Optional[int]
+    sum: Optional[float]
+    date: Optional[datetime]
+
+    class Config:
+        orm_mode = True
+
+
 class PaymentInfo(PaymentBase):
     """Schema for getting information about payment"""
 

@@ -41,7 +41,7 @@ async def create_payment(payment: payments_schema.PaymentCreate):
 
 
 @router.put("/payments/{payment_id}", response_model=payments_schema.PaymentInfo)
-async def update_payment(payment_id: int, payment: payments_schema.PaymentCreate):
+async def update_payment(payment_id: int, payment: payments_schema.PaymentUpdate):
     """
     Update payment
 
