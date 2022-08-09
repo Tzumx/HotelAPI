@@ -7,8 +7,9 @@ plugins:
   - mkdocstrings
 
 nav:
+  - Installation: installation.md
   - Hotel Docs: index.md
-  - tutorials.md
-  - How-To Guides: how-to-guides.md
-  - reference.md
-  - explanation.md
+  - General Info: general-info.md
+  - Database design: HotelAPI_db.md
+  # - How-To Guides: how-to-guides.md  
+  # - explanation.md

@@ -1,9 +1,14 @@
+# Hotel_API
+Generic Hotel API for a basic hotel administrations system created with FastAPI and PostgreSQL.
+
+
 ## Table Of Contents
 
-1. [Tutorials](tutorials.md)
-2. [How-To Guides](how-to-guides.md)
-3. [Reference](reference.md)
-4. [Explanation](explanation.md)
+1. [Installation](installation.md)
+2. [General info](general-info.md)
+3. [Database design](HotelAPI_db.md)
+<!-- 4. [How-To Guides](how-to-guides.md) -->
+<!-- 5. [Explanation](explanation.md) -->
 
 ## Project Overview
 
