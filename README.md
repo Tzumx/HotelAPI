@@ -1,2 +1,2 @@
 # Hotel_API
-API for Hotel administrations via FastAPI 
+API for Hotel administrations via FastAPI

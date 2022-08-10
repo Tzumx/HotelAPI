@@ -5,7 +5,7 @@ from pydantic import BaseModel, EmailStr, Field, UUID4, validator
 
 class RoomTypeBase(BaseModel):
     """Base schema with room type details."""
-    
+
     type_name: str
     price: float
     description: str
@@ -13,7 +13,7 @@ class RoomTypeBase(BaseModel):
 
 class RoomBase(BaseModel):
     """Base schema with room details."""
-    
+
     number: int
     room_types_id: int
     floor: int = 0
@@ -34,7 +34,7 @@ class RoomTypeCreate(RoomTypeBase):
 
 class RoomTypeInfo(RoomTypeBase):
     """Response schema with room type details."""
-    
+
     id: int
 
     class Config:
@@ -50,7 +50,7 @@ class RoomCreate(RoomBase):
 
 class RoomInfo(RoomBase):
     """Response schema with room details."""
-    
+
     room_types_id: Union[int, None]
 
     class Config:
@@ -66,7 +66,7 @@ class FeatureCreate(FeatureBase):
 
 class FeatureInfo(FeatureBase):
     """Response schema with roomtype's features."""
-    
+
     id: int
 
     class Config:
@@ -106,4 +106,3 @@ class RoomStatus(BaseModel):
     is_free: bool
     is_open_requests: bool
     is_paid: bool
-

@@ -12,7 +12,7 @@ request = Table(
     metadata,
     Column('id', Integer, primary_key=True),
     Column('fk_booking_id', ForeignKey(booking.c.id,
-                                    onupdate="CASCADE", ondelete="CASCADE")),
+                                       onupdate="CASCADE", ondelete="CASCADE")),
     Column('description', String(), nullable=False),
     Column('is_closed', Boolean(),
            server_default=expression.false(), nullable=False),

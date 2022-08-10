@@ -12,7 +12,7 @@ async def get_requests(offset: int = 0, limit: int = 100):
 
         Args:
             offset (int, optional): number for "offset" entries
-            limit (int, optional): number for "limit" entries   
+            limit (int, optional): number for "limit" entries
         Returns:
             response: List[RequestInfo]
                 JSON with result
@@ -27,7 +27,7 @@ async def filter_requests(filter: requests_schema.RequestFilter, offset: int = 0
 
         Args:
             offset (int, optional): number for "offset" entries
-            limit (int, optional): number for "limit" entries           
+            limit (int, optional): number for "limit" entries
 
             filter: RequestFilter
                 parameters required to filter requests

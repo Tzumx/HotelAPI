@@ -11,7 +11,7 @@ payment = Table(
     metadata,
     Column('id', Integer, primary_key=True),
     Column('fk_booking_id', ForeignKey(booking.c.id,
-                                    onupdate="CASCADE", ondelete="CASCADE")),
+                                       onupdate="CASCADE", ondelete="CASCADE")),
     Column('sum', Numeric, nullable=False),
     Column('date', DateTime, nullable=False, index=True,
            default=datetime.datetime.now),

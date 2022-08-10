@@ -13,7 +13,7 @@ async def get_payments(offset: int = 0, limit: int = 100):
 
         Args:
             offset (int, optional): number for "offset" entries
-            limit (int, optional): number for "limit" entries         
+            limit (int, optional): number for "limit" entries
         Returns:
             response: List[PaymentInfo]
                 JSON with result
@@ -31,7 +31,7 @@ async def filter_payments(filter: payments_schema.PaymentFilter, offset: int = 0
             limit (int, optional): number for "limit" entries
 
             filter: PaymentFilter
-                parameters required to filter     
+                parameters required to filter
         Returns:
             response: List[PaymentInfo]
                 JSON with result
