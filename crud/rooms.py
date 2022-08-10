@@ -298,12 +298,12 @@ async def get_room_status(number: int, check_date_from: datetime,
         if booking['is_active'] == True:
             if (check_date_from <= booking['check_in'] and
                 check_date_till >= booking["check_out"]) or \
-               (check_date_from >= booking['check_in'] and
-                check_date_from <= booking["check_out"]) or \
-               (check_date_till >= booking['check_in'] and
-                check_date_till <= booking["check_out"]):
+               (check_date_from >= booking['check_in']
+                and check_date_from <= booking["check_out"]) or \
+               (check_date_till >= booking['check_in']
+                    and check_date_till <= booking["check_out"]):
                 status["is_free"] = False
-                if "is_paid" not in status.keys() or status['is_paid']==True:
+                if "is_paid" not in status.keys() or status['is_paid'] == True:
                     status['is_paid'] = booking['is_paid']
 
     requests = await get_room_requests(number, None, None, False)

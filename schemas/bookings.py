@@ -74,3 +74,8 @@ class BookingDeleteInfo (BaseModel):
     """Response schema on delete action"""
 
     result: str
+
+class BookingSumInfo (BaseModel):
+    """Response schema with full information about amount of money for booking"""
+
+    sum: float

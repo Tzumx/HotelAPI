@@ -153,4 +153,4 @@ async def get_booking_sum(booking_id: int):
     for request_booking in results:
         price += dict(request_booking)['price']
 
-    return price
+    return {"sum": price}

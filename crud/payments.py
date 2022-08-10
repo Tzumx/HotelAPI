@@ -54,7 +54,8 @@ async def check_is_paid(booking_id: int):
         payments_model.payment.c.fk_booking_id == booking_id))
     payments_booking = [dict(result._mapping)['sum'] for result in results]
     sum_payment_bookings = sum(payments_booking)
-    price = await bookings_crud.get_booking_sum(booking_id)
+    results = await bookings_crud.get_booking_sum(booking_id)
+    price = results['sum']
     if sum_payment_bookings >= price:
         query = bookings_model.booking.update().values(is_paid=True).where(
             bookings_model.booking.c.id == booking_id)

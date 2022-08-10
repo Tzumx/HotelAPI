@@ -105,7 +105,8 @@ async def post_booking_review(booking_id: int, review: str,
     """
     return await bookings_crud.post_booking_review(booking_id=booking_id, review=review)
 
-@router.get("/bookings/{booking_id}/sum")
+
+@router.get("/bookings/{booking_id}/sum", response_model=bookings_schema.BookingSumInfo)
 async def get_booking_sum(booking_id: int):
     """
     Get amount of services for the booking
