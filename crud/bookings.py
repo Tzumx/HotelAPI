@@ -110,9 +110,6 @@ async def set_booking_status(booking_id: int, is_active: bool):
         query = bookings_model.booking.update().values(is_active=is_active).where(
             bookings_model.booking.c.id == booking_id)
         await database.execute(query)
-        # query = bookings_model.booking.select().where(
-        #     bookings_model.booking.c.id == booking_id)
-        # answer = await database.execute(query)
         query = bookings_model.booking.select().where(
             bookings_model.booking.c.id == booking_id)
         answer = await database.fetch_all(query)

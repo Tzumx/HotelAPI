@@ -1,5 +1,3 @@
-import datetime
-
 from sqlalchemy import (Boolean, Column, DateTime, ForeignKey, Integer,
                         MetaData, Numeric, String, Table)
 from sqlalchemy.sql import expression, func

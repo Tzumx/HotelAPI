@@ -1,6 +1,6 @@
 """Different helper-functions to work with rooms."""
 
-from datetime import date, datetime
+from datetime import datetime
 
 from fastapi import HTTPException, Query
 
