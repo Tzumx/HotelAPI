@@ -185,6 +185,7 @@ async def add_feature_to_roomtype(fk_room_type_id: int, fk_feature_id: int):
                                                   rooms_model.roomtype_feature.c.fk_room_type_id == rooms_model.room_type.c.id
                                                   ).join(rooms_model.feature,
                                                          rooms_model.roomtype_feature.c.fk_feature_id == rooms_model.feature.c.id)
+
     result = await database.fetch_one(sum_table.select().
                                       where(rooms_model.room_type.c.id == fk_room_type_id).
                                       where(rooms_model.feature.c.id == fk_feature_id).

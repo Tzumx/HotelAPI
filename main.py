@@ -3,7 +3,7 @@ from fastapi.responses import JSONResponse
 from fastapi import FastAPI, Request
 import uvicorn
 from db import database
-from routers import bookings, guests, payments, requests, rooms
+from routers import bookings, guests, payments, requests, rooms, users
 
 # Initialize the app
 app = FastAPI()
@@ -14,6 +14,8 @@ app.include_router(guests.router)
 app.include_router(payments.router)
 app.include_router(requests.router)
 app.include_router(rooms.router)
+app.include_router(users.router)
+
 
 
 @app.on_event('startup')
