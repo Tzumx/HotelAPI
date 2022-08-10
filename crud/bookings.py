@@ -2,7 +2,7 @@
 
 from fastapi import HTTPException
 from db import database
-from models import bookings as bookings_model
+from models import bookings as bookings_model, rooms as rooms_model, requests as requests_model
 from schemas import bookings as bookings_schema
 from crud import rooms as room_crud
 
@@ -134,3 +134,23 @@ async def post_booking_review(booking_id: int, review: str):
         return dict(answer[0]._mapping)
     else:
         raise HTTPException(status_code=404, detail="Not found")
+
+
+async def get_booking_sum(booking_id: int):
+    """Get full price for the booking"""
+
+    results = await database.fetch_one(bookings_model.booking.select().where(
+        bookings_model.booking.c.id == booking_id))
+    room_number = dict(results._mapping)['fk_room_number']
+    results = await database.fetch_one(rooms_model.room.select().where(
+        rooms_model.room.c.number == room_number))
+    room_type = dict(results._mapping)['fk_room_types_id']
+    results = await database.fetch_one(rooms_model.room_type.select().where(
+        rooms_model.room_type.c.id == room_type))
+    price = dict(results._mapping)['price']
+    results = await database.fetch_all(requests_model.request.select().where(
+        requests_model.request.c.fk_booking_id == booking_id))
+    for request_booking in results:
+        price += dict(request_booking)['price']
+
+    return price

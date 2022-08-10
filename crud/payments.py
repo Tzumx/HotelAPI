@@ -4,6 +4,7 @@ from fastapi import HTTPException
 from db import database
 from models import payments as payments_model, bookings as bookings_model, rooms as rooms_model
 from schemas import payments as payments_schema
+from crud import bookings as bookings_crud
 
 
 async def filter_payments(filter: payments_schema.PaymentFilter,
@@ -53,15 +54,7 @@ async def check_is_paid(booking_id: int):
         payments_model.payment.c.fk_booking_id == booking_id))
     payments_booking = [dict(result._mapping)['sum'] for result in results]
     sum_payment_bookings = sum(payments_booking)
-    results = await database.fetch_one(bookings_model.booking.select().where(
-        bookings_model.booking.c.id == booking_id))
-    room_number = dict(results._mapping)['fk_room_number']
-    results = await database.fetch_one(rooms_model.room.select().where(
-        rooms_model.room.c.number == room_number))
-    room_type = dict(results._mapping)['fk_room_types_id']
-    results = await database.fetch_one(rooms_model.room_type.select().where(
-        rooms_model.room_type.c.id == room_type))
-    price = dict(results._mapping)['price']
+    price = await bookings_crud.get_booking_sum(booking_id)
     if sum_payment_bookings >= price:
         query = bookings_model.booking.update().values(is_paid=True).where(
             bookings_model.booking.c.id == booking_id)

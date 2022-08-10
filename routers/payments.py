@@ -1,8 +1,9 @@
 from datetime import datetime
 from typing import List, Union
-from fastapi import APIRouter, Body
-from schemas import payments as payments_schema
+from fastapi import APIRouter, Body, Depends
+from schemas import payments as payments_schema, users as users_schema
 from crud import payments as payments_crud
+from utils import users as users_utils
 
 router = APIRouter()
 
@@ -26,7 +27,8 @@ async def filter_payments(filter: payments_schema.PaymentFilter, offset: int = 0
 
 
 @router.post("/payments", response_model=payments_schema.PaymentInfo)
-async def create_payment(payment: payments_schema.PaymentCreate):
+async def create_payment(payment: payments_schema.PaymentCreate,
+                         user: users_schema.User = Depends(users_utils.get_current_user)):
     """
     Create payment
 
@@ -41,7 +43,8 @@ async def create_payment(payment: payments_schema.PaymentCreate):
 
 
 @router.put("/payments/{payment_id}", response_model=payments_schema.PaymentInfo)
-async def update_payment(payment_id: int, payment: payments_schema.PaymentUpdate):
+async def update_payment(payment_id: int, payment: payments_schema.PaymentUpdate,
+                         user: users_schema.User = Depends(users_utils.get_current_user)):
     """
     Update payment
 
@@ -58,7 +61,8 @@ async def update_payment(payment_id: int, payment: payments_schema.PaymentUpdate
 
 
 @router.delete("/payments/{payment_id}", response_model=payments_schema.PaymentDeleteInfo)
-async def delete_payment(payment_id: int):
+async def delete_payment(payment_id: int,
+                         user: users_schema.User = Depends(users_utils.get_current_user)):
     """
     Delete payment
 
