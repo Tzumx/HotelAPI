@@ -1,9 +1,19 @@
 """Different helper-functions to work with rooms."""
 
-from fastapi import HTTPException
+from datetime import date, datetime
+from fastapi import HTTPException, Query
 from db import database
-from models import rooms as rooms_model
+from models import rooms as rooms_model, bookings as bookings_model
+from models import guests as guests_model, requests as requests_model
 from schemas import rooms as rooms_schema
+
+
+async def get_room_types(offset: int = 0, limit: int = 100):
+    """Get list of room's types"""
+
+    results = await database.fetch_all(
+        rooms_model.room_type.select().offset(offset).limit(limit))
+    return [dict(result._mapping) for result in results]
 
 
 async def create_room_type(roomtype: rooms_schema.RoomTypeCreate):
@@ -16,15 +26,33 @@ async def create_room_type(roomtype: rooms_schema.RoomTypeCreate):
     return {**roomtype.dict(), "id": roomtype_id}
 
 
+async def update_room_type(roomtype_id, roomtype: rooms_schema.RoomTypeUpdate):
+    """Update the type of room"""
+
+    query = rooms_model.room_type.select().where(
+        rooms_model.room_type.c.id == roomtype_id)
+    stored_data = await database.fetch_one(query)
+    if stored_data != None:
+        stored_data = dict(stored_data)
+        update_data = roomtype.dict(exclude_unset=True)
+        stored_data.update(update_data)
+        query = rooms_model.room_type.update().values(**update_data).where(
+            rooms_model.room_type.c.id == roomtype_id)
+        await database.execute(query)
+        return {**stored_data, "id": roomtype_id}
+    else:
+        raise HTTPException(status_code=404, detail="Not found")
+
+
 async def delete_room_type(id: int):
     """Delete room's type by id"""
 
     query = rooms_model.room_type.select().where(
-                                            rooms_model.room_type.c.id == id)
+        rooms_model.room_type.c.id == id)
     answer = await database.execute(query)
     if answer == id:
         query = rooms_model.room_type.delete().where(
-                                            rooms_model.room_type.c.id == id)
+            rooms_model.room_type.c.id == id)
         await database.execute(query)
         answer = "Success"
     else:
@@ -32,22 +60,85 @@ async def delete_room_type(id: int):
     return {"result": answer}
 
 
-async def get_room_types(offset: int = 0, limit: int = 100):
-    """Get list of room's types"""
+async def filter_rooms(filter: rooms_schema.RoomFilter, offset: int = 0, limit: int = 100):
+    """Get filter list of rooms"""
 
-    results = await database.fetch_all(rooms_model.room_type.select(
-    ).offset(offset).limit(limit))
+    filter_query = rooms_model.room.select()
+    if not filter.number == None:
+        filter_query = filter_query.where(
+            rooms_model.room.c.number == filter.number)
+    if not filter.room_types_id == None:
+        filter_query = filter_query.where(
+            rooms_model.room.c.fk_room_types_id == filter.room_types_id)
+    if not filter.floor == None:
+        filter_query = filter_query.where(
+            rooms_model.room.c.floor == filter.floor)
+    if not filter.housing == None:
+        filter_query = filter_query.where(
+            rooms_model.room.c.housing == filter.housing)
+
+    results = await database.fetch_all(filter_query.order_by(rooms_model.room.c.number))
+
     return [dict(result._mapping) for result in results]
 
 
-async def create_room_type_feature(roomtype_feature: rooms_schema.FeatureCreate):
+async def create_room(room: rooms_schema.RoomCreate):
+    """Create new room"""
+
+    query = rooms_model.room.select().where(
+        rooms_model.room.c.number == room.number)
+    answer = await database.execute(query)
+    if answer == None:
+        query = rooms_model.room.insert().values(number=room.number,
+                                                 fk_room_types_id=room.room_types_id, floor=room.floor,
+                                                 housing=room.housing)
+        room_id = await database.execute(query)
+        return {**room.dict()}
+    else:
+        raise HTTPException(status_code=409, detail="Already exist")
+
+
+async def update_room(number, room: rooms_schema.RoomUpdate):
+    """Update the room"""
+
+    query = rooms_model.room.select().where(rooms_model.room.c.number == number)
+    stored_data = await database.fetch_one(query)
+    if stored_data != None:
+        stored_data = dict(stored_data)
+        update_data = room.dict(exclude_unset=True)
+        stored_data.update(update_data)
+        query = rooms_model.room.update().values(**update_data).where(
+            rooms_model.room.c.number == number)
+        await database.execute(query)
+        return {**stored_data, "number": number}
+    else:
+        raise HTTPException(status_code=404, detail="Not found")
+
+
+async def delete_room(number: int):
+    """Delete room by id"""
+
+    query = rooms_model.room.select().where(rooms_model.room.c.number == number)
+    answer = await database.execute(query)
+    if answer == number:
+        query = rooms_model.room.delete().where(
+            rooms_model.room.c.number == number)
+        await database.execute(query)
+        answer = "Success"
+    else:
+        answer = "Error"
+        raise HTTPException(status_code=404, detail="Not found")
+    return {"result": answer}
+
+
+async def create_room_type_feature(feature: rooms_schema.FeatureCreate):
     """Create new feature for roomtype"""
 
     query = rooms_model.feature.insert().values(
-        feature=roomtype_feature.feature)
+        feature=feature.feature)
     feature_id = await database.execute(query)
     if feature_id != None:
-        return {**roomtype_feature.dict(), "id": feature_id}
+        return {**feature.dict(), "id": feature_id}
     else:
         HTTPException(status_code=409, detail="Already exist")
 
@@ -78,8 +169,8 @@ async def add_feature_to_roomtype(fk_room_type_id: int, fk_feature_id: int):
     """Add feature to roomtype"""
 
     query = rooms_model.roomtype_feature.select(
-                ).where(rooms_model.roomtype_feature.c.fk_room_type_id == fk_room_type_id
-                ).where(rooms_model.roomtype_feature.c.fk_feature_id == fk_feature_id)
+    ).where(rooms_model.roomtype_feature.c.fk_room_type_id == fk_room_type_id
+            ).where(rooms_model.roomtype_feature.c.fk_feature_id == fk_feature_id)
     answer = await database.execute(query)
     if answer != None:
         raise HTTPException(status_code=409, detail="Already exist")
@@ -91,9 +182,10 @@ async def add_feature_to_roomtype(fk_room_type_id: int, fk_feature_id: int):
         raise HTTPException(status_code=409, detail=err)
 
     sum_table = rooms_model.roomtype_feature.join(rooms_model.room_type,
-                rooms_model.roomtype_feature.c.fk_room_type_id == rooms_model.room_type.c.id
-                ).join(rooms_model.feature,
-                rooms_model.roomtype_feature.c.fk_feature_id == rooms_model.feature.c.id)
+                                                  rooms_model.roomtype_feature.c.fk_room_type_id == rooms_model.room_type.c.id
+                                                  ).join(rooms_model.feature,
+                                                         rooms_model.roomtype_feature.c.fk_feature_id == rooms_model.feature.c.id)
+
     result = await database.fetch_one(sum_table.select().
                                       where(rooms_model.room_type.c.id == fk_room_type_id).
                                       where(rooms_model.feature.c.id == fk_feature_id).
@@ -105,19 +197,19 @@ async def add_feature_to_roomtype(fk_room_type_id: int, fk_feature_id: int):
     return dict(result._mapping)
 
 
-async def delete_feature_from_roomtype(fk_room_type_id: int, fk_feature_id: int):
+async def delete_feature_from_roomtype(type_id: int, feature_id: int):
     """Delete roomtype's feature by id"""
 
     query = rooms_model.roomtype_feature.select().where(
-        rooms_model.roomtype_feature.c.fk_room_type_id == fk_room_type_id
+        rooms_model.roomtype_feature.c.fk_room_type_id == type_id
     ).where(
-        rooms_model.roomtype_feature.c.fk_feature_id == fk_feature_id)
+        rooms_model.roomtype_feature.c.fk_feature_id == feature_id)
     answer = await database.execute(query)
     if answer != None:
         query = rooms_model.roomtype_feature.delete().where(
-            rooms_model.roomtype_feature.c.fk_room_type_id == fk_room_type_id
+            rooms_model.roomtype_feature.c.fk_room_type_id == type_id
         ).where(
-            rooms_model.roomtype_feature.c.fk_feature_id == fk_feature_id)
+            rooms_model.roomtype_feature.c.fk_feature_id == feature_id)
         await database.execute(query)
         answer = "Success"
     else:
@@ -125,54 +217,92 @@ async def delete_feature_from_roomtype(fk_room_type_id: int, fk_feature_id: int)
     return {"result": answer}
 
 
-async def get_features_to_roomtype(fk_room_type_id: int):
+async def get_features_to_roomtype(room_type_id: int):
     """Get list of roomtype's features"""
 
     sum_table = rooms_model.roomtype_feature.join(rooms_model.room_type,
-                    rooms_model.roomtype_feature.c.fk_room_type_id == rooms_model.room_type.c.id
-                    ).join(rooms_model.feature,
-                    rooms_model.roomtype_feature.c.fk_feature_id == rooms_model.feature.c.id)
+                                                  rooms_model.roomtype_feature.c.fk_room_type_id == rooms_model.room_type.c.id
+                                                  ).join(rooms_model.feature,
+                                                         rooms_model.roomtype_feature.c.fk_feature_id == rooms_model.feature.c.id)
     results = await database.fetch_all(sum_table.select().
-                                where(rooms_model.room_type.c.id == fk_room_type_id).
-                                with_only_columns([rooms_model.feature.c.feature]))
+                                       where(rooms_model.room_type.c.id == room_type_id).
+                                       with_only_columns([rooms_model.feature.c.feature]))
     return [dict(result._mapping) for result in results]
 
 
-async def create_room(room: rooms_schema.RoomCreate):
-    """Create new room"""
-
-    query = rooms_model.room.select().where(
-                                    rooms_model.room.c.number == room.number)
-    answer = await database.execute(query)
-    if answer == None:
-        query = rooms_model.room.insert().values(number=room.number,
-                                    type_id=room.type_id, floor=room.floor,
-                                    housing=room.housing)
-        room_id = await database.execute(query)
-        return {**room.dict()}
-    else:
-        raise HTTPException(status_code=409, detail="Already exist")
-
-
-async def delete_room(number: int):
-    """Delete room by id"""
+async def get_features_to_room(number: int):
+    """Get list of room's features"""
 
     query = rooms_model.room.select().where(rooms_model.room.c.number == number)
-    answer = await database.execute(query)
-    if answer == number:
-        query = rooms_model.room.delete().where(
-                                            rooms_model.room.c.number == number)
-        await database.execute(query)
-        answer = "Success"
+    room = await database.fetch_all(query)
+    if len(room) > 0:
+        fk = room[0].fk_room_types_id
+        return await get_features_to_roomtype(fk)
     else:
-        answer = "Error"
         raise HTTPException(status_code=404, detail="Not found")
-    return {"result": answer}
 
 
-async def get_rooms(offset: int = 0, limit: int = 100):
-    """Get list of rooms"""
+async def get_room_guest(number: int):
+    """Get who in the room now"""
 
-    results = await database.fetch_all(
-                        rooms_model.room.select().offset(offset).limit(limit))
+    now = datetime.now()
+    query = bookings_model.booking.select().where(
+        bookings_model.booking.c.fk_room_number == number).where(
+        bookings_model.booking.c.is_active == True).where(
+        bookings_model.booking.c.check_in < now).where(
+        bookings_model.booking.c.check_out > now)
+    booking = await database.fetch_all(query)
+    if len(booking) > 0:
+        fk = booking[0].fk_guest_id
+        query = guests_model.guest.select().where(guests_model.guest.c.id == fk)
+        result = await database.fetch_one(query)
+        return [dict(result._mapping)]
+    else:
+        raise HTTPException(status_code=404, detail="Not found")
+
+
+async def get_room_requests(number: int,
+                            date_from: datetime, date_till: datetime,
+                            is_closed: bool):
+    """List requests coresponding with that room"""
+
+    query = bookings_model.booking.select().where(
+        bookings_model.booking.c.fk_room_number == number)
+    answer = await database.fetch_all(query)
+    bookings = [dict(result._mapping)['id'] for result in answer]
+    query = requests_model.request.select().where(
+        requests_model.request.c.fk_booking_id.in_(bookings))
+    if not date_from == None:
+        query = query.where(requests_model.request.c.created_at > date_from)
+    if not date_till == None:
+        query = query.where(requests_model.request.c.created_at < date_till)
+    if is_closed != True:
+        query = query.where(requests_model.request.c.is_closed == False)
+    results = await database.fetch_all(query)
+
     return [dict(result._mapping) for result in results]
+
+
+async def get_room_status(number: int, check_date_from: datetime,
+                          check_date_till: datetime):
+    """Check room's status"""
+
+    if check_date_from == None or check_date_till == None:
+        check_date_from = check_date_till = datetime.now()
+    status = {"is_free": True, "is_open_requests": False}
+    query = bookings_model.booking.select().where(
+        bookings_model.booking.c.fk_room_number == number)
+    answer = await database.fetch_all(query)
+    bookings = [dict(result._mapping) for result in answer]
+    for booking in bookings:
+        if booking['is_active'] == True:
+            if (booking['check_in'] < check_date_from and
+               booking["check_out"] > check_date_till):
+                status["is_free"] = False
+                status['is_paid'] = booking['is_paid']
+
+    requests = await get_room_requests(number, None, None, False)
+    if len(requests) > 0:
+        status['is_open_requests'] = True
+
+    return status

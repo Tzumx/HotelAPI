@@ -1,23 +1,9 @@
 from typing import List
 from fastapi import APIRouter
 from schemas import requests as requests_schema
+from crud import requests as requests_crud
 
 router = APIRouter()
-
-
-@router.get("/requests", response_model=List[requests_schema.RequestInfo])
-async def get_requests(offset: int = 0, limit: int = 100):
-    """
-    List requests
-
-        Args:
-            offset (int, optional): number for "offset" entries
-            limit (int, optional): number for "limit" entries
-        Returns:
-            response: List[RequestInfo]
-                JSON with result
-    """
-    pass
 
 
 @router.post("/requests/filter", response_model=List[requests_schema.RequestInfo])
@@ -35,7 +21,7 @@ async def filter_requests(filter: requests_schema.RequestFilter, offset: int = 0
             response: List[RequestInfo]
                 JSON with result
     """
-    pass
+    return await requests_crud.filter_requests(filter=filter, offset=offset, limit=limit)
 
 
 @router.post("/requests", response_model=requests_schema.RequestInfo)
@@ -50,11 +36,11 @@ async def create_request(request: requests_schema.RequestCreate):
             response: RequestInfo
                 JSON with result
     """
-    pass
+    return await requests_crud.create_request(request=request)
 
 
-@router.put("/requests/{request_id}", response_model=requests_schema.RequestInfo)
-async def update_request(request_id: int, request: requests_schema.RequestCreate):
+@router.put("/requests/{request_id}", response_model=requests_schema.RequestUpdate)
+async def update_request(request_id: int, request: requests_schema.RequestUpdate):
     """
     Update request
 
@@ -67,7 +53,7 @@ async def update_request(request_id: int, request: requests_schema.RequestCreate
             response: RequestInfo
                 JSON with result
     """
-    pass
+    return await requests_crud.update_request(request_id=request_id, request=request)
 
 
 @router.delete("/requests/{request_id}", response_model=requests_schema.RequestDeleteInfo)
@@ -81,4 +67,4 @@ async def delete_request(request_id: int):
             response: DeleteInfo
                 JSON with result (Success, Error)
     """
-    pass
+    return await requests_crud.delete_request(request_id=request_id)

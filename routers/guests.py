@@ -1,39 +1,28 @@
 from typing import List
 from fastapi import APIRouter
 from schemas import guests as guests_schema, requests as requests_schema
+from crud import guests as guests_crud
 
 router = APIRouter()
 
 
-@router.get("/guests", response_model=List[guests_schema.GuestInfo])
-async def get_guests(offset: int = 0, limit: int = 100):
-    """
-    List guests
-
-        Args:
-            offset (int, optional): number for "offset" entries
-            limit (int, optional): number for "limit" entries
-        Returns:
-            response: List[GuestInfo]
-                JSON with guests
-    """
-    pass
-
-
-@router.get("/guests/filter", response_model=List[guests_schema.GuestInfo])
-async def get_guests(name: str = "", email: str = "", phone: str = ""):
+@router.post("/guests/filter", response_model=List[guests_schema.GuestInfo])
+async def filter_guests(filter: guests_schema.GuestFilter,
+                        offset: int = 0, limit: int = 100):
     """
     List guests with filter
 
         Args:
-            name (str, optional): Name of the guest
-            email (str, optional): guest's email
-            phone (str, optional): guest's phone
+            offset (int, optional): number for "offset" entries
+            limit (int, optional): number for "limit" entries
+
+            room: GuestFilter
+                parameters required to filter guests
         Returns:
             response: List[GuestInfo]
                 JSON with result
     """
-    pass
+    return await guests_crud.filter_guests(filter=filter, offset=offset, limit=limit)
 
 
 @router.post("/guests", response_model=guests_schema.GuestInfo)
@@ -48,11 +37,11 @@ async def create_guest(guest: guests_schema.GuestCreate):
             response: GuestInfo
                 JSON with resulted instance of guest
     """
-    pass
+    return await guests_crud.create_guest(guest=guest)
 
 
 @router.put("/guests/{guest_id}", response_model=guests_schema.GuestInfo)
-async def update_guest(guest_id: int, guest: guests_schema.GuestCreate):
+async def update_guest(guest_id: int, guest: guests_schema.GuestUpdate):
     """
     Update guest
 
@@ -65,7 +54,7 @@ async def update_guest(guest_id: int, guest: guests_schema.GuestCreate):
             response: GuestInfo
                 JSON with resulted instance
     """
-    pass
+    return await guests_crud.update_guest(guest_id=guest_id, guest=guest)
 
 
 @router.delete("/guests/{guest_id}", response_model=guests_schema.GuestDeleteInfo)
@@ -79,7 +68,7 @@ async def delete_guest(guest_id: int):
             response: DeleteInfo
                 JSON with result (Success, Error)
     """
-    pass
+    return await guests_crud.delete_guest(guest_id=guest_id)
 
 
 @router.get("/guests/{guest_id}/requests", response_model=List[requests_schema.RequestInfo])
@@ -94,4 +83,4 @@ async def get_guest_requests(guest_id: int, is_closed: bool = False):
             response: List[RequestInfo]
                 JSON with result
     """
-    pass
+    return await guests_crud.get_guest_requests(guest_id=guest_id, is_closed=is_closed)

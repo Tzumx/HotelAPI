@@ -1,6 +1,6 @@
 from sqlalchemy import Column, DateTime, Integer, String, Boolean, Numeric
 from sqlalchemy import MetaData, Table, ForeignKey
-from sqlalchemy.sql import expression
+from sqlalchemy.sql import expression, func
 from .bookings import booking
 import datetime
 
@@ -18,8 +18,6 @@ request = Table(
            server_default=expression.false(), nullable=False),
     Column('close_description', String()),
     Column('price', Numeric, nullable=False),
-    Column('updated_at', DateTime, nullable=False,
-           onupdate=datetime.datetime.now),
-    Column('created_at', DateTime, nullable=False,
-           default=datetime.datetime.now),
+    Column('updated_at', DateTime, server_default=func.now(), onupdate=func.now()),
+    Column('created_at', DateTime, server_default=func.now()),
 )

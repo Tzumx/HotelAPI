@@ -15,7 +15,6 @@ class RoomBase(BaseModel):
     """Base schema with room details."""
 
     number: int
-    room_types_id: int
     floor: int = 0
     housing: int = 0
 
@@ -32,6 +31,14 @@ class RoomTypeCreate(RoomTypeBase):
         orm_mode = True
 
 
+class RoomTypeUpdate(BaseModel):
+    """Base schema with room type details."""
+
+    type_name: Optional[str]
+    price: Optional[float]
+    description: Optional[str]
+
+
 class RoomTypeInfo(RoomTypeBase):
     """Response schema with room type details."""
 
@@ -44,6 +51,20 @@ class RoomTypeInfo(RoomTypeBase):
 class RoomCreate(RoomBase):
     """Create rooms schema."""
 
+    room_types_id: int
+
+    class Config:
+        orm_mode = True
+
+
+class RoomUpdate(RoomCreate):
+    """Update rooms schema."""
+
+    number: Union[int, None]
+    room_types_id: Optional[int]
+    floor: Optional[int]
+    housing: Optional[int]
+
     class Config:
         orm_mode = True
 
@@ -51,10 +72,11 @@ class RoomCreate(RoomBase):
 class RoomInfo(RoomBase):
     """Response schema with room details."""
 
-    room_types_id: Union[int, None]
+    fk_room_types_id: Union[int, None] = Field(..., alias='room_types_id')
 
     class Config:
         orm_mode = True
+        allow_population_by_field_name = True
 
 
 class FeatureCreate(FeatureBase):
@@ -105,4 +127,4 @@ class RoomStatus(BaseModel):
 
     is_free: bool
     is_open_requests: bool
-    is_paid: bool
+    is_paid: Optional[bool]
