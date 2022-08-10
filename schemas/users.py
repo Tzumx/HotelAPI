@@ -47,7 +47,7 @@ class TokenBase(BaseModel):
         allow_population_by_field_name = True
 
     @validator("token")
-    def hexlify_token(self, value):
+    def hexlify_token(cls, value):
         """ Convert UUID """
 
         return value.hex

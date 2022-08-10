@@ -117,7 +117,7 @@ async def get_booking_sum(booking_id: int):
         Args:
             booking_id (int): id of the booking
         Returns:
-            response: List[BookingSum]
+            response: List[BookingSumInfo]
                 JSON with amount
     """
     return await bookings_crud.get_booking_sum(booking_id=booking_id)

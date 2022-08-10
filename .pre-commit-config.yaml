@@ -32,4 +32,4 @@ repos:
         - --ignore-imports=yes
         - -d duplicate-code
         - --errors-only
-        - --disable=F0401
+        - --disable=F0401, E0213
