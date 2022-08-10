@@ -1,10 +1,14 @@
 """Different helper-functions to work with rooms."""
 
 from datetime import date, datetime
+
 from fastapi import HTTPException, Query
+
 from db import database
-from models import rooms as rooms_model, bookings as bookings_model
-from models import guests as guests_model, requests as requests_model
+from models import bookings as bookings_model
+from models import guests as guests_model
+from models import requests as requests_model
+from models import rooms as rooms_model
 from schemas import rooms as rooms_schema
 
 

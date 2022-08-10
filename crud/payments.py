@@ -1,10 +1,13 @@
 """Different crud-functions to work with payments."""
 
 from fastapi import HTTPException
-from db import database
-from models import payments as payments_model, bookings as bookings_model, rooms as rooms_model
-from schemas import payments as payments_schema
+
 from crud import bookings as bookings_crud
+from db import database
+from models import bookings as bookings_model
+from models import payments as payments_model
+from models import rooms as rooms_model
+from schemas import payments as payments_schema
 
 
 async def filter_payments(filter: payments_schema.PaymentFilter,

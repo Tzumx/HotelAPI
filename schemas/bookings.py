@@ -1,5 +1,6 @@
 from datetime import datetime
 from typing import Optional, Union
+
 from pydantic import BaseModel, Field
 
 
@@ -74,6 +75,7 @@ class BookingDeleteInfo (BaseModel):
     """Response schema on delete action"""
 
     result: str
+
 
 class BookingSumInfo (BaseModel):
     """Response schema with full information about amount of money for booking"""

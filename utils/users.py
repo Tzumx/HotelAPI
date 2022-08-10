@@ -1,18 +1,19 @@
-import random
+import datetime
 import hashlib
+import random
 import string
+from os import getenv
+from pathlib import Path
+from typing import Any, Union
+
+from dotenv import load_dotenv
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
-from crud import users as users_crud
-from schemas import users as users_schema
-import datetime
-from typing import Union, Any
 from jose import jwt
-from pathlib import Path
-from dotenv import load_dotenv
-from os import getenv
 from pydantic import ValidationError
 
+from crud import users as users_crud
+from schemas import users as users_schema
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth", scheme_name="JWT")
 ACCESS_TOKEN_EXPIRE_MINUTES = 30  # 30 minutes

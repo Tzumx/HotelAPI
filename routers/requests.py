@@ -1,7 +1,10 @@
 from typing import List
+
 from fastapi import APIRouter, Depends
-from schemas import requests as requests_schema, users as users_schema
+
 from crud import requests as requests_crud
+from schemas import requests as requests_schema
+from schemas import users as users_schema
 from utils import users as users_utils
 
 router = APIRouter()

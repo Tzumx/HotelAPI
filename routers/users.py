@@ -1,8 +1,8 @@
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi.security import OAuth2PasswordRequestForm
 
-from schemas import users as users_schema
 from crud import users as users_crud
+from schemas import users as users_schema
 from utils import users as users_util
 
 router = APIRouter()

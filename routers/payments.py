@@ -1,8 +1,11 @@
 from datetime import datetime
 from typing import List, Union
+
 from fastapi import APIRouter, Body, Depends
-from schemas import payments as payments_schema, users as users_schema
+
 from crud import payments as payments_crud
+from schemas import payments as payments_schema
+from schemas import users as users_schema
 from utils import users as users_utils
 
 router = APIRouter()

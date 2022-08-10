@@ -1,6 +1,7 @@
 from datetime import datetime
 from typing import Optional, Union
-from pydantic import BaseModel, EmailStr, Field, UUID4, validator
+
+from pydantic import UUID4, BaseModel, EmailStr, Field, validator
 
 
 class RoomTypeBase(BaseModel):

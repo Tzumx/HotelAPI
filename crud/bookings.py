@@ -1,10 +1,13 @@
 """Different crud-functions to work with bookings."""
 
 from fastapi import HTTPException
-from db import database
-from models import bookings as bookings_model, rooms as rooms_model, requests as requests_model
-from schemas import bookings as bookings_schema
+
 from crud import rooms as room_crud
+from db import database
+from models import bookings as bookings_model
+from models import requests as requests_model
+from models import rooms as rooms_model
+from schemas import bookings as bookings_schema
 
 
 async def filter_bookings(filter: bookings_schema.BookingFilter,
