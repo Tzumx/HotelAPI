@@ -1,5 +1,5 @@
-from sqlalchemy import Table, Column, Integer, String, Numeric, text
-from sqlalchemy import MetaData, ForeignKey, UniqueConstraint, CheckConstraint
+from sqlalchemy import (CheckConstraint, Column, ForeignKey, Integer, MetaData,
+                        Numeric, String, Table, UniqueConstraint, text)
 
 metadata = MetaData()
 

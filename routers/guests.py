@@ -1,7 +1,12 @@
 from typing import List
-from fastapi import APIRouter
-from schemas import guests as guests_schema, requests as requests_schema
+
+from fastapi import APIRouter, Depends
+
 from crud import guests as guests_crud
+from schemas import guests as guests_schema
+from schemas import requests as requests_schema
+from schemas import users as users_schema
+from utils import users as users_utils
 
 router = APIRouter()
 
@@ -26,7 +31,8 @@ async def filter_guests(filter: guests_schema.GuestFilter,
 
 
 @router.post("/guests", response_model=guests_schema.GuestInfo)
-async def create_guest(guest: guests_schema.GuestCreate):
+async def create_guest(guest: guests_schema.GuestCreate,
+                       user: users_schema.User = Depends(users_utils.get_current_user)):
     """
     Create guest
 
@@ -41,7 +47,8 @@ async def create_guest(guest: guests_schema.GuestCreate):
 
 
 @router.put("/guests/{guest_id}", response_model=guests_schema.GuestInfo)
-async def update_guest(guest_id: int, guest: guests_schema.GuestUpdate):
+async def update_guest(guest_id: int, guest: guests_schema.GuestUpdate,
+                       user: users_schema.User = Depends(users_utils.get_current_user)):
     """
     Update guest
 
@@ -58,7 +65,8 @@ async def update_guest(guest_id: int, guest: guests_schema.GuestUpdate):
 
 
 @router.delete("/guests/{guest_id}", response_model=guests_schema.GuestDeleteInfo)
-async def delete_guest(guest_id: int):
+async def delete_guest(guest_id: int,
+                       user: users_schema.User = Depends(users_utils.get_current_user)):
     """
     Delete guest
 

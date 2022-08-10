@@ -1,8 +1,8 @@
-from sqlalchemy import Column, DateTime, Integer, String, Boolean, Numeric
-from sqlalchemy import MetaData, Table, ForeignKey
+from sqlalchemy import (Boolean, Column, DateTime, ForeignKey, Integer,
+                        MetaData, Numeric, String, Table)
 from sqlalchemy.sql import expression, func
-from .bookings import booking
-import datetime
+
+from models import bookings
 
 metadata = MetaData()
 
@@ -11,7 +11,7 @@ request = Table(
     'requests',
     metadata,
     Column('id', Integer, primary_key=True),
-    Column('fk_booking_id', ForeignKey(booking.c.id,
+    Column('fk_booking_id', ForeignKey(bookings.booking.c.id,
                                        onupdate="CASCADE", ondelete="CASCADE")),
     Column('description', String(), nullable=False),
     Column('is_closed', Boolean(),

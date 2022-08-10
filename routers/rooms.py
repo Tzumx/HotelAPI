@@ -1,11 +1,14 @@
 from datetime import datetime
-from fastapi import APIRouter
 from typing import List, Optional
 
-from schemas import rooms as rooms_schema
-from schemas import guests as guests_schema, requests as requests_schema
+from fastapi import APIRouter, Depends
 
 from crud import rooms as rooms_crud
+from schemas import guests as guests_schema
+from schemas import requests as requests_schema
+from schemas import rooms as rooms_schema
+from schemas import users as users_schema
+from utils import users as users_utils
 
 router = APIRouter()
 
@@ -26,7 +29,8 @@ async def get_room_types(offset: int = 0, limit: int = 100):
 
 
 @router.post("/roomtypes", response_model=rooms_schema.RoomTypeInfo)
-async def create_room_type(roomtype: rooms_schema.RoomTypeCreate):
+async def create_room_type(roomtype: rooms_schema.RoomTypeCreate,
+                           user: users_schema.User = Depends(users_utils.get_current_user)):
     """
     Create room's type
 
@@ -41,7 +45,8 @@ async def create_room_type(roomtype: rooms_schema.RoomTypeCreate):
 
 
 @router.put("/roomtypes/{roomtype_id}", response_model=rooms_schema.RoomTypeInfo)
-async def update_room_type(roomtype_id: int, roomtype: rooms_schema.RoomTypeUpdate):
+async def update_room_type(roomtype_id: int, roomtype: rooms_schema.RoomTypeUpdate,
+                           user: users_schema.User = Depends(users_utils.get_current_user)):
     """
     Update info in the room's type
 
@@ -58,7 +63,8 @@ async def update_room_type(roomtype_id: int, roomtype: rooms_schema.RoomTypeUpda
 
 
 @router.delete("/roomtypes/{roomtype_id}", response_model=rooms_schema.RoomDeleteInfo)
-async def delete_room_type(roomtype_id: int):
+async def delete_room_type(roomtype_id: int,
+                           user: users_schema.User = Depends(users_utils.get_current_user)):
     """
     Delete room's type
 
@@ -91,7 +97,8 @@ async def filter_rooms(filter: rooms_schema.RoomFilter,
 
 
 @router.post("/rooms", response_model=rooms_schema.RoomInfo)
-async def create_room(room: rooms_schema.RoomCreate):
+async def create_room(room: rooms_schema.RoomCreate,
+                      user: users_schema.User = Depends(users_utils.get_current_user)):
     """
     Create new room
         Args:
@@ -105,7 +112,8 @@ async def create_room(room: rooms_schema.RoomCreate):
 
 
 @router.put("/rooms/{number}", response_model=rooms_schema.RoomInfo)
-async def update_room(number: int, room: rooms_schema.RoomUpdate):
+async def update_room(number: int, room: rooms_schema.RoomUpdate,
+                      user: users_schema.User = Depends(users_utils.get_current_user)):
     """
     Update info in the room
 
@@ -122,7 +130,8 @@ async def update_room(number: int, room: rooms_schema.RoomUpdate):
 
 
 @router.delete("/rooms/{number}", response_model=rooms_schema.RoomDeleteInfo)
-async def delete_room(number: int):
+async def delete_room(number: int,
+                      user: users_schema.User = Depends(users_utils.get_current_user)):
     """
     Delete room.
 
@@ -203,7 +212,8 @@ async def get_room_type_features(offset: int = 0, limit: int = 100):
 
 
 @router.post("/roomtypes/features", response_model=rooms_schema.FeatureInfo)
-async def create_room_type_feature(feature: rooms_schema.FeatureCreate):
+async def create_room_type_feature(feature: rooms_schema.FeatureCreate,
+                                   user: users_schema.User = Depends(users_utils.get_current_user)):
     """
     Create roomtype's feature
 
@@ -219,7 +229,8 @@ async def create_room_type_feature(feature: rooms_schema.FeatureCreate):
 
 
 @router.delete("/roomtypes/features/{id}", response_model=rooms_schema.RoomDeleteInfo)
-async def delete_room_type_feature(id: int):
+async def delete_room_type_feature(id: int,
+                                   user: users_schema.User = Depends(users_utils.get_current_user)):
     """
     Delete roomtype's feature from global list
 
@@ -234,7 +245,8 @@ async def delete_room_type_feature(id: int):
 
 
 @router.post("/roomtypes/{type_id}/features", response_model=rooms_schema.FeatureTypeInfoFull)
-async def add_feature_to_roomtype(type_id: int, feature_id: int):
+async def add_feature_to_roomtype(type_id: int, feature_id: int,
+                                  user: users_schema.User = Depends(users_utils.get_current_user)):
     """
     Add feature to roomtype
 
@@ -250,7 +262,8 @@ async def add_feature_to_roomtype(type_id: int, feature_id: int):
 
 
 @router.delete("/roomtypes/{type_id}/features", response_model=rooms_schema.RoomDeleteInfo)
-async def delete_feature_from_roomtype(type_id: int, feature_id: int):
+async def delete_feature_from_roomtype(type_id: int, feature_id: int,
+                                       user: users_schema.User = Depends(users_utils.get_current_user)):
     """
     Delete feature from roomtype
 

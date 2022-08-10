@@ -1,7 +1,11 @@
 from typing import List
-from fastapi import APIRouter
-from schemas import requests as requests_schema
+
+from fastapi import APIRouter, Depends
+
 from crud import requests as requests_crud
+from schemas import requests as requests_schema
+from schemas import users as users_schema
+from utils import users as users_utils
 
 router = APIRouter()
 
@@ -25,7 +29,8 @@ async def filter_requests(filter: requests_schema.RequestFilter, offset: int = 0
 
 
 @router.post("/requests", response_model=requests_schema.RequestInfo)
-async def create_request(request: requests_schema.RequestCreate):
+async def create_request(request: requests_schema.RequestCreate,
+                         user: users_schema.User = Depends(users_utils.get_current_user)):
     """
     Create request
 
@@ -40,7 +45,8 @@ async def create_request(request: requests_schema.RequestCreate):
 
 
 @router.put("/requests/{request_id}", response_model=requests_schema.RequestUpdate)
-async def update_request(request_id: int, request: requests_schema.RequestUpdate):
+async def update_request(request_id: int, request: requests_schema.RequestUpdate,
+                         user: users_schema.User = Depends(users_utils.get_current_user)):
     """
     Update request
 
@@ -57,7 +63,8 @@ async def update_request(request_id: int, request: requests_schema.RequestUpdate
 
 
 @router.delete("/requests/{request_id}", response_model=requests_schema.RequestDeleteInfo)
-async def delete_request(request_id: int):
+async def delete_request(request_id: int,
+                         user: users_schema.User = Depends(users_utils.get_current_user)):
     """
     Delete request
 

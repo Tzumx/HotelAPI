@@ -1,8 +1,11 @@
 """Different crud-functions to work with guests."""
 
 from fastapi import HTTPException
+
 from db import database
-from models import guests as guests_model, bookings as bookings_model, requests as requests_model
+from models import bookings as bookings_model
+from models import guests as guests_model
+from models import requests as requests_model
 from schemas import guests as guests_schema
 
 

@@ -1,7 +1,8 @@
 from os import getenv
+from pathlib import Path
+
 from databases import Database
 from dotenv import load_dotenv
-from pathlib import Path
 from starlette.config import Config
 
 env_path = Path('.') / '.env'

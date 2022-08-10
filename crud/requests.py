@@ -1,6 +1,7 @@
 """Different crud-functions to work with requests."""
 
 from fastapi import HTTPException
+
 from db import database
 from models import requests as requests_model
 from schemas import requests as requests_schema

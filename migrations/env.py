@@ -40,9 +40,9 @@ if config.config_file_name is not None:
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
 
-from models import payments, rooms, guests, requests, bookings
+from models import payments, rooms, guests, requests, bookings, users
 target_metadata = [rooms.metadata, guests.metadata, bookings.metadata,
-                     requests.metadata, payments.metadata]
+                     requests.metadata, payments.metadata, users.metadata]
 
 
 # other values from the config, defined by the needs of env.py,

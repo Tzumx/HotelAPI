@@ -1,7 +1,8 @@
-from asyncpg.exceptions import ForeignKeyViolationError
-from fastapi.responses import JSONResponse
-from fastapi import FastAPI, Request
 import uvicorn
+from asyncpg.exceptions import ForeignKeyViolationError
+from fastapi import FastAPI, Request
+from fastapi.responses import JSONResponse
+
 from db import database
 from routers import bookings, guests, payments, requests, rooms, users
 
@@ -15,7 +16,6 @@ app.include_router(payments.router)
 app.include_router(requests.router)
 app.include_router(rooms.router)
 app.include_router(users.router)
-
 
 
 @app.on_event('startup')

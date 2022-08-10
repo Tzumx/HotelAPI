@@ -1,10 +1,14 @@
 """Different helper-functions to work with rooms."""
 
-from datetime import date, datetime
+from datetime import datetime
+
 from fastapi import HTTPException, Query
+
 from db import database
-from models import rooms as rooms_model, bookings as bookings_model
-from models import guests as guests_model, requests as requests_model
+from models import bookings as bookings_model
+from models import guests as guests_model
+from models import requests as requests_model
+from models import rooms as rooms_model
 from schemas import rooms as rooms_schema
 
 
@@ -296,10 +300,15 @@ async def get_room_status(number: int, check_date_from: datetime,
     bookings = [dict(result._mapping) for result in answer]
     for booking in bookings:
         if booking['is_active'] == True:
-            if (booking['check_in'] < check_date_from and
-               booking["check_out"] > check_date_till):
+            if (check_date_from <= booking['check_in'] and
+                check_date_till >= booking["check_out"]) or \
+               (check_date_from >= booking['check_in']
+                and check_date_from <= booking["check_out"]) or \
+               (check_date_till >= booking['check_in']
+                    and check_date_till <= booking["check_out"]):
                 status["is_free"] = False
-                status['is_paid'] = booking['is_paid']
+                if "is_paid" not in status.keys() or status['is_paid'] == True:
+                    status['is_paid'] = booking['is_paid']
 
     requests = await get_room_requests(number, None, None, False)
     if len(requests) > 0:

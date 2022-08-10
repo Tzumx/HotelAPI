@@ -1,7 +1,11 @@
-from fastapi import APIRouter
-from schemas import bookings as bookings_schema
-from crud import bookings as bookings_crud
 from typing import List
+
+from fastapi import APIRouter, Depends
+
+from crud import bookings as bookings_crud
+from schemas import bookings as bookings_schema
+from schemas import users as users_schema
+from utils import users as users_utils
 
 router = APIRouter()
 
@@ -26,7 +30,8 @@ async def filter_bookings(filter: bookings_schema.BookingFilter,
 
 
 @router.post("/bookings", response_model=bookings_schema.BookingInfo)
-async def create_booking(booking: bookings_schema.BookingCreate):
+async def create_booking(booking: bookings_schema.BookingCreate,
+                         user: users_schema.User = Depends(users_utils.get_current_user)):
     """
     Add booking
 
@@ -42,7 +47,8 @@ async def create_booking(booking: bookings_schema.BookingCreate):
 
 @router.put("/bookings/{booking_id}", response_model=bookings_schema.BookingUpdate)
 async def update_bookings(booking_id: int,
-                          booking: bookings_schema.BookingUpdate):
+                          booking: bookings_schema.BookingUpdate,
+                          user: users_schema.User = Depends(users_utils.get_current_user)):
     """
     Update specific booking.
         Args:
@@ -57,7 +63,8 @@ async def update_bookings(booking_id: int,
 
 
 @router.delete("/bookings/{booking_id}", response_model=bookings_schema.BookingDeleteInfo)
-async def delete_bookings(booking_id: int):
+async def delete_bookings(booking_id: int,
+                          user: users_schema.User = Depends(users_utils.get_current_user)):
     """
     Delete booking
 
@@ -71,7 +78,8 @@ async def delete_bookings(booking_id: int):
 
 
 @router.patch("/bookings/{booking_id}/is_active", response_model=bookings_schema.BookingInfo)
-async def set_booking_status(booking_id: int, is_active: bool):
+async def set_booking_status(booking_id: int, is_active: bool,
+                             user: users_schema.User = Depends(users_utils.get_current_user)):
     """
     Set booking state
 
@@ -86,7 +94,8 @@ async def set_booking_status(booking_id: int, is_active: bool):
 
 
 @router.patch("/bookings/{booking_id}/review", response_model=bookings_schema.BookingInfo)
-async def post_booking_review(booking_id: int, review: str):
+async def post_booking_review(booking_id: int, review: str,
+                              user: users_schema.User = Depends(users_utils.get_current_user)):
     """
     Update client's review
 
@@ -98,3 +107,17 @@ async def post_booking_review(booking_id: int, review: str):
                 JSON with updated booking instance
     """
     return await bookings_crud.post_booking_review(booking_id=booking_id, review=review)
+
+
+@router.get("/bookings/{booking_id}/sum", response_model=bookings_schema.BookingSumInfo)
+async def get_booking_sum(booking_id: int):
+    """
+    Get amount of services for the booking
+
+        Args:
+            booking_id (int): id of the booking
+        Returns:
+            response: List[BookingSum]
+                JSON with amount
+    """
+    return await bookings_crud.get_booking_sum(booking_id=booking_id)

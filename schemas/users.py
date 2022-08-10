@@ -1,7 +1,8 @@
 from datetime import datetime
 from typing import Optional
-from pydantic import BaseModel, EmailStr, Field, validator
 from uuid import UUID
+
+from pydantic import BaseModel, EmailStr, Field, validator
 
 
 class UserCreate(BaseModel):
@@ -46,7 +47,7 @@ class TokenBase(BaseModel):
         allow_population_by_field_name = True
 
     @validator("token")
-    def hexlify_token(cls, value):
+    def hexlify_token(self, value):
         """ Convert UUID """
 
         return value.hex
