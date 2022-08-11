@@ -3,7 +3,7 @@ import sqlalchemy
 metadata = sqlalchemy.MetaData()
 
 
-users_table = sqlalchemy.Table(
+user = sqlalchemy.Table(
     "users",
     metadata,
     sqlalchemy.Column("id", sqlalchemy.Integer, primary_key=True),
@@ -14,6 +14,12 @@ users_table = sqlalchemy.Table(
         "is_active",
         sqlalchemy.Boolean(),
         server_default=sqlalchemy.sql.expression.true(),
+        nullable=False,
+    ),
+    sqlalchemy.Column(
+        "is_admin",
+        sqlalchemy.Boolean(),
+        server_default=sqlalchemy.sql.expression.false(),
         nullable=False,
     ),
 )

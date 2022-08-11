@@ -13,7 +13,8 @@ router = APIRouter()
 
 @router.post("/guests/filter", response_model=List[guests_schema.GuestInfo])
 async def filter_guests(filter: guests_schema.GuestFilter,
-                        offset: int = 0, limit: int = 100):
+                        offset: int = 0, limit: int = 100,
+                        user: users_schema.User = Depends(users_utils.get_current_user)):
     """
     List guests with filter
 
@@ -80,7 +81,8 @@ async def delete_guest(guest_id: int,
 
 
 @router.get("/guests/{guest_id}/requests", response_model=List[requests_schema.RequestInfo])
-async def get_guest_requests(guest_id: int, is_closed: bool = False):
+async def get_guest_requests(guest_id: int, is_closed: bool = False,
+                             user: users_schema.User = Depends(users_utils.get_current_user)):
     """
     List requests connected with this guest
 

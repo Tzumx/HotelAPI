@@ -40,7 +40,7 @@ async def update_room_type(roomtype_id, roomtype: rooms_schema.RoomTypeUpdate):
         stored_data = dict(stored_data)
         update_data = roomtype.dict(exclude_unset=True)
         stored_data.update(update_data)
-        query = rooms_model.room_type.update().values(**update_data).where(
+        query = rooms_model.room_type.update().values(**stored_data).where(
             rooms_model.room_type.c.id == roomtype_id)
         await database.execute(query)
         return {**stored_data, "id": roomtype_id}
@@ -111,7 +111,7 @@ async def update_room(number, room: rooms_schema.RoomUpdate):
         stored_data = dict(stored_data)
         update_data = room.dict(exclude_unset=True)
         stored_data.update(update_data)
-        query = rooms_model.room.update().values(**update_data).where(
+        query = rooms_model.room.update().values(**stored_data).where(
             rooms_model.room.c.number == number)
         await database.execute(query)
         return {**stored_data, "number": number}

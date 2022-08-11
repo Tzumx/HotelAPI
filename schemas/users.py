@@ -13,27 +13,25 @@ class UserCreate(BaseModel):
     password: str
 
 
-class UserOut(BaseModel):
-    """ User answer """
-
-    id: int
-    email: str
-    name: str
-    # token: dict
-
-
-class SystemUser(UserOut):
-    """ Auth User check """
-
-    hashed_password: str
-
-
 class UserBase(BaseModel):
     """ User information answer """
 
     id: int
     email: EmailStr
     name: str
+
+
+class UserInfo(UserBase):
+    """ User full answer """
+
+    is_active: Optional[bool]
+    is_admin: Optional[bool]
+
+
+class SystemUser(UserInfo):
+    """ Auth User check """
+
+    hashed_password: str
 
 
 class TokenBase(BaseModel):
@@ -67,8 +65,38 @@ class TokenSchema(BaseModel):
     refresh_token: str
 
 
+class TokenRefreshSchema(BaseModel):
+    """ Token refesh schema """
+
+    access_token: str
+
+
 class TokenPayload(BaseModel):
     """ Token check auth """
 
     sub: str = None
     exp: int = None
+
+
+class UserFilter(BaseModel):
+    """ User filter """
+
+    id: Optional[int]
+    email: Optional[str]
+    name: Optional[str]
+
+
+class UserUpdate(BaseModel):
+    """ User filter """
+
+    email: Optional[EmailStr]
+    name: Optional[str]
+    password: Optional[str]
+    is_active: Optional[bool]
+    is_admin: Optional[bool]
+
+
+class UserDeleteInfo(BaseModel):
+
+    """Response schema on delete action."""
+    result: str

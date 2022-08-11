@@ -12,7 +12,8 @@ router = APIRouter()
 
 @router.post("/bookings/filter", response_model=List[bookings_schema.BookingInfo])
 async def filter_bookings(filter: bookings_schema.BookingFilter,
-                          offset: int = 0, limit: int = 100):
+                          offset: int = 0, limit: int = 100,
+                          user: users_schema.User = Depends(users_utils.get_current_user)):
     """
     Add booking
 
@@ -110,7 +111,8 @@ async def post_booking_review(booking_id: int, review: str,
 
 
 @router.get("/bookings/{booking_id}/sum", response_model=bookings_schema.BookingSumInfo)
-async def get_booking_sum(booking_id: int):
+async def get_booking_sum(booking_id: int,
+                          user: users_schema.User = Depends(users_utils.get_current_user)):
     """
     Get amount of services for the booking
 

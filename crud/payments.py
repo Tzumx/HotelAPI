@@ -80,7 +80,7 @@ async def update_payment(payment_id, payment: payments_schema.PaymentUpdate):
         stored_data = dict(stored_data)
         update_data = payment.dict(exclude_unset=True)
         stored_data.update(update_data)
-        query = payments_model.payment.update().values(**update_data).where(
+        query = payments_model.payment.update().values(**stored_data).where(
             payments_model.payment.c.id == payment_id)
         await database.execute(query)
 
@@ -95,11 +95,12 @@ async def delete_payment(payment_id: int):
 
     query = payments_model.payment.select().where(
         payments_model.payment.c.id == payment_id)
-    answer = await database.execute(query)
-    if answer == payment_id:
+    stored_data = await database.fetch_one(query)
+    if stored_data != None:
         query = payments_model.payment.delete().where(
             payments_model.payment.c.id == payment_id)
         await database.execute(query)
+        result = await check_is_paid(stored_data['fk_booking_id'])
         answer = "Success"
     else:
         answer = "Error"
