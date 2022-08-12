@@ -148,21 +148,6 @@
   
   
     <li class="md-nav__item">
-      <a href="../installation/" class="md-nav__link">
-        Installation
-      </a>
-    </li>
-  
-
-    
-      
-      
-      
-
-  
-  
-  
-    <li class="md-nav__item">
       <a href=".." class="md-nav__link">
         Hotel Docs
       </a>
@@ -174,6 +159,34 @@
       
       
 
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2" type="checkbox" id="__nav_2" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2">
+          About
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="About" data-md-level="1">
+        <label class="md-nav__title" for="__nav_2">
+          <span class="md-nav__icon md-icon"></span>
+          About
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
   
   
     
@@ -256,10 +269,38 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#users" class="md-nav__link">
+    Users
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
       
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../HotelAPI_db/" class="md-nav__link">
+        Database design
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
     </li>
   
 
@@ -271,10 +312,71 @@
   
   
   
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3" type="checkbox" id="__nav_3" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3">
+          User Guide
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="User Guide" data-md-level="1">
+        <label class="md-nav__title" for="__nav_3">
+          <span class="md-nav__icon md-icon"></span>
+          User Guide
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
     <li class="md-nav__item">
-      <a href="../HotelAPI_db/" class="md-nav__link">
-        Database design
+      <a href="../installation/" class="md-nav__link">
+        Installation
       </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../overview/" class="md-nav__link">
+        Routers overview
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../how-to-guides/" class="md-nav__link">
+        How-To Guides
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
     </li>
   
 
@@ -352,6 +454,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#users" class="md-nav__link">
+    Users
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -369,7 +478,7 @@
   <h1>General Info</h1>
 
 <p>This project serves a simple hotel administrations system API that includes the following aspects (CRUD):</p>
-<pre><code>* room categories can be created, viewed, updated, and deleted
+<pre><code>* room categories can be created, viewed, updated, deleted and modified with features
 * rooms can be created, viewed, updated, and deleted
 * guests can be created, viewed, updated, and deleted
 * bookings can be created, viewed, updated, and deleted
@@ -377,29 +486,33 @@
 * requests can be created, viewed, updated, and deleted
 </code></pre>
 <h2 id="room-categories-types">Room categories (types)</h2>
-<p>Room categories has room's characteristics.</p>
-<p>A room category has basic information, such as:</p>
+<p>Room categories have room's characteristics.<br>
+<a href="../overview/#rooms">View rooms routers.</a></p>
+<p>A room categories have basic information, such as:</p>
 <pre><code>* id
 * name
 * price
 * description
 </code></pre>
 <h2 id="room-features">Room features</h2>
-<p>Room features has many-to-many connection with room categories. Each room can have some features and vice versa each feature can be in many room's category.</p>
-<p>A room features has basic information, such as:</p>
+<p>Room features have many-to-many connection with room categories. Each room can have some features and vice versa, each feature can be in many room's category.<br>
+<a href="../overview/#rooms">View rooms routers.</a></p>
+<p>A room features have basic information, such as:</p>
 <pre><code>* id
 * feature
 </code></pre>
 <h2 id="room">Room</h2>
-<p>Room is the main unit when working with bookings. Each room must be connected with one room categories (types) to get information about price and features in the room.
-Rooms are identified by their room number.</p>
-<p>A room has basic information, such as:</p>
+<p>Room is the main unit when working with bookings. Each room must be connected with one room categories (types) to get information about price and features in the room.<br>
+Rooms are identified by their room number.<br>
+<a href="../overview/#rooms">View rooms routers.</a></p>
+<p>A rooms have basic information, such as:</p>
 <pre><code>* number
 * room category
 * number of the floor
 * number of the house
 </code></pre>
 <h2 id="guests">Guests</h2>
+<p><a href="../overview/#guests">View guests routers.</a><br></p>
 <p>Guests can have multiple bookings and have basic information, such as:</p>
 <pre><code>* id
 * name
@@ -407,8 +520,9 @@ Rooms are identified by their room number.</p>
 * phone number
 </code></pre>
 <h2 id="bookings">Bookings</h2>
-<p>Bookings are connected to guests and rooms. When a guest makes a booking, only one room is assigned. Hotel staff can not change is_paid checkbox - it is calculated automatically based on payments.</p>
-<p>Booking have basic information, such as:</p>
+<p>Bookings are connected to guests and rooms. When a guest makes a booking, only one room is assigned. Hotel staff can not change is_paid checkbox - it is calculated automatically based on payments.<br>
+<a href="../overview/#bookings">View bookings routers.</a></p>
+<p>Bookings have basic information, such as:</p>
 <pre><code>* id
 * room number
 * guest id
@@ -422,8 +536,9 @@ Rooms are identified by their room number.</p>
 * created_at
 </code></pre>
 <h2 id="payments">Payments</h2>
-<p>Payments has the information about all financial transactions. Each payment connected with one booking. After adding each payment is_paid checkbox is recalculate for connected booking.</p>
-<p>Payment have basic information, such as:</p>
+<p>Payments have the information about all financial transactions. Each payment connected with one booking. After adding each payment is_paid checkbox is recalculating for connected booking.<br>
+<a href="../overview/#payments">View payments routers.</a></p>
+<p>Payments have basic information, such as:</p>
 <pre><code>* id
 * booking id
 * sum of transaction
@@ -431,7 +546,8 @@ Rooms are identified by their room number.</p>
 * description
 </code></pre>
 <h2 id="requests">Requests</h2>
-<p>For each booking can be created requests like "need to clean", "need to be repaired" etc.</p>
+<p>For each booking can be created requests like "need to clean", "need to be repaired" etc.<br>
+<a href="../overview/#requests">View requests routers.</a></p>
 <p>Requests have basic information, such as:</p>
 <pre><code>* id
 * booking id
@@ -441,6 +557,17 @@ Rooms are identified by their room number.</p>
 * price
 * updated_at
 * created_at
+</code></pre>
+<h2 id="users">Users</h2>
+<p>Have two types of users: ordinary staff and admins. Admins additionally can add, change and delete any user. First user will always be created as admin.<br>
+<a href="../overview/#users">View users routers.</a></p>
+<p>Users have basic information, such as:</p>
+<pre><code>* id
+* email
+* name
+* password
+* is_active
+* is_admin
 </code></pre>
 
               

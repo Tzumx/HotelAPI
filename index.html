@@ -146,21 +146,6 @@
 
   
   
-  
-    <li class="md-nav__item">
-      <a href="installation/" class="md-nav__link">
-        Installation
-      </a>
-    </li>
-  
-
-    
-      
-      
-      
-
-  
-  
     
   
   
@@ -211,20 +196,6 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#routers" class="md-nav__link">
-    routers
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#commands" class="md-nav__link">
-    Commands
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#project-layout" class="md-nav__link">
     Project layout
   </a>
@@ -246,10 +217,57 @@
   
   
   
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2" type="checkbox" id="__nav_2" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2">
+          About
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="About" data-md-level="1">
+        <label class="md-nav__title" for="__nav_2">
+          <span class="md-nav__icon md-icon"></span>
+          About
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
     <li class="md-nav__item">
       <a href="general-info/" class="md-nav__link">
         General Info
       </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="HotelAPI_db/" class="md-nav__link">
+        Database design
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
     </li>
   
 
@@ -261,10 +279,71 @@
   
   
   
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3" type="checkbox" id="__nav_3" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3">
+          User Guide
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="User Guide" data-md-level="1">
+        <label class="md-nav__title" for="__nav_3">
+          <span class="md-nav__icon md-icon"></span>
+          User Guide
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
     <li class="md-nav__item">
-      <a href="HotelAPI_db/" class="md-nav__link">
-        Database design
+      <a href="installation/" class="md-nav__link">
+        Installation
       </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="overview/" class="md-nav__link">
+        Routers overview
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="how-to-guides/" class="md-nav__link">
+        How-To Guides
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
     </li>
   
 
@@ -310,20 +389,6 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#routers" class="md-nav__link">
-    routers
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#commands" class="md-nav__link">
-    Commands
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#project-layout" class="md-nav__link">
     Project layout
   </a>
@@ -348,53 +413,53 @@
 <p>Generic Hotel API for a basic hotel administrations system created with FastAPI and PostgreSQL.</p>
 <h2 id="table-of-contents">Table Of Contents</h2>
 <ol>
-<li><a href="installation/">Installation</a></li>
 <li><a href="general-info/">General info</a></li>
 <li><a href="HotelAPI_db/">Database design</a></li>
+<li><a href="installation/">Installation</a></li>
+<li><a href="overview/">Routers overview</a></li>
+<li><a href="how-to-guides/">How-To Guides</a></li>
 </ol>
-<!-- 4. [How-To Guides](how-to-guides.md) -->
 <!-- 5. [Explanation](explanation.md) -->
 
 <h2 id="project-overview">Project Overview</h2>
-
-
-<div class="doc doc-object doc-module">
-
-
-<a id="routers"></a>
-  <div class="doc doc-contents first">
-
-  
-
-  <div class="doc doc-children">
-
-
-
-
-
-
-
-
-
-
-
-  </div>
-
-  </div>
-
-</div><p>For full documentation visit <a href="https://www.mkdocs.org">mkdocs.org</a>.</p>
-<h2 id="commands">Commands</h2>
-<ul>
-<li><code>mkdocs new [dir-name]</code> - Create a new project.</li>
-<li><code>mkdocs serve</code> - Start the live-reloading docs server.</li>
-<li><code>mkdocs build</code> - Build the documentation site.</li>
-<li><code>mkdocs -h</code> - Print help message and exit.</li>
-</ul>
+<p>Features</p>
+<pre><code>Create different types of room with own price and fixtures.
+Store and search information about guests, bookings and hotel facilities.
+Create Bookings depending on the room state (free or booked).
+Check if booking's payment is full, if guest has any open requests.
+Role based access to functionality (Admin/User).
+</code></pre>
+<p>Getting Started</p>
+<pre><code>Setup database (heroku-postgresql hobby-dev is a great free option)
+Add database URL to .env file
+Setup keys in .env file as per need.
+Setup a local environment
+Update database via migrations
+Start app and create first user (admin)
+</code></pre>
 <h2 id="project-layout">Project layout</h2>
-<pre><code>mkdocs.yml    # The configuration file.
+<pre><code>db.py            # Config files for database connection
+main.py          # Main executable file
+mkdocs.yml       # The configuration file for mkdocs.
+requirements.txt # File with dependencies
 docs/
-    index.md  # The documentation homepage.
-    ...       # Other markdown pages, images and other files.
+    index.md     # The documentation homepage.
+    ...          # Other markdown pages, images and other files.
+crud/
+    rooms.py     # Modules to work with database's models "rooom"
+    ...          # Other modules to work with similar models in database
+migration/
+    version/     # Folder with transaction to prepare tables in database
+    env.py       # Alembic Config object
+    ...          # Other files for Alembic
+models/
+    room.py      # Database models with information about room
+    ...          # Other modelues with db models
+schemas/
+    room.py      # Pydantic schemas for rooms models
+    ...          # Other files with pydantic schemas
+utils/
+    users.py     # Helper functions for auth logic
 </code></pre>
 
               
@@ -409,21 +474,6 @@ docs/
   
     
     <nav class="md-footer__inner md-grid" aria-label="Footer" >
-      
-        
-        <a href="installation/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Installation" rel="prev">
-          <div class="md-footer__button md-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
-          </div>
-          <div class="md-footer__title">
-            <div class="md-ellipsis">
-              <span class="md-footer__direction">
-                Previous
-              </span>
-              Installation
-            </div>
-          </div>
-        </a>
       
       
         
