@@ -80,7 +80,7 @@ def create_refresh_token(subject: Union[str, Any], expires_delta: int = None) ->
     return encoded_jwt, expires_delta
 
 
-async def get_refresh_user(token: str = Depends(oauth2_scheme)):
+async def refresh_token(token: str = Depends(oauth2_scheme)):
     """ Get user by long term token """
 
     try:
@@ -101,20 +101,8 @@ async def get_refresh_user(token: str = Depends(oauth2_scheme)):
             detail="Could not validate credentials",
             headers={"WWW-Authenticate": "Bearer"},
         )
-    user = await users_crud.get_user_by_email(payload['sub'])
 
-    if user is None:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="Could not find user",
-        )
-
-    return users_schema.SystemUser(**user)
-
-
-def refresh_token(user: users_schema.User):
-
-    token, _ = create_access_token(user.email)
+    token, _ = create_access_token(payload['sub'])
 
     return {"access_token": token}
 
@@ -159,7 +147,7 @@ async def get_current_user(token: str = Depends(oauth2_scheme)):
 
 
 async def get_admin_user(token: str = Depends(oauth2_scheme)):
-    """ Get auth user for validation """
+    """ Check if user is admin for validation """
 
     users = await users_crud.filter_users(users_schema.UserFilter(**{}))
     if len(users) == 0:

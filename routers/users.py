@@ -64,7 +64,7 @@ async def auth(form_data: OAuth2PasswordRequestForm = Depends()):
 
 @router.post("/users/filter", response_model=List[users_schema.UserInfo],
              summary="Filter users", tags=["users"])
-async def filter_users(filter: users_schema.UserFilter,
+async def filter_users(filter: users_schema.UserFilter = users_schema.UserFilter(**{}),
                        offset: int = 0, limit: int = 100,
                        user: users_schema.User = Depends(users_util.get_admin_user)):
     """
@@ -105,7 +105,7 @@ async def update_user(id: int, user_to_update: users_schema.UserUpdate,
 
 @router.delete("/users/{id}", response_model=users_schema.UserDeleteInfo,
                summary="Delete user", tags=["users"])
-async def delete_room(id: int,
+async def delete_user(id: int,
                       user: users_schema.User = Depends(users_util.get_admin_user)):
     """
     Delete user.
@@ -121,11 +121,11 @@ async def delete_room(id: int,
 
 @router.post("/auth/refresh", response_model=users_schema.TokenRefreshSchema,
              summary="Refresh token for access", tags=["users"])
-async def refresh_token(user: users_schema.User = Depends(users_util.get_refresh_user)):
+async def refresh_token(token = Depends(users_util.refresh_token)):
     """
-    Refrsh token for user
+    Refresh token for user
 
         Returns:
                 response: Dict with access token
     """
-    return users_util.refresh_token(user)
+    return token
