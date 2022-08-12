@@ -1,32 +1,58 @@
 # Hotel_API
-Generic Hotel API for a basic hotel administrations system created with FastAPI and PostgreSQL.
+Generic Hotel API for a basic hotel administrations system created with FastAPI and PostgreSQL to simplify and structure hotel operations.
 
 
 ## Table Of Contents
 
-1. [Installation](installation.md)
-2. [General info](general-info.md)
-3. [Database design](HotelAPI_db.md)
-<!-- 4. [How-To Guides](how-to-guides.md) -->
-<!-- 5. [Explanation](explanation.md) -->
+1. [General info](general-info.md)
+2. [Database design](HotelAPI_db.md)
+3. [Installation](installation.md)
+4. [Routers overview](overview.md)
+5. [How-To Guides](how-to-guides.md)
 
 ## Project Overview
 
-::: routers
+Features
+
+    Create different types of room with own price and fixtures.
+    Store and search information about guests, bookings and hotel facilities.
+    Create Bookings depending on the room state (free or booked).
+    Check if booking's payment is full, if guest has any open requests.
+    Role based access to functionality (Admin/User).
 
 
-For full documentation visit [mkdocs.org](https://www.mkdocs.org).
+Getting Started
 
-## Commands
+    Setup database (heroku-postgresql hobby-dev is a great free option)
+    Add database URL to .env file
+    Setup keys in .env file as per need.
+    Setup a local environment
+    Update database via migrations
+    Start app and create first user (admin)
 
-* `mkdocs new [dir-name]` - Create a new project.
-* `mkdocs serve` - Start the live-reloading docs server.
-* `mkdocs build` - Build the documentation site.
-* `mkdocs -h` - Print help message and exit.
 
 ## Project layout
 
-    mkdocs.yml    # The configuration file.
+    db.py            # Config files for database connection
+    main.py          # Main executable file
+    mkdocs.yml       # The configuration file for mkdocs.
+    requirements.txt # File with dependencies
     docs/
-        index.md  # The documentation homepage.
-        ...       # Other markdown pages, images and other files.
+        index.md     # The documentation homepage.
+        ...          # Other markdown pages, images and other files.
+    crud/
+        rooms.py     # Modules to work with database's models "rooom"
+        ...          # Other modules to work with similar models in database
+    migration/
+        version/     # Folder with transaction to prepare tables in database
+        env.py       # Alembic Config object
+        ...          # Other files for Alembic
+    models/
+        room.py      # Database models with information about room
+        ...          # Other modelues with db models
+    schemas/
+        room.py      # Pydantic schemas for rooms models
+        ...          # Other files with pydantic schemas
+    utils/
+        users.py     # Helper functions for auth logic
+

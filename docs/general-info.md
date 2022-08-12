@@ -1,16 +1,18 @@
 This project serves a simple hotel administrations system API that includes the following aspects (CRUD):
 
-    * room categories can be created, viewed, updated, and deleted
+    * room categories can be created, viewed, updated, deleted and modified with features
     * rooms can be created, viewed, updated, and deleted
     * guests can be created, viewed, updated, and deleted
     * bookings can be created, viewed, updated, and deleted
     * payments can be created, viewed, updated, and deleted
     * requests can be created, viewed, updated, and deleted
+    * users can be created, viewed, updated, and deleted by admins
 
-## Room categories (types)
-Room categories has room's characteristics.
+## Room categories (types) 
+Room categories have room's characteristics.<br>
+[View rooms routers.](overview.md#rooms)
 
-A room category has basic information, such as:
+A room categories have basic information, such as:
 
     * id
     * name
@@ -18,18 +20,20 @@ A room category has basic information, such as:
     * description
 
 ## Room features
-Room features has many-to-many connection with room categories. Each room can have some features and vice versa each feature can be in many room's category.
+Room features have many-to-many connection with room categories. Each room can have some features and vice versa, each feature can be in many room's category.<br>
+[View rooms routers.](overview.md#rooms)
 
-A room features has basic information, such as:
+A room features have basic information, such as:
 
     * id
     * feature
 
 ## Room
-Room is the main unit when working with bookings. Each room must be connected with one room categories (types) to get information about price and features in the room.
-Rooms are identified by their room number.
+Room is the main unit when working with bookings. Each room must be connected with one room categories (types) to get information about price and features in the room.<br>
+Rooms are identified by their room number.<br>
+[View rooms routers.](overview.md#rooms)
 
-A room has basic information, such as:
+A rooms have basic information, such as:
 
     * number
     * room category
@@ -37,6 +41,8 @@ A room has basic information, such as:
     * number of the house
 
 ## Guests
+[View guests routers.](overview.md#guests)<br>
+
 Guests can have multiple bookings and have basic information, such as:
 
     * id
@@ -45,9 +51,10 @@ Guests can have multiple bookings and have basic information, such as:
     * phone number
 
 ## Bookings
-Bookings are connected to guests and rooms. When a guest makes a booking, only one room is assigned. Hotel staff can not change is_paid checkbox - it is calculated automatically based on payments.
+Bookings are connected to guests and rooms. When a guest makes a booking, only one room is assigned. Hotel staff can not change is_paid checkbox - it is calculated automatically based on payments.<br>
+[View bookings routers.](overview.md#bookings)
 
-Booking have basic information, such as:
+Bookings have basic information, such as:
 
     * id
     * room number
@@ -62,9 +69,10 @@ Booking have basic information, such as:
     * created_at
 
 ## Payments
-Payments has the information about all financial transactions. Each payment connected with one booking. After adding each payment is_paid checkbox is recalculate for connected booking.
+Payments have the information about all financial transactions. Each payment connected with one booking. After adding each payment is_paid checkbox is recalculating for connected booking.<br>
+[View payments routers.](overview.md#payments)
 
-Payment have basic information, such as:
+Payments have basic information, such as:
     
     * id
     * booking id
@@ -73,7 +81,8 @@ Payment have basic information, such as:
     * description
 
 ## Requests
-For each booking can be created requests like "need to clean", "need to be repaired" etc.
+For each booking can be created requests like "need to clean", "need to be repaired" etc.<br>
+[View requests routers.](overview.md#requests)
 
 Requests have basic information, such as:
 
@@ -85,3 +94,17 @@ Requests have basic information, such as:
     * price
     * updated_at
     * created_at    
+
+## Users
+Have two types of users: ordinary staff and admins. Admins additionally can add, change and delete any user. First user will always be created as admin.<br>
+[View users routers.](overview.md#users)
+
+
+Users have basic information, such as:
+
+    * id
+    * email
+    * name
+    * password
+    * is_active
+    * is_admin
