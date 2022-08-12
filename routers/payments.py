@@ -10,7 +10,8 @@ from utils import users as users_utils
 router = APIRouter()
 
 
-@router.post("/payments/filter", response_model=List[payments_schema.PaymentInfo])
+@router.post("/payments/filter", response_model=List[payments_schema.PaymentInfo],
+             tags=["payments"])
 async def filter_payments(filter: payments_schema.PaymentFilter, offset: int = 0, limit: int = 100,
                           user: users_schema.User = Depends(users_utils.get_current_user)):
     """
@@ -29,7 +30,8 @@ async def filter_payments(filter: payments_schema.PaymentFilter, offset: int = 0
     return await payments_crud.filter_payments(filter=filter, offset=offset, limit=limit)
 
 
-@router.post("/payments", response_model=payments_schema.PaymentInfo)
+@router.post("/payments", response_model=payments_schema.PaymentInfo,
+             tags=["payments"])
 async def create_payment(payment: payments_schema.PaymentCreate,
                          user: users_schema.User = Depends(users_utils.get_current_user)):
     """
@@ -45,7 +47,8 @@ async def create_payment(payment: payments_schema.PaymentCreate,
     return await payments_crud.create_payment(payment=payment)
 
 
-@router.put("/payments/{payment_id}", response_model=payments_schema.PaymentInfo)
+@router.put("/payments/{payment_id}", response_model=payments_schema.PaymentInfo,
+            tags=["payments"])
 async def update_payment(payment_id: int, payment: payments_schema.PaymentUpdate,
                          user: users_schema.User = Depends(users_utils.get_current_user)):
     """
@@ -63,7 +66,8 @@ async def update_payment(payment_id: int, payment: payments_schema.PaymentUpdate
     return await payments_crud.update_payment(payment_id=payment_id, payment=payment)
 
 
-@router.delete("/payments/{payment_id}", response_model=payments_schema.PaymentDeleteInfo)
+@router.delete("/payments/{payment_id}", response_model=payments_schema.PaymentDeleteInfo,
+               tags=["payments"])
 async def delete_payment(payment_id: int,
                          user: users_schema.User = Depends(users_utils.get_current_user)):
     """

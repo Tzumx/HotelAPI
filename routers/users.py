@@ -11,7 +11,8 @@ from utils import users as users_util
 router = APIRouter()
 
 
-@router.post("/sign-up", response_model=users_schema.UserInfo)
+@router.post("/sign-up", response_model=users_schema.UserInfo,
+             summary="Register new user", tags=["users"])
 async def create_user(user: users_schema.UserCreate,
                       user_admin: users_schema.User = Depends(users_util.get_admin_user)):
     """
@@ -28,7 +29,8 @@ async def create_user(user: users_schema.UserCreate,
     return await users_crud.create_user(user=user)
 
 
-@router.post("/auth", response_model=users_schema.TokenSchema)
+@router.post("/auth", response_model=users_schema.TokenSchema,
+             summary="LogIn and get tokens", tags=["users"])
 async def auth(form_data: OAuth2PasswordRequestForm = Depends()):
     """
     Login user
@@ -60,7 +62,8 @@ async def auth(form_data: OAuth2PasswordRequestForm = Depends()):
             "refresh_token": refresh_token}
 
 
-@router.post("/users/filter", response_model=List[users_schema.UserInfo])
+@router.post("/users/filter", response_model=List[users_schema.UserInfo],
+             summary="Filter users", tags=["users"])
 async def filter_users(filter: users_schema.UserFilter,
                        offset: int = 0, limit: int = 100,
                        user: users_schema.User = Depends(users_util.get_admin_user)):
@@ -81,7 +84,8 @@ async def filter_users(filter: users_schema.UserFilter,
     return await users_crud.filter_users(filter=filter, offset=offset, limit=limit)
 
 
-@router.put("/users/{id}", response_model=users_schema.UserInfo)
+@router.put("/users/{id}", response_model=users_schema.UserInfo,
+            summary="Update user", tags=["users"])
 async def update_user(id: int, user_to_update: users_schema.UserUpdate,
                       user: users_schema.User = Depends(users_util.get_admin_user)):
     """
@@ -99,7 +103,8 @@ async def update_user(id: int, user_to_update: users_schema.UserUpdate,
     return await users_crud.update_user(id=id, user=user_to_update)
 
 
-@router.delete("/users/{id}", response_model=users_schema.UserDeleteInfo)
+@router.delete("/users/{id}", response_model=users_schema.UserDeleteInfo,
+               summary="Delete user", tags=["users"])
 async def delete_room(id: int,
                       user: users_schema.User = Depends(users_util.get_admin_user)):
     """
@@ -114,7 +119,8 @@ async def delete_room(id: int,
     return await users_crud.delete_user(id=id)
 
 
-@router.post("/auth/refresh", response_model=users_schema.TokenRefreshSchema)
+@router.post("/auth/refresh", response_model=users_schema.TokenRefreshSchema,
+             summary="Refresh token for access", tags=["users"])
 async def refresh_token(user: users_schema.User = Depends(users_util.get_refresh_user)):
     """
     Refrsh token for user
