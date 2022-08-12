@@ -1,13 +1,21 @@
-from fastapi import FastAPI
 import uvicorn
+from asyncpg.exceptions import ForeignKeyViolationError
+from fastapi import FastAPI, Request
+from fastapi.responses import JSONResponse
+
 from db import database
-from routers import rooms
+from routers import bookings, guests, payments, requests, rooms, users
 
 # Initialize the app
 app = FastAPI()
 
 # Link all URLs
+app.include_router(bookings.router)
+app.include_router(guests.router)
+app.include_router(payments.router)
+app.include_router(requests.router)
 app.include_router(rooms.router)
+app.include_router(users.router)
 
 
 @app.on_event('startup')
@@ -18,6 +26,14 @@ async def startup() -> None:
 @app.on_event('shutdown')
 async def shutdown() -> None:
     await database.disconnect()
+
+
+@app.exception_handler(ForeignKeyViolationError)
+async def value_error_exception_handler(request: Request, exc: ValueError):
+    return JSONResponse(
+        status_code=400,
+        content={"message": str(exc)},
+    )
 
 
 if __name__ == '__main__':

@@ -1,7 +1,9 @@
 from os import getenv
+from pathlib import Path
+
 from databases import Database
 from dotenv import load_dotenv
-from pathlib import Path
+from starlette.config import Config
 
 env_path = Path('.') / '.env'
 load_dotenv(dotenv_path=env_path)
@@ -20,9 +22,9 @@ DB_TEST_NAME = getenv("TEST_DB", "tdd")
 # test databases query builder
 TEST_DB_URL = f'postgresql://{DB_TEST_USER}:{DB_TEST_PASSWORD}@{DB_TEST_HOST}:5432/{DB_TEST_NAME}'
 
-from starlette.config import Config
 config = Config()
 TESTING = config('TESTING', cast=bool, default=False)
-if TESTING: database=Database(TEST_DB_URL)
-else: database = Database(DB_URL)
-
+if TESTING:
+    database = Database(TEST_DB_URL)
+else:
+    database = Database(DB_URL)
