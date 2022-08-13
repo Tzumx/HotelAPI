@@ -1,15 +1,14 @@
 # Hotel_API
-API for Hotel administrations via FastAPI.
+Generic Hotel API for a basic hotel administrations system created with FastAPI and PostgreSQL to simplify and structure hotel operations.
 
-This project serves a simple hotel administrations system API that includes the following aspects (CRUD):
 
-    * room categories can be created, viewed, updated, deleted and modified with features
-    * rooms can be created, viewed, updated, and deleted
-    * guests can be created, viewed, updated, and deleted
-    * bookings can be created, viewed, updated, and deleted
-    * payments can be created, viewed, updated, and deleted
-    * requests can be created, viewed, updated, and deleted
-    * users can be created, viewed, updated, and deleted by admins
+## Table Of Contents
+
+1. [General info](general-info.md)
+2. [Database design](HotelAPI_db.md)
+3. [Installation](installation.md)
+4. [Routers overview](overview.md)
+5. [How-To Guides](how-to-guides.md)
 
 ## Project Overview
 
@@ -30,6 +29,7 @@ Getting Started
     Setup a local environment
     Update database via migrations
     Start app and create first user (admin)
+
 
 ## Project layout
 
@@ -55,3 +55,4 @@ Getting Started
         ...          # Other files with pydantic schemas
     utils/
         users.py     # Helper functions for auth logic
+
