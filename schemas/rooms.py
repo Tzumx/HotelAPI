@@ -27,6 +27,8 @@ class FeatureBase(BaseModel):
 class RoomTypeCreate(RoomTypeBase):
     """Create type of rooms schema."""
 
+    description: Optional[str]
+
     class Config:
         orm_mode = True
 
@@ -43,6 +45,7 @@ class RoomTypeInfo(RoomTypeBase):
     """Response schema with room type details."""
 
     id: int
+    description: Optional[str]
 
     class Config:
         orm_mode = True
@@ -73,6 +76,7 @@ class RoomInfo(RoomBase):
     """Response schema with room details."""
 
     fk_room_types_id: Union[int, None] = Field(..., alias='room_types_id')
+    features: Optional[list] = []
 
     class Config:
         orm_mode = True
@@ -120,6 +124,7 @@ class RoomFilter(BaseModel):
     room_types_id: Optional[int]
     floor: Optional[int]
     housing: Optional[int]
+    features: Optional[list] = []
 
 
 class RoomStatus(BaseModel):

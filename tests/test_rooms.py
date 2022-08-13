@@ -1,6 +1,9 @@
 # import asyncio
 import pytest
 from fastapi.testclient import TestClient
+from typing import Union
+from main import app
+from utils import users as users_utils
 
 roomtype_len = 0
 room_len = 0
@@ -10,121 +13,137 @@ room_len = 0
 def client(client: TestClient):
     '''Update global variable'''
 
+    # skips the authentication
+    def skip_auth():
+        pass
+    app.dependency_overrides[users_utils.get_current_user] = skip_auth
+
     global roomtype_len, room_len
-    roomtype_len = len(client.get('/roomtype').json())
-    room_len = len(client.get('/room').json())
+    roomtype_len = len(client.get('/roomtypes').json())
+    room_len = len(client.post('/rooms/filter').json())
+
     yield client
 
 
-def test_roomtype_create(client):
+def test_roomtype_create_update(client):
     '''Test creation and getting room's types'''
 
     request_data = {
-        'type': 'super-puper',
+        'type_name': 'super-puper',
         'price': 999.9,
         'description': 'Best room',
-        'is_doublebad': True,
-        'is_bathroom': True,
-        'is_conditioner': True,
-        'is_TV': True,
     }
-    response = client.post('/roomtype', json=request_data)
+    response = client.post('/roomtypes', json=request_data)
     assert response.status_code == 200
-    new_id = int(response.json()['id'])
-    assert response.json()['type'] == 'super-puper'
-    assert response.json()['price'] == 999.9
-    assert response.json()['description'] == 'Best room'
-    assert response.json()['is_doublebad'] == True
-    assert response.json()['is_bathroom'] == True
-    assert response.json()['is_kitchen'] == False
-
-    response = client.get('/roomtype')
-    assert len(response.json()) == roomtype_len+1
-    assert response.json()[roomtype_len+0]['type'] == 'super-puper'
+    data = response.json()
+    new_id = int(data['id'])
+    assert data['type_name'] == 'super-puper'
+    assert data['price'] == 999.9
+    assert data['description'] == 'Best room'
 
     request_data = {
-        'type': 'Single',
+        'price': 888.9,
+    }
+    response = client.put(f'/roomtypes/{new_id}', json=request_data)
+    assert response.status_code == 200
+    assert response.json()['price'] == 888.9
+
+    response = client.get('/roomtypes')
+    data = response.json()
+    assert len(data) == roomtype_len+1
+    assert data[roomtype_len+0]['type_name'] == 'super-puper'
+
+    request_data = {
+        'type_name': 'Single',
         'price': 99.9,
-        'description': 'Simple room',
-        'is_conditioner': True,
     }
-    response = client.post('/roomtype', json=request_data)
+    response = client.post('/roomtypes', json=request_data)
     assert response.status_code == 200
-    assert response.json()['id'] == new_id+1
-    assert response.json()['type'] == 'Single'
-    assert response.json()['price'] == 99.9
-    assert response.json()['description'] == 'Simple room'
-    assert response.json()['is_conditioner'] == True
+    data = response.json()
+    assert data['id'] == new_id+1
+    assert data['type_name'] == 'Single'
+    assert data['price'] == 99.9
+    assert data['description'] == None
 
-    response = client.get('/roomtype')
-    assert len(response.json()) == roomtype_len+2
-    assert response.json()[roomtype_len+1]['price'] == 99.9
+    response = client.get('/roomtypes')
+    data = response.json()
+    assert len(data) == roomtype_len+2
+    assert data[roomtype_len+1]['price'] == 99.9
 
     request_data = {
-        'type': 'Double',
+        'type_name': 'Double',
         'price': "error",
         'description': 'Double room',
     }
-    response = client.post('/roomtype', json=request_data)
+    response = client.post('/roomtypes', json=request_data)
     assert response.status_code == 422
 
-    response = client.get('/roomtype')
+    response = client.get('/roomtypes')
     assert len(response.json()) == roomtype_len+2
 
 
-def test_room_create(client: TestClient):
+def test_room_create_update(client: TestClient):
     '''Test creation and getting rooms'''
 
     request_data = {
-        'type': 'Double',
+        'type_name': 'Double',
         'price': 199.9,
         'description': 'Simple room',
-        'is_conditioner': True,
     }
-    response = client.post('/roomtype', json=request_data)
+    response = client.post('/roomtypes', json=request_data)
     assert response.status_code == 200
 
     roomtype_id = response.json()['id']
     request_data = {
         'number': 4444,
-        'type_id': roomtype_id,
-        'is_clean': True,
+        'room_types_id': roomtype_id,
+        'floor': 1,
+        'housing': 2,
     }
-    response = client.post('/room', json=request_data)
+    response = client.post('/rooms', json=request_data)
     assert response.status_code == 200
-    new_id = int(response.json()['id'])
-    assert response.json()['number'] == 4444
-    assert response.json()['type_id'] == roomtype_id
-    assert response.json()['is_clean'] == True
+    data = response.json()
+    assert data['number'] == 4444
+    assert data['room_types_id'] == roomtype_id
+    assert data['floor'] == 1
+    assert data['housing'] == 2
 
-    response = client.get('/room')
-    assert len(response.json()) == 1
-    assert response.json()[room_len+0]['number'] == 4444
+    request_data = {
+        'floor': 2,
+    }
+    response = client.put(f'/rooms/{data["number"]}', json=request_data)
+    assert response.status_code == 200
+    assert response.json()['floor'] == 2
+
+    response = client.post('/rooms/filter')
+    data = response.json()
+    assert len(data) == 1
+    assert data[room_len+0]['number'] == 4444
 
     request_data = {
         'number': 8888,
-        'type_id': roomtype_id,
-        'is_clean': False,
+        'room_types_id': roomtype_id,
     }
-    response = client.post('/room', json=request_data)
+    response = client.post('/rooms', json=request_data)
     assert response.status_code == 200
-    assert response.json()['id'] == new_id+1
-    assert response.json()['number'] == 8888
-    assert response.json()['type_id'] == roomtype_id
-    assert response.json()['is_clean'] == False
+    data = response.json()
+    assert data['number'] == 8888
+    assert data['room_types_id'] == roomtype_id
 
-    response = client.get('/room')
+    response = client.post('/rooms', json=request_data)
+    assert response.status_code == 409
+
+    response = client.post('/rooms/filter')
     assert len(response.json()) == room_len+2
-    assert response.json()[room_len+1]['is_clean'] == False
+    assert response.json()[room_len+1]['housing'] == 0
 
     request_data = {
         'number': 88888,
-        'is_clean': False,
     }
-    response = client.post('/room', json=request_data)
+    response = client.post('/rooms', json=request_data)
     assert response.status_code == 422
 
-    response = client.get('/room')
+    response = client.post('/rooms/filter')
     assert len(response.json()) == room_len+2
 
 
@@ -132,36 +151,36 @@ def test_roomtype_delete(client: TestClient):
     """Test delete room's type"""
 
     request_data = {
-        'type': 'Double',
+        'type_name': 'Double',
         'price': 199.9,
         'description': 'Simple room',
-        'is_conditioner': True,
     }
-    response = client.post('/roomtype', json=request_data)
+    response = client.post('/roomtypes', json=request_data)
     assert response.status_code == 200
     roomtype_id = response.json()['id']
 
     request_data = {
         'number': 9999,
-        'type_id': roomtype_id,
-        'is_clean': True,
+        'room_types_id': roomtype_id,
     }
-    response = client.post('/room', json=request_data)
+    response = client.post('/rooms', json=request_data)
     assert response.status_code == 200
 
-    response = client.delete(f'/roomtype?id={roomtype_id}')
+    response = client.delete(f'/roomtypes/{roomtype_id}')
     assert response.json()['result'] == "Success"
 
-    response = client.get('/room')
-    assert len(response.json()) == room_len
+    response = client.post('/rooms/filter')
+    data = response.json()
+    assert len(data) == room_len+1
+    data[room_len+0]['room_types_id'] == None
 
-    response = client.get('/roomtype')
+    response = client.get('/roomtypes')
     assert len(response.json()) == roomtype_len
 
-    response = client.delete(f'/roomtype?id={roomtype_id+1}')
-    assert response.json()['result'] == "Error"
+    response = client.delete(f'/roomtypes/{roomtype_id+1}')
+    assert response.json()['detail'] == "Not found"
 
-    response = client.get('/roomtype')
+    response = client.get('/roomtypes')
     assert len(response.json()) == roomtype_len
 
 
@@ -169,29 +188,65 @@ def test_room_delete(client: TestClient):
     """Test rooms deletion"""
 
     request_data = {
-        'type': 'Double',
+        'type_name': 'Double',
         'price': 199.9,
         'description': 'Simple room',
-        'is_conditioner': True,
     }
-    response = client.post('/roomtype', json=request_data)
+    response = client.post('/roomtypes', json=request_data)
     assert response.status_code == 200
 
     roomtype_id = response.json()['id']
     request_data = {
         'number': 5555,
-        'type_id': roomtype_id,
-        'is_clean': True,
+        'room_types_id': roomtype_id,
     }
-    response = client.post('/room', json=request_data)
+    response = client.post('/rooms', json=request_data)
     assert response.status_code == 200
-    room_id = response.json()['id']
+    room_number= response.json()['number']
 
-    response = client.delete(f'/room?id={room_id}')
-    assert response.json()['result'] == "Success"
+    response = client.delete(f'/rooms/-9')
+    assert response.json()['detail'] == "Not found"
 
-    response = client.delete(f'/room?id={room_id+2}')
-    assert response.json()['result'] == "Error"
+    response = client.delete(f'/rooms/{room_number}')
+    assert response.json()['result'] == "Success"    
 
-    response = client.get('/room')
+    response = client.post('/rooms/filter')
     assert len(response.json()) == room_len
+
+def test_features(client: TestClient):
+    """Test rooms deletion"""
+
+    request_data = {
+        'type_name': 'Triple',
+        'price': 799.9,
+        'description': 'Very big room',
+    }
+    response = client.post('/roomtypes', json=request_data)
+    assert response.status_code == 200
+    roomtype_id = response.json()['id']
+
+    request_data = {
+        'number': 5656,
+        'room_types_id': roomtype_id,
+    }
+    response = client.post('/rooms', json=request_data)
+    assert response.status_code == 200
+    room_number= response.json()['number']
+
+    request_data = {
+        "feature": "TV"
+    }
+    response = client.post('/roomtypes/features', json=request_data)
+    assert response.status_code == 200
+    response.json()['feature'] = "TV"
+    feature_id = response.json()['id']
+
+    response = client.post(f'/roomtypes/{roomtype_id}/features?feature_id={feature_id}', json={})
+    assert response.status_code == 200
+    data = response.json()
+    assert data['feature'] == "TV"
+
+    response = client.post('/rooms/filter')
+    for elem in response.json():
+        if elem['number'] == room_number:
+            assert "TV" in elem['features']

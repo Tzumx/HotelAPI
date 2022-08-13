@@ -37,7 +37,7 @@ async def update_room_type(roomtype_id, roomtype: rooms_schema.RoomTypeUpdate):
         rooms_model.room_type.c.id == roomtype_id)
     stored_data = await database.fetch_one(query)
     if stored_data != None:
-        stored_data = dict(stored_data)
+        stored_data = dict(stored_data._mapping)
         update_data = roomtype.dict(exclude_unset=True)
         stored_data.update(update_data)
         query = rooms_model.room_type.update().values(**stored_data).where(
@@ -67,23 +67,26 @@ async def delete_room_type(id: int):
 async def filter_rooms(filter: rooms_schema.RoomFilter, offset: int = 0, limit: int = 100):
     """Get filter list of rooms"""
 
+    filter_params = filter.dict(exclude_unset=True)
+    filter_features = filter_params.pop('features', [])
+
     filter_query = rooms_model.room.select()
-    if not filter.number == None:
-        filter_query = filter_query.where(
-            rooms_model.room.c.number == filter.number)
-    if not filter.room_types_id == None:
-        filter_query = filter_query.where(
-            rooms_model.room.c.fk_room_types_id == filter.room_types_id)
-    if not filter.floor == None:
-        filter_query = filter_query.where(
-            rooms_model.room.c.floor == filter.floor)
-    if not filter.housing == None:
-        filter_query = filter_query.where(
-            rooms_model.room.c.housing == filter.housing)
+
+    for k, v in filter_params.items():
+        filter_query = filter_query.where(rooms_model.room.c[k] == v)
 
     results = await database.fetch_all(filter_query.order_by(rooms_model.room.c.number))
 
-    return [dict(result._mapping) for result in results]
+    answer = []
+    for result in results:
+        current_room = dict(result._mapping)
+        features_list = await get_features_to_room(current_room['number'])
+        features_list = [elem['feature'] for elem in features_list]
+        if all(elem in features_list for elem in filter_features):
+            current_room["features"] = features_list
+            answer.append(current_room)
+
+    return answer
 
 
 async def create_room(room: rooms_schema.RoomCreate):
@@ -108,7 +111,7 @@ async def update_room(number, room: rooms_schema.RoomUpdate):
     query = rooms_model.room.select().where(rooms_model.room.c.number == number)
     stored_data = await database.fetch_one(query)
     if stored_data != None:
-        stored_data = dict(stored_data)
+        stored_data = dict(stored_data._mapping)
         update_data = room.dict(exclude_unset=True)
         stored_data.update(update_data)
         query = rooms_model.room.update().values(**stored_data).where(
