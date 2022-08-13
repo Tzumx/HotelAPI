@@ -75,7 +75,7 @@ async def update_booking(booking_id, booking: bookings_schema.BookingUpdate):
         stored_data = dict(stored_data)
         update_data = booking.dict(exclude_unset=True)
         stored_data.update(update_data)
-        query = bookings_model.booking.update().values(**update_data).where(
+        query = bookings_model.booking.update().values(**stored_data).where(
             bookings_model.booking.c.id == booking_id)
         await database.execute(query)
         return {**stored_data, "id": booking_id}

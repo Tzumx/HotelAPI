@@ -9,6 +9,7 @@ from typing import Any, Union
 from dotenv import load_dotenv
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
+from fastapi_jwt_auth import AuthJWT
 from jose import jwt
 from pydantic import ValidationError
 
@@ -79,6 +80,33 @@ def create_refresh_token(subject: Union[str, Any], expires_delta: int = None) ->
     return encoded_jwt, expires_delta
 
 
+async def refresh_token(token: str = Depends(oauth2_scheme)):
+    """ Get user by long term token """
+
+    try:
+        payload = jwt.decode(
+            token, JWT_REFRESH_SECRET_KEY, algorithms=[ALGORITHM]
+        )
+        token_data = users_schema.TokenPayload(**payload)
+
+        if datetime.datetime.fromtimestamp(token_data.exp) < datetime.datetime.now():
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Token expired",
+                headers={"WWW-Authenticate": "Bearer"},
+            )
+    except(jwt.JWTError, ValidationError):
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Could not validate credentials",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+
+    token, _ = create_access_token(payload['sub'])
+
+    return {"access_token": token}
+
+
 async def get_current_user(token: str = Depends(oauth2_scheme)):
     """ Get auth user for validation """
 
@@ -108,5 +136,29 @@ async def get_current_user(token: str = Depends(oauth2_scheme)):
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Could not find user",
         )
+    if not user.is_active:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="User is inactive",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
 
     return users_schema.SystemUser(**user)
+
+
+async def get_admin_user(token: str = Depends(oauth2_scheme)):
+    """ Check if user is admin for validation """
+
+    users = await users_crud.filter_users(users_schema.UserFilter(**{}))
+    if len(users) == 0:
+        return users_schema.UserUpdate(**{})
+
+    user = await get_current_user(token)
+    if user.is_admin:
+        return user
+    else:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="User has no rights",
+            headers={"WWW-Authenticate": "Bearer"},
+        )

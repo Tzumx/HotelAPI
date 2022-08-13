@@ -59,7 +59,7 @@ async def update_request(request_id, request: requests_schema.RequestUpdate):
         stored_data = dict(stored_data)
         update_data = request.dict(exclude_unset=True)
         stored_data.update(update_data)
-        query = requests_model.request.update().values(**update_data).where(
+        query = requests_model.request.update().values(**stored_data).where(
             requests_model.request.c.id == request_id)
         await database.execute(query)
         return {**stored_data, "id": request_id}

@@ -11,9 +11,11 @@ from utils import users as users_utils
 router = APIRouter()
 
 
-@router.post("/guests/filter", response_model=List[guests_schema.GuestInfo])
-async def filter_guests(filter: guests_schema.GuestFilter,
-                        offset: int = 0, limit: int = 100):
+@router.post("/guests/filter", response_model=List[guests_schema.GuestInfo],
+                               tags=["guests"])
+async def filter_guests(filter: guests_schema.GuestFilter = guests_schema.GuestFilter(**{}),
+                        offset: int = 0, limit: int = 100,
+                        user: users_schema.User = Depends(users_utils.get_current_user)):
     """
     List guests with filter
 
@@ -30,7 +32,8 @@ async def filter_guests(filter: guests_schema.GuestFilter,
     return await guests_crud.filter_guests(filter=filter, offset=offset, limit=limit)
 
 
-@router.post("/guests", response_model=guests_schema.GuestInfo)
+@router.post("/guests", response_model=guests_schema.GuestInfo,
+                        tags=["guests"])
 async def create_guest(guest: guests_schema.GuestCreate,
                        user: users_schema.User = Depends(users_utils.get_current_user)):
     """
@@ -46,7 +49,8 @@ async def create_guest(guest: guests_schema.GuestCreate,
     return await guests_crud.create_guest(guest=guest)
 
 
-@router.put("/guests/{guest_id}", response_model=guests_schema.GuestInfo)
+@router.put("/guests/{guest_id}", response_model=guests_schema.GuestInfo,
+                                  tags=["guests"])
 async def update_guest(guest_id: int, guest: guests_schema.GuestUpdate,
                        user: users_schema.User = Depends(users_utils.get_current_user)):
     """
@@ -64,7 +68,8 @@ async def update_guest(guest_id: int, guest: guests_schema.GuestUpdate,
     return await guests_crud.update_guest(guest_id=guest_id, guest=guest)
 
 
-@router.delete("/guests/{guest_id}", response_model=guests_schema.GuestDeleteInfo)
+@router.delete("/guests/{guest_id}", response_model=guests_schema.GuestDeleteInfo,
+                                     tags=["guests"])
 async def delete_guest(guest_id: int,
                        user: users_schema.User = Depends(users_utils.get_current_user)):
     """
@@ -79,8 +84,10 @@ async def delete_guest(guest_id: int,
     return await guests_crud.delete_guest(guest_id=guest_id)
 
 
-@router.get("/guests/{guest_id}/requests", response_model=List[requests_schema.RequestInfo])
-async def get_guest_requests(guest_id: int, is_closed: bool = False):
+@router.get("/guests/{guest_id}/requests", response_model=List[requests_schema.RequestInfo],
+                                           tags=["guests"])
+async def get_guest_requests(guest_id: int, is_closed: bool = False,
+                             user: users_schema.User = Depends(users_utils.get_current_user)):
     """
     List requests connected with this guest
 

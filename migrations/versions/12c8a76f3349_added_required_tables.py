@@ -1,8 +1,8 @@
 """Added required tables
 
-Revision ID: b9b8778fa7f9
+Revision ID: 12c8a76f3349
 Revises: 
-Create Date: 2022-08-10 11:24:59.493955
+Create Date: 2022-08-11 22:16:36.805126
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'b9b8778fa7f9'
+revision = '12c8a76f3349'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -99,6 +99,7 @@ def upgrade() -> None:
     sa.Column('name', sa.String(length=100), nullable=True),
     sa.Column('hashed_password', sa.String(), nullable=True),
     sa.Column('is_active', sa.Boolean(), server_default=sa.text('true'), nullable=False),
+    sa.Column('is_admin', sa.Boolean(), server_default=sa.text('false'), nullable=False),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_index(op.f('ix_users_email'), 'users', ['email'], unique=True)

@@ -13,8 +13,10 @@ from utils import users as users_utils
 router = APIRouter()
 
 
-@router.get("/roomtypes", response_model=List[rooms_schema.RoomTypeInfo])
-async def get_room_types(offset: int = 0, limit: int = 100):
+@router.get("/roomtypes", response_model=List[rooms_schema.RoomTypeInfo],
+            tags=["roomtypes"])
+async def get_room_types(offset: int = 0, limit: int = 100,
+                         user: users_schema.User = Depends(users_utils.get_current_user)):
     """
     Get list of room's types
 
@@ -28,7 +30,8 @@ async def get_room_types(offset: int = 0, limit: int = 100):
     return await rooms_crud.get_room_types(offset=offset, limit=limit)
 
 
-@router.post("/roomtypes", response_model=rooms_schema.RoomTypeInfo)
+@router.post("/roomtypes", response_model=rooms_schema.RoomTypeInfo,
+             tags=["roomtypes"])
 async def create_room_type(roomtype: rooms_schema.RoomTypeCreate,
                            user: users_schema.User = Depends(users_utils.get_current_user)):
     """
@@ -44,7 +47,8 @@ async def create_room_type(roomtype: rooms_schema.RoomTypeCreate,
     return await rooms_crud.create_room_type(roomtype=roomtype)
 
 
-@router.put("/roomtypes/{roomtype_id}", response_model=rooms_schema.RoomTypeInfo)
+@router.put("/roomtypes/{roomtype_id}", response_model=rooms_schema.RoomTypeInfo,
+            tags=["roomtypes"])
 async def update_room_type(roomtype_id: int, roomtype: rooms_schema.RoomTypeUpdate,
                            user: users_schema.User = Depends(users_utils.get_current_user)):
     """
@@ -62,7 +66,8 @@ async def update_room_type(roomtype_id: int, roomtype: rooms_schema.RoomTypeUpda
     return await rooms_crud.update_room_type(roomtype_id, roomtype=roomtype)
 
 
-@router.delete("/roomtypes/{roomtype_id}", response_model=rooms_schema.RoomDeleteInfo)
+@router.delete("/roomtypes/{roomtype_id}", response_model=rooms_schema.RoomDeleteInfo,
+               tags=["roomtypes"])
 async def delete_room_type(roomtype_id: int,
                            user: users_schema.User = Depends(users_utils.get_current_user)):
     """
@@ -77,9 +82,11 @@ async def delete_room_type(roomtype_id: int,
     return await rooms_crud.delete_room_type(id=roomtype_id)
 
 
-@router.post("/rooms/filter", response_model=List[rooms_schema.RoomInfo])
-async def filter_rooms(filter: rooms_schema.RoomFilter,
-                       offset: int = 0, limit: int = 100):
+@router.post("/rooms/filter", response_model=List[rooms_schema.RoomInfo],
+             tags=["rooms"])
+async def filter_rooms(filter: rooms_schema.RoomFilter = rooms_schema.RoomFilter(**{}),
+                       offset: int = 0, limit: int = 100,
+                       user: users_schema.User = Depends(users_utils.get_current_user)):
     """
     Get list of rooms with filter
 
@@ -96,7 +103,8 @@ async def filter_rooms(filter: rooms_schema.RoomFilter,
     return await rooms_crud.filter_rooms(filter=filter, offset=offset, limit=limit)
 
 
-@router.post("/rooms", response_model=rooms_schema.RoomInfo)
+@router.post("/rooms", response_model=rooms_schema.RoomInfo,
+             tags=["rooms"])
 async def create_room(room: rooms_schema.RoomCreate,
                       user: users_schema.User = Depends(users_utils.get_current_user)):
     """
@@ -111,7 +119,8 @@ async def create_room(room: rooms_schema.RoomCreate,
     return await rooms_crud.create_room(room=room)
 
 
-@router.put("/rooms/{number}", response_model=rooms_schema.RoomInfo)
+@router.put("/rooms/{number}", response_model=rooms_schema.RoomInfo,
+            tags=["rooms"])
 async def update_room(number: int, room: rooms_schema.RoomUpdate,
                       user: users_schema.User = Depends(users_utils.get_current_user)):
     """
@@ -129,7 +138,8 @@ async def update_room(number: int, room: rooms_schema.RoomUpdate,
     return await rooms_crud.update_room(number=number, room=room)
 
 
-@router.delete("/rooms/{number}", response_model=rooms_schema.RoomDeleteInfo)
+@router.delete("/rooms/{number}", response_model=rooms_schema.RoomDeleteInfo,
+               tags=["rooms"])
 async def delete_room(number: int,
                       user: users_schema.User = Depends(users_utils.get_current_user)):
     """
@@ -144,10 +154,12 @@ async def delete_room(number: int,
     return await rooms_crud.delete_room(number=number)
 
 
-@router.get("/rooms/{number}/status", response_model=rooms_schema.RoomStatus)
+@router.get("/rooms/{number}/status", response_model=rooms_schema.RoomStatus,
+            tags=["rooms"])
 async def get_room_status(number: int,
                           date_from: Optional[datetime] = None,
-                          date_till: Optional[datetime] = None):
+                          date_till: Optional[datetime] = None,
+                          user: users_schema.User = Depends(users_utils.get_current_user)):
     """
     Check room's status
 
@@ -160,11 +172,13 @@ async def get_room_status(number: int,
     return await rooms_crud.get_room_status(number=number, check_date_from=date_from, check_date_till=date_till)
 
 
-@router.get("/rooms/{number}/requests", response_model=List[requests_schema.RequestInfo])
+@router.get("/rooms/{number}/requests", response_model=List[requests_schema.RequestInfo],
+            tags=["rooms"])
 async def get_room_requests(number: int,
                             date_from: Optional[datetime] = None,
                             date_till: Optional[datetime] = None,
-                            is_closed: bool = None):
+                            is_closed: bool = None,
+                            user: users_schema.User = Depends(users_utils.get_current_user)):
     """
     List requests coresponding with that room
 
@@ -181,8 +195,10 @@ async def get_room_requests(number: int,
                                               date_till=date_till, is_closed=is_closed)
 
 
-@router.get("/rooms/{number}/guests", response_model=List[guests_schema.GuestInfo])
-async def get_room_guest(number: int):
+@router.get("/rooms/{number}/guests", response_model=List[guests_schema.GuestInfo],
+            tags=["rooms"])
+async def get_room_guest(number: int,
+                         user: users_schema.User = Depends(users_utils.get_current_user)):
     """
     Get who in the room now
 
@@ -195,8 +211,10 @@ async def get_room_guest(number: int):
     return await rooms_crud.get_room_guest(number=number)
 
 
-@router.get("/roomtypes/features", response_model=List[rooms_schema.FeatureInfo])
-async def get_room_type_features(offset: int = 0, limit: int = 100):
+@router.get("/roomtypes/features", response_model=List[rooms_schema.FeatureInfo],
+            tags=["roomtypes"])
+async def get_room_type_features(offset: int = 0, limit: int = 100,
+                                 user: users_schema.User = Depends(users_utils.get_current_user)):
     """
     Get list of roomtype's features
 
@@ -211,7 +229,8 @@ async def get_room_type_features(offset: int = 0, limit: int = 100):
     return await rooms_crud.get_room_type_features(offset=offset, limit=limit)
 
 
-@router.post("/roomtypes/features", response_model=rooms_schema.FeatureInfo)
+@router.post("/roomtypes/features", response_model=rooms_schema.FeatureInfo,
+             tags=["roomtypes"])
 async def create_room_type_feature(feature: rooms_schema.FeatureCreate,
                                    user: users_schema.User = Depends(users_utils.get_current_user)):
     """
@@ -228,7 +247,8 @@ async def create_room_type_feature(feature: rooms_schema.FeatureCreate,
     return await rooms_crud.create_room_type_feature(feature=feature)
 
 
-@router.delete("/roomtypes/features/{id}", response_model=rooms_schema.RoomDeleteInfo)
+@router.delete("/roomtypes/features/{id}", response_model=rooms_schema.RoomDeleteInfo,
+               tags=["roomtypes"])
 async def delete_room_type_feature(id: int,
                                    user: users_schema.User = Depends(users_utils.get_current_user)):
     """
@@ -244,7 +264,8 @@ async def delete_room_type_feature(id: int,
     return await rooms_crud.delete_room_type_feature(id=id)
 
 
-@router.post("/roomtypes/{type_id}/features", response_model=rooms_schema.FeatureTypeInfoFull)
+@router.post("/roomtypes/{type_id}/features", response_model=rooms_schema.FeatureTypeInfoFull,
+             tags=["roomtypes"])
 async def add_feature_to_roomtype(type_id: int, feature_id: int,
                                   user: users_schema.User = Depends(users_utils.get_current_user)):
     """
@@ -261,7 +282,8 @@ async def add_feature_to_roomtype(type_id: int, feature_id: int,
     return await rooms_crud.add_feature_to_roomtype(type_id, feature_id)
 
 
-@router.delete("/roomtypes/{type_id}/features", response_model=rooms_schema.RoomDeleteInfo)
+@router.delete("/roomtypes/{type_id}/features", response_model=rooms_schema.RoomDeleteInfo,
+               tags=["roomtypes"])
 async def delete_feature_from_roomtype(type_id: int, feature_id: int,
                                        user: users_schema.User = Depends(users_utils.get_current_user)):
     """
@@ -278,8 +300,10 @@ async def delete_feature_from_roomtype(type_id: int, feature_id: int,
     return await rooms_crud.delete_feature_from_roomtype(type_id, feature_id)
 
 
-@router.get("/roomtypes/{type_id}/features", response_model=List[rooms_schema.FeatureTypeInfo])
-async def get_features_to_roomtype(type_id: int):
+@router.get("/roomtypes/{type_id}/features", response_model=List[rooms_schema.FeatureTypeInfo],
+            tags=["roomtypes"])
+async def get_features_to_roomtype(type_id: int,
+                                   user: users_schema.User = Depends(users_utils.get_current_user)):
     """
     Get roomtype's features
 
@@ -293,8 +317,10 @@ async def get_features_to_roomtype(type_id: int):
     return await rooms_crud.get_features_to_roomtype(type_id)
 
 
-@router.get("/rooms/{number}/features", response_model=List[rooms_schema.FeatureTypeInfo])
-async def get_room_features(number: int):
+@router.get("/rooms/{number}/features", response_model=List[rooms_schema.FeatureTypeInfo],
+            tags=["rooms"])
+async def get_room_features(number: int,
+                            user: users_schema.User = Depends(users_utils.get_current_user)):
     """
     List features corresponding with that room
 
