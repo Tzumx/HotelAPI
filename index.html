@@ -410,7 +410,7 @@
 
 
 <h1 id="hotel_api">Hotel_API</h1>
-<p>Generic Hotel API for a basic hotel administrations system created with FastAPI and PostgreSQL.</p>
+<p>Generic Hotel API for a basic hotel administrations system created with FastAPI and PostgreSQL to simplify and structure hotel operations.</p>
 <h2 id="table-of-contents">Table Of Contents</h2>
 <ol>
 <li><a href="general-info/">General info</a></li>
@@ -419,8 +419,6 @@
 <li><a href="overview/">Routers overview</a></li>
 <li><a href="how-to-guides/">How-To Guides</a></li>
 </ol>
-<!-- 5. [Explanation](explanation.md) -->
-
 <h2 id="project-overview">Project Overview</h2>
 <p>Features</p>
 <pre><code>Create different types of room with own price and fixtures.
@@ -455,6 +453,9 @@ migration/
 models/
     room.py      # Database models with information about room
     ...          # Other modelues with db models
+routers/
+    room.py      # Endpoints for rooms functionality
+    ...          # Other modules for endpointes
 schemas/
     room.py      # Pydantic schemas for rooms models
     ...          # Other files with pydantic schemas
