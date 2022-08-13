@@ -12,7 +12,8 @@ router = APIRouter()
 
 @router.post("/payments/filter", response_model=List[payments_schema.PaymentInfo],
              tags=["payments"])
-async def filter_payments(filter: payments_schema.PaymentFilter, offset: int = 0, limit: int = 100,
+async def filter_payments(filter: payments_schema.PaymentFilter = payments_schema.PaymentFilter(**{}),
+                          offset: int = 0, limit: int = 100,
                           user: users_schema.User = Depends(users_utils.get_current_user)):
     """
     List payments with filter

@@ -13,7 +13,7 @@ router = APIRouter()
 
 @router.post("/guests/filter", response_model=List[guests_schema.GuestInfo],
                                tags=["guests"])
-async def filter_guests(filter: guests_schema.GuestFilter,
+async def filter_guests(filter: guests_schema.GuestFilter = guests_schema.GuestFilter(**{}),
                         offset: int = 0, limit: int = 100,
                         user: users_schema.User = Depends(users_utils.get_current_user)):
     """

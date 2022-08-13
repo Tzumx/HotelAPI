@@ -84,7 +84,7 @@ async def delete_room_type(roomtype_id: int,
 
 @router.post("/rooms/filter", response_model=List[rooms_schema.RoomInfo],
              tags=["rooms"])
-async def filter_rooms(filter: rooms_schema.RoomFilter,
+async def filter_rooms(filter: rooms_schema.RoomFilter = rooms_schema.RoomFilter(**{}),
                        offset: int = 0, limit: int = 100,
                        user: users_schema.User = Depends(users_utils.get_current_user)):
     """

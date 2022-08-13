@@ -12,7 +12,7 @@ router = APIRouter()
 
 @router.post("/bookings/filter", response_model=List[bookings_schema.BookingInfo],
              tags=["bookings"])
-async def filter_bookings(filter: bookings_schema.BookingFilter,
+async def filter_bookings(filter: bookings_schema.BookingFilter = bookings_schema.BookingFilter(**{}),
                           offset: int = 0, limit: int = 100,
                           user: users_schema.User = Depends(users_utils.get_current_user)):
     """

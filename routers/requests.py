@@ -12,7 +12,8 @@ router = APIRouter()
 
 @router.post("/requests/filter", response_model=List[requests_schema.RequestInfo],
              tags=["requests"])
-async def filter_requests(filter: requests_schema.RequestFilter, offset: int = 0, limit: int = 100,
+async def filter_requests(filter: requests_schema.RequestFilter = requests_schema.RequestFilter(**{}),
+                          offset: int = 0, limit: int = 100,
                           user: users_schema.User = Depends(users_utils.get_current_user)):
     """
     List requests with filter
