@@ -43,7 +43,7 @@ async def update_guest(guest_id, guest: guests_schema.GuestUpdate):
     query = guests_model.guest.select().where(guests_model.guest.c.id == guest_id)
     stored_data = await database.fetch_one(query)
     if stored_data != None:
-        stored_data = dict(stored_data)
+        stored_data = dict(stored_data._mapping)
         update_data = guest.dict(exclude_unset=True)
         stored_data.update(update_data)
         query = guests_model.guest.update().values(**stored_data).where(

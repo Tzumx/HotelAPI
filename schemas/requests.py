@@ -38,6 +38,7 @@ class RequestInfo(RequestBase):
 
     id: int
     fk_booking_id: int = Field(..., alias='booking_id')
+    description: Optional[str]
     is_closed: bool  # is request closed
     close_description: Optional[str]  # requsts's description after closing
     price: float

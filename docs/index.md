@@ -56,6 +56,8 @@ Getting Started
     schemas/
         room.py      # Pydantic schemas for rooms models
         ...          # Other files with pydantic schemas
+    tests/
+        room.py      # Tests for room logic
+        ...          # Other tests for whole api
     utils/
         users.py     # Helper functions for auth logic
-

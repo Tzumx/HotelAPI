@@ -101,7 +101,7 @@ async def set_booking_status(booking_id: int, is_active: bool,
 
 @router.patch("/bookings/{booking_id}/review", response_model=bookings_schema.BookingInfo,
               tags=["bookings"])
-async def post_booking_review(booking_id: int, review: str,
+async def post_booking_review(booking_id: int, review: bookings_schema.BookingReview,
                               user: users_schema.User = Depends(users_utils.get_current_user)):
     """
     Update client's review

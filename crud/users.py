@@ -1,10 +1,11 @@
+from typing import Optional
+
 from fastapi import HTTPException
 
 from db import database
 from models import users as users_model
 from schemas import users as users_schema
 from utils import users as users_util
-from typing import Optional
 
 
 async def get_user_by_email(email: str):
@@ -57,7 +58,7 @@ async def update_user(id: int, user: users_schema.UserUpdate):
     query = users_model.user.select().where(users_model.user.c.id == id)
     stored_data = await database.fetch_one(query)
     if stored_data != None:
-        stored_data = dict(stored_data)
+        stored_data = dict(stored_data._mapping)
         update_data = user.dict(exclude_unset=True)
         if 'password' in update_data.keys():
             salt = users_util.get_random_string()

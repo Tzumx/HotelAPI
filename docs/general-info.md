@@ -8,7 +8,7 @@ This project serves a simple hotel administrations system API that includes the 
     * requests can be created, viewed, updated, and deleted
     * users can be created, viewed, updated, and deleted by admins
 
-## Room categories (types) 
+## Room categories (types)
 Room categories have room's characteristics.<br>
 [View rooms routers.](overview.md#rooms)
 
@@ -73,7 +73,7 @@ Payments have the information about all financial transactions. Each payment con
 [View payments routers.](overview.md#payments)
 
 Payments have basic information, such as:
-    
+
     * id
     * booking id
     * sum of transaction
@@ -93,7 +93,7 @@ Requests have basic information, such as:
     * close description
     * price
     * updated_at
-    * created_at    
+    * created_at
 
 ## Users
 Have two types of users: ordinary staff and admins. Admins additionally can add, change and delete any user. First user will always be created as admin.<br>

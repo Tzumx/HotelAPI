@@ -72,7 +72,7 @@ async def update_booking(booking_id, booking: bookings_schema.BookingUpdate):
         bookings_model.booking.c.id == booking_id)
     stored_data = await database.fetch_one(query)
     if stored_data != None:
-        stored_data = dict(stored_data)
+        stored_data = dict(stored_data._mapping)
         update_data = booking.dict(exclude_unset=True)
         stored_data.update(update_data)
         query = bookings_model.booking.update().values(**stored_data).where(
@@ -118,14 +118,14 @@ async def set_booking_status(booking_id: int, is_active: bool):
         raise HTTPException(status_code=404, detail="Not found")
 
 
-async def post_booking_review(booking_id: int, review: str):
+async def post_booking_review(booking_id: int, review: bookings_schema.BookingReview):
     """Update client's review"""
 
     query = bookings_model.booking.select().where(
         bookings_model.booking.c.id == booking_id)
     answer = await database.execute(query)
     if answer == booking_id:
-        query = bookings_model.booking.update().values(client_review=review).where(
+        query = bookings_model.booking.update().values(client_review=review.review).where(
             bookings_model.booking.c.id == booking_id)
         await database.execute(query)
         query = bookings_model.booking.select().where(
@@ -141,6 +141,8 @@ async def get_booking_sum(booking_id: int):
 
     results = await database.fetch_one(bookings_model.booking.select().where(
         bookings_model.booking.c.id == booking_id))
+    if results == None:
+        raise HTTPException(status_code=404, detail="Not found")
     room_number = dict(results._mapping)['fk_room_number']
     results = await database.fetch_one(rooms_model.room.select().where(
         rooms_model.room.c.number == room_number))
@@ -151,6 +153,6 @@ async def get_booking_sum(booking_id: int):
     results = await database.fetch_all(requests_model.request.select().where(
         requests_model.request.c.fk_booking_id == booking_id))
     for request_booking in results:
-        price += dict(request_booking)['price']
+        price += dict(request_booking._mapping)['price']
 
     return {"sum": price}

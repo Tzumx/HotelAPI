@@ -10,9 +10,13 @@
 
 `pip install -r requirements.txt`
 
-* #### Preparing the database.
+* #### Preparing the database
 
 `alembic upgrade head`
+
+* #### Edit environment file .env
+
+  - Look .env_example for an example
 
 * #### Start the service.
 
