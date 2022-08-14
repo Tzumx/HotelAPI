@@ -5,6 +5,7 @@ from unittest.mock import patch
 import datetime
 from utils import users as users_utils
 from schemas import payments as payments_schema
+from pydantic import ValidationError
 
 payment_data = {
     "sum": 22,
@@ -41,7 +42,7 @@ roomtype_data = {
 
 
 @pytest.fixture
-def client(client: TestClient):
+def client_no_auth(client: TestClient):
     '''Update global variable'''
 
     # skips the authentication
@@ -52,51 +53,92 @@ def client(client: TestClient):
     yield client
 
 
-def test_routers_payments(client):
-    """Test routers endpoints for payments"""
+def test_routers_payments_create(client_no_auth):
+    """Test routers endpoints for payments create"""
 
     with patch('crud.payments.create_payment') as mock:
         mock.return_value = payments_schema.PaymentInfo(
             **(payment_data | {"id": 11}))
-        response = client.post('/payments', json=payment_data)
+        response = client_no_auth.post('/payments', json=payment_data)
         assert response.status_code == 200
         data = response.json()
         assert data['id'] == 11
         assert data['description'] == payment_data['description']
 
+        response = client_no_auth.post('/payments', json={})
+        assert response.status_code == 422
+
+        try:
+            mock.return_value = payments_schema.PaymentDeleteInfo(**{"status": "ok"})
+            response = client_no_auth.post('/payments', json=payment_data)
+        except ValidationError:
+            assert True
+
+        try:
+            mock.return_value = payments_schema.PaymentInfo(**{"status": "ok"})
+        except ValidationError:
+            assert True     
+
+def test_routers_payments_filter(client_no_auth):
+    """Test routers endpoints for payments filter"""
+
     with patch('crud.payments.filter_payments') as mock:
         mock.return_value = [payments_schema.PaymentInfo(
             **(payment_data | {"id": 11})), ]
-        response = client.post('/payments/filter', json={})
+        response = client_no_auth.post('/payments/filter', json={})
         assert response.status_code == 200
         data = response.json()
         assert data[0]['sum'] == payment_data['sum']
 
+        try:
+            mock.return_value = payments_schema.PaymentDeleteInfo(**{"status": "ok"})
+            response = client_no_auth.post('/payments/filter', json=payment_data)
+        except ValidationError:
+            assert True        
+
+def test_routers_payments_update(client_no_auth):
+    """Test routers endpoints for payments update"""
+
     with patch('crud.payments.update_payment') as mock:
         mock.return_value = payments_schema.PaymentInfo(
             **(payment_data | {"sum": 33, "id": 11}))
-        response = client.put('/payments/11', json={"sum": 33})
+        response = client_no_auth.put('/payments/11', json={"sum": 33})
         assert response.status_code == 200
         data = response.json()
         assert data['sum'] == 33
 
+        try:
+            mock.return_value = payments_schema.PaymentDeleteInfo(**{"status": "ok"})
+            response = client_no_auth.post('/payments/11', json=payment_data)
+        except ValidationError:
+            assert True           
+
+def test_routers_payments_delete(client_no_auth):
+    """Test routers endpoints for payments delete"""
+
     with patch('crud.payments.delete_payment') as mock:
         mock.return_value = {"result": "success"}
-        response = client.delete('/payments/11')
+        response = client_no_auth.delete('/payments/11')
         assert response.status_code == 200
         data = response.json()
         assert data['result'] == 'success'
 
+        try:
+            mock.return_value = payments_schema.PaymentDeleteInfo(
+                **{"status": "ok"})
+            response = client_no_auth.delete('/payments/11', json=payment_data)
+        except ValidationError:
+            assert True
 
-def test_crud_payments(client):
+def test_crud_payments_correct(client_no_auth):
     """ Test crud via endpoints """
 
     # create supporting data
-    response = client.post('/guests', json=guest_data)
+    response = client_no_auth.post('/guests', json=guest_data)
     assert response.status_code == 200
     id_guest = response.json()['id']
 
-    response = client.post('/roomtypes', json=roomtype_data)
+    response = client_no_auth.post('/roomtypes', json=roomtype_data)
     assert response.status_code == 200
     roomtype_id = response.json()['id']
 
@@ -106,27 +148,27 @@ def test_crud_payments(client):
         'floor': 1,
         'housing': 2,
     }
-    response = client.post('/rooms', json=room_data)
+    response = client_no_auth.post('/rooms', json=room_data)
     assert response.status_code == 200
 
     booking_data['guest_id'] = id_guest
     booking_data['room_number'] = room_data['number']
 
-    response = client.post('/bookings', json=booking_data)
+    response = client_no_auth.post('/bookings', json=booking_data)
     assert response.status_code == 200
     booking_id = response.json()['id']
 
     payment_data['booking_id'] = booking_id
-    response = client.post('/payments', json=payment_data)
+    response = client_no_auth.post('/payments', json=payment_data)
     assert response.status_code == 200
     data = response.json()
     payment_id = data['id']
     assert data['sum'] == payment_data['sum']
     assert data['booking_id'] == booking_id  
 
-    response = client.put(f'/payments/{payment_id}', json={'sum': 33})
+    response = client_no_auth.put(f'/payments/{payment_id}', json={'sum': 33})
     assert response.status_code == 200
-    response = client.post('/payments/filter', json={'sum': 33})
+    response = client_no_auth.post('/payments/filter', json={'sum': 33})
     data = response.json()
     right_item = False
     for item in data:
@@ -135,9 +177,9 @@ def test_crud_payments(client):
             right_item = True
     assert right_item
 
-    response = client.delete(f'/payments/{payment_id}')
+    response = client_no_auth.delete(f'/payments/{payment_id}')
     assert response.status_code == 200
-    response = client.post('/payments/filter')
+    response = client_no_auth.post('/payments/filter')
     data = response.json()
     right_item = True
     for item in data:
@@ -145,5 +187,18 @@ def test_crud_payments(client):
             right_item = False
     assert right_item
 
-    response = client.delete(f'/payments/{payment_id+888}')
+    response = client_no_auth.delete(f'/payments/{payment_id+888}')
+    assert response.status_code == 404
+
+
+def test_crud_payments_wrong(client_no_auth):
+    """ Test crud with mistakes via endpoints """
+
+    response = client_no_auth.post('/payments', json=booking_data)
+    assert response.status_code == 422 
+
+    response = client_no_auth.put(f'/payments/-1', json={'sum': 33})
+    assert response.status_code == 404
+
+    response = client_no_auth.delete(f'/payments/-1')
     assert response.status_code == 404

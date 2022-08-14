@@ -141,6 +141,8 @@ async def get_booking_sum(booking_id: int):
 
     results = await database.fetch_one(bookings_model.booking.select().where(
         bookings_model.booking.c.id == booking_id))
+    if results == None:
+        raise HTTPException(status_code=404, detail="Not found")
     room_number = dict(results._mapping)['fk_room_number']
     results = await database.fetch_one(rooms_model.room.select().where(
         rooms_model.room.c.number == room_number))
