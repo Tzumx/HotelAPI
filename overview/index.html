@@ -2481,7 +2481,7 @@ Returns:
 <span class="normal">115</span>
 <span class="normal">116</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@router</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s2">&quot;/bookings/</span><span class="si">{booking_id}</span><span class="s2">/review&quot;</span><span class="p">,</span> <span class="n">response_model</span><span class="o">=</span><span class="n">bookings_schema</span><span class="o">.</span><span class="n">BookingInfo</span><span class="p">,</span>
               <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;bookings&quot;</span><span class="p">])</span>
-<span class="k">async</span> <span class="k">def</span> <span class="nf">post_booking_review</span><span class="p">(</span><span class="n">booking_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">review</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">post_booking_review</span><span class="p">(</span><span class="n">booking_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">review</span><span class="p">:</span> <span class="n">bookings_schema</span><span class="o">.</span><span class="n">BookingReview</span><span class="p">,</span>
                               <span class="n">user</span><span class="p">:</span> <span class="n">users_schema</span><span class="o">.</span><span class="n">User</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">users_utils</span><span class="o">.</span><span class="n">get_current_user</span><span class="p">)):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Update client&#39;s review</span>
@@ -3562,7 +3562,7 @@ Returns:
 <span class="normal">130</span>
 <span class="normal">131</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@router</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;/auth/refresh&quot;</span><span class="p">,</span> <span class="n">response_model</span><span class="o">=</span><span class="n">users_schema</span><span class="o">.</span><span class="n">TokenRefreshSchema</span><span class="p">,</span>
              <span class="n">summary</span><span class="o">=</span><span class="s2">&quot;Refresh token for access&quot;</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;users&quot;</span><span class="p">])</span>
-<span class="k">async</span> <span class="k">def</span> <span class="nf">refresh_token</span><span class="p">(</span><span class="n">token</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">users_util</span><span class="o">.</span><span class="n">refresh_token</span><span class="p">)):</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">refresh_token</span><span class="p">(</span><span class="n">token</span><span class="o">=</span><span class="n">Depends</span><span class="p">(</span><span class="n">users_util</span><span class="o">.</span><span class="n">refresh_token</span><span class="p">)):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Refresh token for user</span>
 
