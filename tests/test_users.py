@@ -72,11 +72,36 @@ def test_crud_requests(client):
     assert response.json()["name"] == user_data["name"]
 
     response = client.post('/sign-up', json=user_data)
-    assert response.status_code == 400    
+    assert response.status_code == 400
 
-    response = client.put(f'/users/{user_id}', json={'name': "new_name"})
+    response = client.post(
+        "/auth", data={"username": user_data["email"], "password": "wrong_password"})
+    assert response.status_code == 401
+
+    response = client.post(
+        "/auth", data={"username": user_data["email"], "password": user_data["password"]})
     assert response.status_code == 200
-    response = client.post('/users/filter', json={'name': "new_name"})
+    data = response.json()
+    assert "access_token" in data
+    assert "refresh_token" in data
+    refresh_token = data['refresh_token']
+
+    app.dependency_overrides[users_utils.get_admin_user] = users_utils.get_admin_user
+
+    response = client.post(
+        '/auth/refresh', headers={"authorization": f"Bearer {refresh_token}"})
+    assert response.status_code == 200
+    data = response.json()
+    assert "access_token" in data
+    assert "refresh_token" not in data
+    access_token = data['access_token']
+
+    response = client.put(f'/users/{user_id}', json={'name': "new_name"},
+                          headers={"authorization": f"Bearer {access_token}"})
+    assert response.status_code == 200
+    response = client.post('/users/filter', json={'name': "new_name"}, headers={
+                           "authorization": f"Bearer {access_token}"})
+    assert response.status_code == 200
     data = response.json()
     right_item = False
     for item in data:
@@ -85,9 +110,15 @@ def test_crud_requests(client):
             right_item = True
     assert right_item
 
-    response = client.delete(f'/users/{user_id}')
+    response = client.post('/users/filter', json={'name': "new_name"}, headers={
+                           "authorization": f"Bearer wrong_token"})    
+    assert response.status_code == 403                       
+
+    response = client.delete(
+        f'/users/{user_id}', headers={"authorization": f"Bearer {access_token}"})
     assert response.status_code == 200
-    response = client.post('/users/filter')
+    response = client.post(
+        '/users/filter', headers={"authorization": f"Bearer {access_token}"})
     data = response.json()
     right_item = True
     for item in data:
@@ -95,5 +126,6 @@ def test_crud_requests(client):
             right_item = False
     assert right_item
 
-    response = client.delete(f'/users/{user_id+888}')
+    response = client.delete(
+        f'/users/{user_id+888}', headers={"authorization": f"Bearer {access_token}"})
     assert response.status_code == 404
