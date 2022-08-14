@@ -121,7 +121,7 @@ async def delete_user(id: int,
 
 @router.post("/auth/refresh", response_model=users_schema.TokenRefreshSchema,
              summary="Refresh token for access", tags=["users"])
-async def refresh_token(token = Depends(users_util.refresh_token)):
+async def refresh_token(token=Depends(users_util.refresh_token)):
     """
     Refresh token for user
 

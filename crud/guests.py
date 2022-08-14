@@ -30,7 +30,7 @@ async def filter_guests(filter: guests_schema.GuestFilter, offset: int = 0, limi
 
 async def create_guest(guest: guests_schema.GuestCreate):
     """Create new guest"""
-    
+
     query = guests_model.guest.insert().values(name=guest.name,
                                                email=guest.email, phone=guest.phone)
     guest_id = await database.execute(query)

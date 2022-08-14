@@ -52,7 +52,7 @@ Getting Started
         ...          # Other modelues with db models
     routers/
         room.py      # Endpoints for rooms functionality
-        ...          # Other modules for endpointes        
+        ...          # Other modules for endpointes
     schemas/
         room.py      # Pydantic schemas for rooms models
         ...          # Other files with pydantic schemas

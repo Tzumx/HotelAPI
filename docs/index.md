@@ -58,4 +58,3 @@ Getting Started
         ...          # Other files with pydantic schemas
     utils/
         users.py     # Helper functions for auth logic
-

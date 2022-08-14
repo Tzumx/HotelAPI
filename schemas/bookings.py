@@ -82,6 +82,7 @@ class BookingSumInfo (BaseModel):
 
     sum: float
 
+
 class BookingReview (BaseModel):
     """Schema for client review"""
 

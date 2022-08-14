@@ -1,10 +1,11 @@
+from typing import Optional
+
 from fastapi import HTTPException
 
 from db import database
 from models import users as users_model
 from schemas import users as users_schema
 from utils import users as users_util
-from typing import Optional
 
 
 async def get_user_by_email(email: str):
