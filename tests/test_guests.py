@@ -47,17 +47,13 @@ def test_routers_guest_create(client_no_auth):
         response = client_no_auth.post('/guests', json={})
         assert response.status_code == 422
 
-        try:
+        with pytest.raises(ValidationError):
             mock.return_value = guests_schema.GuestDeleteInfo(
                 **{"status": "ok"})
             response = client_no_auth.post('/guests', json=guest_1_data)
-        except ValidationError:
-            assert True
 
-        try:
+        with pytest.raises(ValidationError):
             mock.return_value = guests_schema.GuestInfo(**{"status": "ok"})
-        except ValidationError:
-            assert True
 
 
 def test_routers_guest_filter(client_no_auth):
@@ -72,12 +68,10 @@ def test_routers_guest_filter(client_no_auth):
         assert data[0]['id'] == 11
         assert data[1]['name'] == guest_2_data['name']
 
-        try:
+        with pytest.raises(ValidationError):
             mock.return_value = guests_schema.GuestDeleteInfo(
                 **{"status": "ok"})
             response = client_no_auth.post('/guests/filter', json=guest_1_data)
-        except ValidationError:
-            assert True
 
 
 def test_routers_guest_update(client_no_auth):
@@ -91,12 +85,10 @@ def test_routers_guest_update(client_no_auth):
         data = response.json()
         assert data['name'] == guest_1_data['name']
 
-        try:
+        with pytest.raises(ValidationError):
             mock.return_value = guests_schema.GuestDeleteInfo(
                 **{"status": "ok"})
             response = client_no_auth.put('/guests/1', json=guest_1_data)
-        except ValidationError:
-            assert True
 
 
 def test_routers_guest_delete(client_no_auth):
@@ -109,12 +101,10 @@ def test_routers_guest_delete(client_no_auth):
         data = response.json()
         assert data['result'] == 'success'
 
-        try:
+        with pytest.raises(ValidationError):
             mock.return_value = guests_schema.GuestDeleteInfo(
                 **{"status": "ok"})
             response = client_no_auth.delete('/guests/1', json=guest_1_data)
-        except ValidationError:
-            assert True
 
 
 def test_routers_guest(client_no_auth):
@@ -129,13 +119,11 @@ def test_routers_guest(client_no_auth):
         data = response.json()
         assert data[0]['booking_id'] == 1
 
-        try:
+        with pytest.raises(ValidationError):
             mock.return_value = guests_schema.GuestDeleteInfo(
                 **{"status": "ok"})
             response = client_no_auth.get(
                 '/guests/1/requests', json=guest_1_data)
-        except ValidationError:
-            assert True
 
 
 def test_crud_guests_correct(client_no_auth):

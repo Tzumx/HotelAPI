@@ -5,7 +5,7 @@ from unittest.mock import patch
 import datetime
 from utils import users as users_utils
 from schemas import bookings as bookings_schema
-from pydantic import ValidationError
+from pydantic import ValidationError, BytesError
 
 booking_data = {
     'room_number': 1,
@@ -70,17 +70,13 @@ def test_routers_bookings_create(client_no_auth):
         response = client_no_auth.post('/bookings', json=roomtype_data)
         assert response.status_code == 422
 
-        try:
+        with pytest.raises(ValidationError):
             mock.return_value = bookings_schema.BookingDeleteInfo(
                 **{"status": "ok"})
             response = client_no_auth.post('/bookings', json=booking_data)
-        except ValidationError:
-            assert True
 
-        try:
+        with pytest.raises(ValidationError):
             mock.return_value = bookings_schema.BookingInfo(**(roomtype_data))
-        except ValidationError:
-            assert True
 
 
 def test_routers_bookings_filter(client_no_auth):
@@ -95,13 +91,11 @@ def test_routers_bookings_filter(client_no_auth):
         assert data[0]['id'] == booking_data_add['id']
         assert data[1]['client_review'] == '2nd review'
 
-        try:
+        with pytest.raises(ValidationError):
             mock.return_value = bookings_schema.BookingDeleteInfo(
                 **{"status": "ok"})
             response = client_no_auth.post(
                 '/bookings/filter', json=booking_data)
-        except ValidationError:
-            assert True
 
 
 def test_routers_bookings_update(client_no_auth):
@@ -115,12 +109,10 @@ def test_routers_bookings_update(client_no_auth):
         data = response.json()
         assert data['client_review'] == booking_data_add_2['client_review']
 
-        try:
+        with pytest.raises(ValidationError):
             mock.return_value = bookings_schema.BookingDeleteInfo(
                 **{"status": "ok"})
             response = client_no_auth.put('/bookings/1', json=booking_data)
-        except ValidationError:
-            assert True
 
 
 def test_routers_bookings_delete(client_no_auth):
@@ -133,12 +125,10 @@ def test_routers_bookings_delete(client_no_auth):
         data = response.json()
         assert data['result'] == 'success'
 
-        try:
+        with pytest.raises(ValidationError):
             mock.return_value = bookings_schema.BookingInfo(
                 **(booking_data | booking_data_add_2))
             response = client_no_auth.delete('/bookings/11', json=booking_data)
-        except ValidationError:
-            assert True
 
 
 def test_routers_bookings_set_status(client_no_auth):
@@ -157,12 +147,10 @@ def test_routers_bookings_set_status(client_no_auth):
             '/bookings/11/is_active?is_active=Worong')
         assert response.status_code == 405
 
-        try:
+        with pytest.raises(ValidationError):
             mock.return_value = bookings_schema.BookingDeleteInfo(
                 **{"status": "ok"})
             response = client_no_auth.post('/bookings', json=booking_data)
-        except ValidationError:
-            assert True
 
 
 def test_crud_bookings_correct(client_no_auth):

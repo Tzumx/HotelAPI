@@ -77,17 +77,13 @@ def test_routers_requests_create(client_no_auth):
         response = client_no_auth.post('/requests', json={})
         assert response.status_code == 422
 
-        try:
+        with pytest.raises(ValidationError):
             mock.return_value = requests_schema.RequestDeleteInfo(
                 **{"status": "ok"})
             response = client_no_auth.post('/requests', json=request_data)
-        except ValidationError:
-            assert True
 
-        try:
+        with pytest.raises(ValidationError):
             mock.return_value = requests_schema.RequestInfo(**{"status": "ok"})
-        except ValidationError:
-            assert True
 
 
 def test_routers_requests_filter(client_no_auth):
@@ -101,13 +97,11 @@ def test_routers_requests_filter(client_no_auth):
         data = response.json()
         assert data[0]['price'] == request_data['price']
 
-        try:
+        with pytest.raises(ValidationError):
             mock.return_value = requests_schema.RequestDeleteInfo(
                 **{"status": "ok"})
             response = client_no_auth.post(
                 '/requests/filter', json=request_data)
-        except ValidationError:
-            assert True
 
 
 def test_routers_requests_update(client_no_auth):
@@ -121,12 +115,10 @@ def test_routers_requests_update(client_no_auth):
         data = response.json()
         assert data['price'] == 33
 
-        try:
+        with pytest.raises(ValidationError):
             mock.return_value = requests_schema.RequestDeleteInfo(
                 **{"status": "ok"})
             response = client_no_auth.put('/requests/11', json=request_data)
-        except ValidationError:
-            assert True
 
 
 def test_routers_requests_delete(client_no_auth):
@@ -139,12 +131,10 @@ def test_routers_requests_delete(client_no_auth):
         data = response.json()
         assert data['result'] == 'success'
 
-        try:
+        with pytest.raises(ValidationError):
             mock.return_value = requests_schema.RequestDeleteInfo(
                 **{"status": "ok"})
             response = client_no_auth.delete('/guests/1', json=request_data)
-        except ValidationError:
-            assert True
 
 
 def test_crud_requests_correct(client_no_auth):

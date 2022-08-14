@@ -43,17 +43,14 @@ def test_routers_users_create(client_no_auth):
         response = client_no_auth.post('/guests', json={})
         assert response.status_code == 422
 
-        try:
+        with pytest.raises(ValidationError):
             mock.return_value = users_schema.UserDeleteInfo(
                 **{"status": "ok"})
             response = client_no_auth.post('/sign-up', json=user_data)
-        except ValidationError:
-            assert True
 
-        try:
+        with pytest.raises(ValidationError):
             mock.return_value = users_schema.UserInfo(**{"status": "ok"})
-        except ValidationError:
-            assert True
+
 
 def test_routers_users_filter(client_no_auth):
     """Test routers endpoints for filter users"""
@@ -66,12 +63,11 @@ def test_routers_users_filter(client_no_auth):
         data = response.json()
         assert data[0]['email'] == user_data['email']
 
-        try:
+        with pytest.raises(ValidationError):
             mock.return_value = users_schema.UserDeleteInfo(
                 **{"status": "ok"})
             response = client_no_auth.post('/users/filter', json=user_data)
-        except ValidationError:
-            assert True        
+
 
 def test_routers_users_update(client_no_auth):
     """Test routers endpoints for update users"""
@@ -79,17 +75,17 @@ def test_routers_users_update(client_no_auth):
     with patch('crud.users.update_user') as mock:
         mock.return_value = users_schema.UserInfo(
             **(user_data | {"email": "mail@user.com", "id": 11}))
-        response = client_no_auth.put('/users/11', json={"email": "mail@user.com"})
+        response = client_no_auth.put(
+            '/users/11', json={"email": "mail@user.com"})
         assert response.status_code == 200
         data = response.json()
         assert data['email'] == "mail@user.com"
 
-        try:
+        with pytest.raises(ValidationError):
             mock.return_value = users_schema.UserDeleteInfo(
                 **{"status": "ok"})
             response = client_no_auth.post('/users/-11', json=user_data)
-        except ValidationError:
-            assert True
+
 
 def test_routers_users_delete(client_no_auth):
     """Test routers endpoints for delete users"""
@@ -101,12 +97,10 @@ def test_routers_users_delete(client_no_auth):
         data = response.json()
         assert data['result'] == 'success'
 
-        try:
+        with pytest.raises(ValidationError):
             mock.return_value = users_schema.UserDeleteInfo(
                 **{"status": "ok"})
             response = client_no_auth.post('/users/-11', json=user_data)
-        except ValidationError:
-            assert True
 
 
 def test_crud_requests_correct(client_no_auth):
@@ -143,10 +137,10 @@ def test_crud_requests_correct(client_no_auth):
     access_token = data['access_token']
 
     response = client_no_auth.put(f'/users/{user_id}', json={'name': "new_name"},
-                          headers={"authorization": f"Bearer {access_token}"})
+                                  headers={"authorization": f"Bearer {access_token}"})
     assert response.status_code == 200
     response = client_no_auth.post('/users/filter', json={'name': "new_name"}, headers={
-                           "authorization": f"Bearer {access_token}"})
+        "authorization": f"Bearer {access_token}"})
     assert response.status_code == 200
     data = response.json()
     right_item = False
@@ -157,8 +151,8 @@ def test_crud_requests_correct(client_no_auth):
     assert right_item
 
     response = client_no_auth.post('/users/filter', json={'name': "new_name"}, headers={
-                           "authorization": f"Bearer wrong_token"})    
-    assert response.status_code == 403                       
+        "authorization": f"Bearer wrong_token"})
+    assert response.status_code == 403
 
     response = client_no_auth.delete(
         f'/users/{user_id}', headers={"authorization": f"Bearer {access_token}"})
@@ -187,7 +181,7 @@ def test_crud_requests_wrong(client_no_auth):
     assert response.status_code == 401
 
     response = client_no_auth.put(f'/users/-1', json={'name': "new_name"})
-    assert response.status_code == 404               
+    assert response.status_code == 404
 
     response = client_no_auth.delete(f'/users/-888')
     assert response.status_code == 404

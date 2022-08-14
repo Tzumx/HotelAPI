@@ -68,16 +68,14 @@ def test_routers_payments_create(client_no_auth):
         response = client_no_auth.post('/payments', json={})
         assert response.status_code == 422
 
-        try:
-            mock.return_value = payments_schema.PaymentDeleteInfo(**{"status": "ok"})
+        with pytest.raises(ValidationError):
+            mock.return_value = payments_schema.PaymentDeleteInfo(
+                **{"status": "ok"})
             response = client_no_auth.post('/payments', json=payment_data)
-        except ValidationError:
-            assert True
 
-        try:
+        with pytest.raises(ValidationError):
             mock.return_value = payments_schema.PaymentInfo(**{"status": "ok"})
-        except ValidationError:
-            assert True     
+
 
 def test_routers_payments_filter(client_no_auth):
     """Test routers endpoints for payments filter"""
@@ -90,11 +88,12 @@ def test_routers_payments_filter(client_no_auth):
         data = response.json()
         assert data[0]['sum'] == payment_data['sum']
 
-        try:
-            mock.return_value = payments_schema.PaymentDeleteInfo(**{"status": "ok"})
-            response = client_no_auth.post('/payments/filter', json=payment_data)
-        except ValidationError:
-            assert True        
+        with pytest.raises(ValidationError):
+            mock.return_value = payments_schema.PaymentDeleteInfo(
+                **{"status": "ok"})
+            response = client_no_auth.post(
+                '/payments/filter', json=payment_data)
+
 
 def test_routers_payments_update(client_no_auth):
     """Test routers endpoints for payments update"""
@@ -107,11 +106,11 @@ def test_routers_payments_update(client_no_auth):
         data = response.json()
         assert data['sum'] == 33
 
-        try:
-            mock.return_value = payments_schema.PaymentDeleteInfo(**{"status": "ok"})
+        with pytest.raises(ValidationError):
+            mock.return_value = payments_schema.PaymentDeleteInfo(
+                **{"status": "ok"})
             response = client_no_auth.post('/payments/11', json=payment_data)
-        except ValidationError:
-            assert True           
+
 
 def test_routers_payments_delete(client_no_auth):
     """Test routers endpoints for payments delete"""
@@ -123,12 +122,11 @@ def test_routers_payments_delete(client_no_auth):
         data = response.json()
         assert data['result'] == 'success'
 
-        try:
+        with pytest.raises(ValidationError):
             mock.return_value = payments_schema.PaymentDeleteInfo(
                 **{"status": "ok"})
             response = client_no_auth.delete('/payments/11', json=payment_data)
-        except ValidationError:
-            assert True
+
 
 def test_crud_payments_correct(client_no_auth):
     """ Test crud via endpoints """
@@ -164,7 +162,7 @@ def test_crud_payments_correct(client_no_auth):
     data = response.json()
     payment_id = data['id']
     assert data['sum'] == payment_data['sum']
-    assert data['booking_id'] == booking_id  
+    assert data['booking_id'] == booking_id
 
     response = client_no_auth.put(f'/payments/{payment_id}', json={'sum': 33})
     assert response.status_code == 200
@@ -195,7 +193,7 @@ def test_crud_payments_wrong(client_no_auth):
     """ Test crud with mistakes via endpoints """
 
     response = client_no_auth.post('/payments', json=booking_data)
-    assert response.status_code == 422 
+    assert response.status_code == 422
 
     response = client_no_auth.put(f'/payments/-1', json={'sum': 33})
     assert response.status_code == 404
