@@ -1,7 +1,5 @@
-# import asyncio
 import pytest
 from fastapi.testclient import TestClient
-from typing import Union
 from main import app
 from utils import users as users_utils
 
@@ -50,8 +48,8 @@ def test_roomtype_create_update(client):
 
     response = client.get('/roomtypes')
     data = response.json()
-    assert len(data) == roomtype_len+1
-    assert data[roomtype_len+0]['type_name'] == 'super-puper'
+    assert len(data) == roomtype_len + 1
+    assert data[roomtype_len + 0]['type_name'] == 'super-puper'
 
     request_data = {
         'type_name': 'Single',
@@ -60,15 +58,15 @@ def test_roomtype_create_update(client):
     response = client.post('/roomtypes', json=request_data)
     assert response.status_code == 200
     data = response.json()
-    assert data['id'] == new_id+1
+    assert data['id'] == new_id + 1
     assert data['type_name'] == 'Single'
     assert data['price'] == 99.9
     assert data['description'] == None
 
     response = client.get('/roomtypes')
     data = response.json()
-    assert len(data) == roomtype_len+2
-    assert data[roomtype_len+1]['price'] == 99.9
+    assert len(data) == roomtype_len + 2
+    assert data[roomtype_len + 1]['price'] == 99.9
 
     request_data = {
         'type_name': 'Double',
@@ -79,7 +77,7 @@ def test_roomtype_create_update(client):
     assert response.status_code == 422
 
     response = client.get('/roomtypes')
-    assert len(response.json()) == roomtype_len+2
+    assert len(response.json()) == roomtype_len + 2
 
 
 def test_room_create_update(client: TestClient):
@@ -92,8 +90,8 @@ def test_room_create_update(client: TestClient):
     }
     response = client.post('/roomtypes', json=request_data)
     assert response.status_code == 200
-
     roomtype_id = response.json()['id']
+
     request_data = {
         'number': 4444,
         'room_types_id': roomtype_id,
@@ -118,7 +116,7 @@ def test_room_create_update(client: TestClient):
     response = client.post('/rooms/filter')
     data = response.json()
     assert len(data) == 1
-    assert data[room_len+0]['number'] == 4444
+    assert data[room_len + 0]['number'] == 4444
 
     request_data = {
         'number': 8888,
@@ -134,8 +132,8 @@ def test_room_create_update(client: TestClient):
     assert response.status_code == 409
 
     response = client.post('/rooms/filter')
-    assert len(response.json()) == room_len+2
-    assert response.json()[room_len+1]['housing'] == 0
+    assert len(response.json()) == room_len + 2
+    assert response.json()[room_len + 1]['housing'] == 0
 
     request_data = {
         'number': 88888,
@@ -144,7 +142,7 @@ def test_room_create_update(client: TestClient):
     assert response.status_code == 422
 
     response = client.post('/rooms/filter')
-    assert len(response.json()) == room_len+2
+    assert len(response.json()) == room_len + 2
 
 
 def test_roomtype_delete(client: TestClient):
@@ -171,8 +169,8 @@ def test_roomtype_delete(client: TestClient):
 
     response = client.post('/rooms/filter')
     data = response.json()
-    assert len(data) == room_len+1
-    data[room_len+0]['room_types_id'] == None
+    assert len(data) == room_len + 1
+    data[room_len + 0]['room_types_id'] == None
 
     response = client.get('/roomtypes')
     assert len(response.json()) == roomtype_len
@@ -202,16 +200,17 @@ def test_room_delete(client: TestClient):
     }
     response = client.post('/rooms', json=request_data)
     assert response.status_code == 200
-    room_number= response.json()['number']
+    room_number = response.json()['number']
 
     response = client.delete(f'/rooms/-9')
     assert response.json()['detail'] == "Not found"
 
     response = client.delete(f'/rooms/{room_number}')
-    assert response.json()['result'] == "Success"    
+    assert response.json()['result'] == "Success"
 
     response = client.post('/rooms/filter')
     assert len(response.json()) == room_len
+
 
 def test_features(client: TestClient):
     """Test rooms deletion"""
@@ -231,7 +230,7 @@ def test_features(client: TestClient):
     }
     response = client.post('/rooms', json=request_data)
     assert response.status_code == 200
-    room_number= response.json()['number']
+    room_number = response.json()['number']
 
     request_data = {
         "feature": "TV"
@@ -241,7 +240,8 @@ def test_features(client: TestClient):
     response.json()['feature'] = "TV"
     feature_id = response.json()['id']
 
-    response = client.post(f'/roomtypes/{roomtype_id}/features?feature_id={feature_id}', json={})
+    response = client.post(
+        f'/roomtypes/{roomtype_id}/features?feature_id={feature_id}', json={})
     assert response.status_code == 200
     data = response.json()
     assert data['feature'] == "TV"

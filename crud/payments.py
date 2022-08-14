@@ -77,7 +77,7 @@ async def update_payment(payment_id, payment: payments_schema.PaymentUpdate):
         payments_model.payment.c.id == payment_id)
     stored_data = await database.fetch_one(query)
     if stored_data != None:
-        stored_data = dict(stored_data)
+        stored_data = dict(stored_data._mapping)
         update_data = payment.dict(exclude_unset=True)
         stored_data.update(update_data)
         query = payments_model.payment.update().values(**stored_data).where(

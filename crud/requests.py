@@ -56,7 +56,7 @@ async def update_request(request_id, request: requests_schema.RequestUpdate):
         requests_model.request.c.id == request_id)
     stored_data = await database.fetch_one(query)
     if stored_data != None:
-        stored_data = dict(stored_data)
+        stored_data = dict(stored_data._mapping)
         update_data = request.dict(exclude_unset=True)
         stored_data.update(update_data)
         query = requests_model.request.update().values(**stored_data).where(

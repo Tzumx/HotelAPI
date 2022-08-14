@@ -57,7 +57,7 @@ async def update_user(id: int, user: users_schema.UserUpdate):
     query = users_model.user.select().where(users_model.user.c.id == id)
     stored_data = await database.fetch_one(query)
     if stored_data != None:
-        stored_data = dict(stored_data)
+        stored_data = dict(stored_data._mapping)
         update_data = user.dict(exclude_unset=True)
         if 'password' in update_data.keys():
             salt = users_util.get_random_string()
