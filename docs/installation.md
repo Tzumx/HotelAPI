@@ -16,7 +16,7 @@
 
 * #### Edit environment file .env
 
-  - Look .env_example for an example
+  `Look .env_example for an example`
 
 * #### Start the service.
 

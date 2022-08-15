@@ -15,3 +15,5 @@ nav:
     - Installation: installation.md
     - Routers overview: overview.md
     - How-To Guides: how-to-guides.md
+  - 'Tests coverage report':
+    - Coverage report: coverage.md

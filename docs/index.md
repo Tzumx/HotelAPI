@@ -9,6 +9,7 @@ Generic Hotel API for a basic hotel administrations system created with FastAPI 
 3. [Installation](installation.md)
 4. [Routers overview](overview.md)
 5. [How-To Guides](how-to-guides.md)
+6. [Tests coverage report](coverage.md)
 
 ## Project Overview
 
